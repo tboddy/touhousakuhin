@@ -159,8 +159,8 @@ module.exports = {
 				enemyHit.enemy.health--;
 			} else {
 				explosion.spawn(enemyHit.enemy, true, false, true);
-				globals.score += 15;
-				chips.spawn(enemyHit.enemy);
+				globals.score += 5000;
+				if(enemyHit.enemy.suicide) enemyHit.enemy.suicide(enemyHit.enemy);
 				enemyHit.enemy.y = globals.gameHeight * 2;
 				enemyHit.sect.enemy = false;
 			}

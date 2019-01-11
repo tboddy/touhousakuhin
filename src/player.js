@@ -16,7 +16,7 @@ invulnerableClock: 0,
 removed: false,
 bombClock: 0,
 bombY: globals.gameHeight,
-bulletSpeed: 36,
+bulletSpeed: 35,
 didShoot: false,
 
 sprite: false,

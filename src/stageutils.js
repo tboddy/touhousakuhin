@@ -4,10 +4,6 @@ canSpawn: true,
 bossPosition: {x: 0, y: 0},
 bossBorder: false,
 
-wait(time, callback){
-	PIXI.setTimeout(time, callback)
-},
-
 spawnEnemy(type, x, y, initFunc, updateFunc){
 	let enemy;
 	switch(type){
@@ -92,18 +88,6 @@ updateEnemy(enemy, index, delta){
 		switch(enemy.enemyType){
 			case 'fairy':
 				const color = enemy.texture.baseTexture.imageUrl.indexOf('red') > -1 ? 'red' : 'blue';
-				// if(!enemy.didFlip && enemy.angle && !(enemy.angle == Math.PI / 2)){
-				// 	if(enemy.angle < Math.PI / 2){
-				// 		enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-right00.png');
-				// 		enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-right01.png');
-				// 		enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-right02.png');
-				// 	} else {
-				// 		enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-left00.png');
-				// 		enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-left01.png');
-				// 		enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-left02.png');
-				// 	}
-				// 	enemy.didFlip = true;
-				// }
 				if(enemy.angle == Math.PI / 2 && enemy.texture.baseTexture.imageUrl.indexOf('center') == -1){
 					enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-center00.png');
 					enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-center01.png');
@@ -132,10 +116,6 @@ updateEnemy(enemy, index, delta){
 			enemy.y += enemy.velocity.y;
 		}
 		if(enemy.updateFunc) enemy.updateFunc(enemy, index, delta);
-		if(player.bombClock){
-			enemy.health--;
-			if(enemy.clock % 10 == 0) explosion.spawn(enemy, false, 199, true);
-		}
 		enemy.clock++;
 		if(enemy.x >= globals.gameX &&
 			enemy.y >= 0 &&
@@ -173,16 +153,15 @@ updateBullet(bullet, index, delta){
 		bullet.y += bullet.velocity.y;
 	}
 	bullet.zOrder += 0.0001;
-	// bullet.rotation += bullet.rotationNum;
 	bullet.clock++;
-	if(bullet.x >= 0 - bullet.width / 2 &&
+	if(bullet.x >= globals.gameX - bullet.width / 2 &&
 		bullet.y >= 0 - bullet.height / 2 &&
-		bullet.x < globals.gameWidth + bullet.width / 2 &&
+		bullet.x < globals.gameX + globals.gameWidth + bullet.width / 2 &&
 		bullet.y < globals.gameHeight + bullet.height / 2 && !bullet.seen) bullet.seen = true;
 	if(bullet.seen && (bullet.y >= globals.gameHeight + globals.gameHeight / 4 ||
 		bullet.y <= -globals.gameHeight / 4 ||
-		bullet.x >= globals.gameWidth + globals.gameWidth / 4 ||
-		bullet.x <= -globals.gameWidth / 4)) globals.game.stage.removeChildAt(index);
+		bullet.x >= globals.gameX + globals.gameWidth + globals.gameWidth / 4 ||
+		bullet.x <= globals.gameX - globals.gameWidth / 4)) globals.game.stage.removeChildAt(index);
 	if(globals.removeBullets){
 		if(bullet.clock > 10) explosion.spawn(bullet, bullet.texture.baseTexture.imageUrl.indexOf('blue') > -1)
 		globals.game.stage.removeChildAt(index);
@@ -242,7 +221,7 @@ nextWave(wave, thisObj){
 	thisObj.clock = -1;
 	thisObj.currentWave = () => {
 		thisObj[wave]();
-		thisObj.clock++;
+		if(!globals.paused) thisObj.clock++;
 	}
 }
 
