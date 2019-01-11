@@ -23,6 +23,21 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
 			break;
+		case 'yinyangTopLeft':
+			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang-topleft.png');
+			break;
+		case 'yinyangTopRight':
+			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang-topright.png');
+			break;
+		case 'yinyangBottomLeft':
+			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang-bottomleft.png');
+			break;
+		case 'yinyangBottomRight':
+			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang-bottomright.png');
+			break;
+		case 'yinyang':
+			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang.png');
+			break;
 		case 'shinki':
 			enemy = PIXI.Sprite.fromImage('img/boss/shinki-center00.png');
 			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/shinki-center00.png');
@@ -31,33 +46,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.idleClock = 0;
 			enemy.enemyType = 'boss';
 			globals.bossName = 'shinki';
-			break;
-		case 'alice':
-			enemy = PIXI.Sprite.fromImage('img/boss/alice-center00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/alice-center00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/boss/alice-center01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/boss/alice-center02.png');
-			enemy.idleClock = 0;
-			enemy.enemyType = 'boss';
-			globals.bossName = 'alice';
-			break;
-		case 'mima':
-			enemy = PIXI.Sprite.fromImage('img/boss/mima-center00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/mima-center00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/boss/mima-center01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/boss/mima-center02.png');
-			enemy.idleClock = 0;
-			enemy.enemyType = 'boss';
-			globals.bossName = 'mima';
-			break;
-		case 'yuka':
-			enemy = PIXI.Sprite.fromImage('img/boss/yuka-center00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/yuka-center00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/boss/yuka-center01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/boss/yuka-center02.png');
-			enemy.idleClock = 0;
-			enemy.enemyType = 'boss';
-			globals.bossName = 'yuka';
 			break;
 	}
 	enemy.anchor.set(.5);
@@ -82,7 +70,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 	}
 },
 
-updateEnemy(enemy, index, delta){
+updateEnemy(enemy, index){
 	globals.enemyCount++;
 	if(!globals.paused){
 		switch(enemy.enemyType){
@@ -115,14 +103,11 @@ updateEnemy(enemy, index, delta){
 			enemy.x += enemy.velocity.x;
 			enemy.y += enemy.velocity.y;
 		}
-		if(enemy.updateFunc) enemy.updateFunc(enemy, index, delta);
+		if(enemy.updateFunc) enemy.updateFunc(enemy, index);
 		enemy.clock++;
-		if(enemy.x >= globals.gameX &&
-			enemy.y >= 0 &&
-			enemy.x <= globals.gameWidth + globals.gameX &&
-			enemy.y <= globals.gameHeight && !enemy.seen) enemy.seen = true;
-		if(enemy.seen && (enemy.y >= globals.gameHeight + enemy.height / 2 ||
-			enemy.y <= -enemy.height / 2 ||
+		if(enemy.x >= globals.gameX && enemy.y >= 0 &&
+			enemy.x <= globals.gameWidth + globals.gameX && enemy.y <= globals.gameHeight && !enemy.seen) enemy.seen = true;
+		if(enemy.seen && (enemy.y >= globals.gameHeight + enemy.height / 2 || enemy.y <= -enemy.height / 2 ||
 			enemy.x >= globals.gameWidth + enemy.width / 2 + globals.gameX ||
 			enemy.x <= -enemy.width / 2 + globals.gameX)) globals.game.stage.removeChildAt(index);
 	}
@@ -146,8 +131,8 @@ spawnBullet(type, x, y, angle, initFunc, updateFunc){
 	}
 },
 
-updateBullet(bullet, index, delta){
-	if(bullet.updateFunc) bullet.updateFunc(bullet, index, delta);
+updateBullet(bullet, index){
+	if(bullet.updateFunc) bullet.updateFunc(bullet, index);
 	if(bullet.velocity){
 		bullet.x += bullet.velocity.x;
 		bullet.y += bullet.velocity.y;

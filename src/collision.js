@@ -67,12 +67,13 @@ module.exports = {
 			if(bullet.x + bullet.width / 2 >= enemy.x - enemy.width / 2 && bullet.x - bullet.height / 2 <= enemy.x + enemy.width - enemy.width / 2 &&
 			  bullet.y + bullet.height / 2 >= enemy.y - enemy.height / 2 && bullet.y - bullet.height / 2 <= enemy.y + enemy.height - enemy.height / 2 &&
 				bullet.y - bullet.height / 2 > 0){
-				bullet.y = -globals.gameHeight;
-				thisObj.sects[i][j].bullet = false;
 				enemyHit = {
 					enemy: enemy,
+					bullet: {x: bullet.x, y: bullet.y},
 					sect: thisObj.sects[i][j]
 				};
+				bullet.y = -globals.gameHeight;
+				thisObj.sects[i][j].bullet = false;
 			}
 		}, checkPlayerBulletAgainstBlock = (bullet, block, i, j) => {
 			if(bullet.x + bullet.width / 2 >= block.x - block.width / 2 && bullet.x - bullet.height / 2 <= block.x + block.width - block.width / 2 &&
@@ -155,10 +156,10 @@ module.exports = {
 		}
 		if(enemyHit){
 			if(enemyHit.enemy.health){
-				explosion.spawn(enemyHit.enemy, true);
+				explosion.spawn(enemyHit.bullet, true);
 				enemyHit.enemy.health--;
 			} else {
-				explosion.spawn(enemyHit.enemy, true, false, true);
+				explosion.spawn(enemyHit.bullet, true, false, true);
 				globals.score += 5000;
 				if(enemyHit.enemy.suicide) enemyHit.enemy.suicide(enemyHit.enemy);
 				enemyHit.enemy.y = globals.gameHeight * 2;

@@ -40,7 +40,7 @@ const mainLoop = delta => {
 					bulletCount++;
 					break;
 				case 'enemy':
-					stageUtils.updateEnemy(child, i, delta);
+					stageUtils.updateEnemy(child, i);
 					collision.placeItem(child, i);
 					if(child.seen){
 						enemyDistances.push({
