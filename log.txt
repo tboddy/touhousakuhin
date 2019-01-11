@@ -1,0 +1,5 @@
+[INFO] 开始初始化 版本: luaSTGPlus-0.2
+[INFO] 开始初始化Lua虚拟机 版本: LuaJIT 2.0.5
+[INFO] 初始化对象池 上限=32768
+[INFO] 装载初始化脚本'launch'
+[ERRO] ResourceMgr: 装载本地文件'launch'失败，文件不存在？ (异常信息'CreateFile Failed ( LastErr = 2 )' 源'fcyFileStream::fcyFileStream')

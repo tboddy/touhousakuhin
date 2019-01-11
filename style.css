@@ -1,0 +1,6 @@
+@font-face {font-family:'socket';src:url('pc-9800.ttf');}
+* {margin:0;padding:0;cursor:default;image-rendering:pixelated;}
+body, html {background-color:black;overflow:hidden;width:100%;height:100%;display:flex;justify-content:center;align-items:center;
+	font-family:'bucky';color:white;}
+canvas {cursor:none !important;}
+span {position:absolute;top:-100px;font-family:'socket';}
