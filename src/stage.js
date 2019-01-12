@@ -14,7 +14,7 @@ const map = [
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
 
-	[3, 0, 0, 0, 0, 0, 0, 3],
+	[0, 3, 0, 0, 0, 0, 3, 0],
 
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
@@ -217,6 +217,7 @@ module.exports = {
 		block.growSeed = Math.floor(Math.random() * 45);
 		block.clock = 0;
 		block.health = 2;
+		if(img != '2') block.rotation = Math.random() * Math.PI;
 		if(img == '2') block.power = true;
 		globals.game.stage.addChild(block);
 	},
@@ -230,7 +231,7 @@ module.exports = {
 		block.zOrder -= 0.001;
 		if(block.clock >= block.growSeed){
 			const mod = 0.0025;
-			if((block.growing && block.scale.x >= 1.15) || (!block.growing && block.scale.x <= 1)) block.growing = !block.growing;
+			if((block.growing && block.scale.x >= 1.2) || (!block.growing && block.scale.x <= 1)) block.growing = !block.growing;
 			const diff = block.growing ? mod : -mod;
 			block.scale.set(block.scale.x + diff);
 		}

@@ -132,13 +132,13 @@ spawnBullets(){
 	if(this.power == 1 || this.power == 2) mainBullet(-base, 0, false, this.zIndex - 10);
 	if(this.power < 2 || this.power == 3) mainBullet(base, 0, false, this.zIndex - 10, true, true);
 	if(this.power >= 2){
-		mainBullet(base - Math.PI / 4, 0, false, this.zIndex - 10, false, true);
-		mainBullet(base + Math.PI / 4, 0, false, this.zIndex - 10, false, true);
+		mainBullet(base - Math.PI / 8, 0, false, this.zIndex - 10, false, true);
+		mainBullet(base + Math.PI / 8, 0, false, this.zIndex - 10, false, true);
 	}
 	if(this.power == 2) mainBullet(base, 0, false, this.zIndex - 10, false, true);
 	else if(this.power == 3){
-		mainBullet(-base - Math.PI / 4, 0, false, this.zIndex - 10, false, true);
-		mainBullet(-base + Math.PI / 4, 0, false, this.zIndex - 10, false, true);
+		mainBullet(-base - Math.PI / 8, 0, false, this.zIndex - 10, false, true);
+		mainBullet(-base + Math.PI / 8, 0, false, this.zIndex - 10, false, true);
 	}
 },
 

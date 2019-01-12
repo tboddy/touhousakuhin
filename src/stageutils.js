@@ -23,6 +23,14 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
 			break;
+		case 'fairyGreen':
+			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-green-center00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-green-center00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-green-center01.png');
+			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-green-center02.png');
+			enemy.enemyType = 'fairy';
+			enemy.idleClock = 0;
+			break;
 		case 'yinyangTopLeft':
 			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang-topleft.png');
 			break;
@@ -38,14 +46,14 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 		case 'yinyang':
 			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang.png');
 			break;
-		case 'shinki':
-			enemy = PIXI.Sprite.fromImage('img/boss/shinki-center00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/shinki-center00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/boss/shinki-center01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/boss/shinki-center02.png');
+		case 'yuka':
+			enemy = PIXI.Sprite.fromImage('img/boss/yuka-center00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/yuka-center00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/boss/yuka-center01.png');
+			enemy.textureCenter2 = PIXI.Texture.fromImage('img/boss/yuka-center02.png');
 			enemy.idleClock = 0;
 			enemy.enemyType = 'boss';
-			globals.bossName = 'shinki';
+			globals.bossName = 'yuka';
 			break;
 	}
 	enemy.anchor.set(.5);
@@ -124,9 +132,7 @@ spawnBullet(type, x, y, angle, initFunc, updateFunc){
 		if(angle) bullet.angle = angle;
 		bullet.updateFunc = updateFunc;
 		bullet.zOrder = 70;
-		bullet.rotationNum = Math.PI / 90;
-		if(Math.random() < .5) bullet.rotationNum *= -1;
-		initFunc(bullet);
+		if(initFunc) initFunc(bullet);
 		globals.game.stage.addChild(bullet);
 	}
 },

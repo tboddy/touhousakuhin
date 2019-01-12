@@ -6,7 +6,6 @@ module.exports = {
 		item.y = player.sprite.y;
 		item.zOrder = 70;
 		item.type = 'graze';
-		item.scale.set(2)
 		const angle = globals.getAngle(bullet, player.sprite), speed = 2;
 		item.velocity = {x: Math.cos(angle) * speed, y: Math.sin(angle) * speed};
 		item.clock = 0;
