@@ -84,6 +84,7 @@ module.exports = {
 	},
 
 	startGame(){
+		sound.stopBgm();
 		globals.game.stage.removeChildren()
 		this.starting = false;
 		globals.game.ticker.add(mainLoop);

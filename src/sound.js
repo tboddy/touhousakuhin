@@ -13,7 +13,7 @@ module.exports = {
 		bulletOne: new Howl({src: ['sfx/bullet1.wav']}),
 		bulletTwo: new Howl({src: ['sfx/bullet2.wav']}),
 		bulletThree: new Howl({src: ['sfx/bullet3.wav']}),
-		// bgmOne: new Howl({src: ['bgm/sacredlot.ogg']}),
+		title: new Howl({src: ['bgm/title.ogg'], loop: true}),
 		// bgmTwo: new Howl({src: ['bgm/eternalshrinemaiden.ogg']}),
 		// bgmThree: new Howl({src: ['bgm/tillyoudie.ogg']})
 	},
@@ -33,12 +33,16 @@ module.exports = {
 
 	playBgm(name){
 		if(!this.muted){
-			if(this.list.bgmOne.playing()) this.list.bgmOne.stop(); 
-			if(this.list.bgmTwo.playing()) this.list.bgmTwo.stop(); 
-			if(this.list.bgmThree.playing()) this.list.bgmThree.stop();
+			if(this.list.title.playing()) this.list.title.stop(); 
+			// if(this.list.bgmTwo.playing()) this.list.bgmTwo.stop(); 
+			// if(this.list.bgmThree.playing()) this.list.bgmThree.stop();
 			this.list[name].volume(this.bgmVolume);
 			this.list[name].play();
 		}
+	},
+
+	stopBgm(){
+		if(this.list.title.playing()) this.list.title.stop(); 
 	}
 
 };

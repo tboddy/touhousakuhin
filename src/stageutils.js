@@ -137,7 +137,7 @@ updateBullet(bullet, index){
 		bullet.x += bullet.velocity.x;
 		bullet.y += bullet.velocity.y;
 	}
-	bullet.zOrder += 0.0001;
+	bullet.zOrder += 0.001;
 	bullet.clock++;
 	if(bullet.x >= globals.gameX - bullet.width / 2 &&
 		bullet.y >= 0 - bullet.height / 2 &&
