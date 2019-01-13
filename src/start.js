@@ -70,7 +70,7 @@ version(){
 
 highScore(){
 	const text = 'Current High Score', scoreText = chrome.processScore(globals.highScore), x = globals.winWidth / 2,
-		y = globals.gameHeight * .75 - globals.grid * 1.25;
+		y = globals.gameHeight * .75 - globals.grid * 1.5;
 	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark'),
 		scoreLabel = chrome.label(scoreText, x, y + globals.grid + 4), scoreShadow = chrome.label(scoreText, x, y + globals.grid + 4, 'dark');
 	label.anchor.set(.5, 0);
@@ -92,21 +92,25 @@ changeOption(){
 		this.optionItems[other].label.style.fill = globals.hex.orange;
 	}
 	this.optionItems[0].active ? changeStyle(0) : changeStyle(1);
+	sound.spawn('changeSelect');
 },
 
 selectOption(){
-	this.optionItems[0].active ? globals.startGame() : require('electron').remote.app.quit();
+	if(this.optionItems[0].active){
+		sound.spawn('startGame');
+		globals.startGame();
+	} else require('electron').remote.app.quit();
 },
 
 init(){
-	// sound.playBgm('title');
+	sound.playBgm('title');
 	this.bg();
 	this.title();
 	this.options();
 	this.credit();
 	this.version();
 	if(globals.highScore) this.highScore();
-	globals.startGame();
+	// globals.startGame();
 }
 
 };

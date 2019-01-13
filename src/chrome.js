@@ -66,8 +66,7 @@ processTime(input){
 
 frame(){
 	const frameLeft = PIXI.Sprite.fromImage('img/frame/bg-left.png'), frameRight = PIXI.Sprite.fromImage('img/frame/bg-right.png'),
-		borders = new PIXI.Graphics(), logo = PIXI.Sprite.fromImage('img/frame/logo.png'), prLabel = PIXI.Sprite.fromImage('img/frame/prlabel.png'),
-		pr = PIXI.Sprite.fromImage('img/frame/pr.png');
+		borders = new PIXI.Graphics(), logo = PIXI.Sprite.fromImage('img/frame/logo.png');
 
 	frameLeft.zOrder = this.zOrder - 11;
 	frameRight.zOrder = this.zOrder - 11;
@@ -87,22 +86,9 @@ frame(){
 	logo.x = globals.gameX * 1.5 + globals.gameWidth
 	logo.y = globals.gameHeight -globals.grid;
 
-	// prLabel.anchor.set(.5, 1);
-	// prLabel.zOrder = this.zOrder;
-	// prLabel.x = globals.gameX / 2;
-	// prLabel.y = globals.gameHeight - globals.grid;
-
-	// pr.anchor.set(.5, 1);
-	// pr.zOrder = this.zOrder;
-	// pr.x = globals.gameX / 2;
-	// pr.y = globals.gameHeight - 10 - globals.grid * 1.75;
-
 	globals.game.stage.addChild(frameLeft);
 	globals.game.stage.addChild(frameRight);
 	globals.game.stage.addChild(borders);
-
-	// globals.game.stage.addChild(prLabel);
-	// globals.game.stage.addChild(pr);
 
 	globals.game.stage.addChild(logo);
 

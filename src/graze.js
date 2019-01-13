@@ -12,6 +12,7 @@ module.exports = {
 		item.clock = 0;
 		globals.game.stage.addChild(item);
 		globals.score += 15;
+		sound.spawn('graze');
 	},
 
 	update(item, index){

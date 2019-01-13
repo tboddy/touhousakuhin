@@ -1,21 +1,29 @@
 module.exports = {
 
 	muted: false,
-	volume: 1,
-	bgmVolume: .25,
+	volume: .15,
+	bgmVolume: 1,
 
 	list: {
-		bomb: new Howl({src:['sfx/LASER.wav']}),
-		damage: new Howl({src: ['sfx/playerbullet.wav']}),
+
+		changeSelect: new Howl({src: ['sfx/changeselect.wav']}),
+		startGame: new Howl({src: ['sfx/startgame.wav']}),
+
 		graze: new Howl({src: ['sfx/graze.wav']}),
 		explosion: new Howl({src: ['sfx/explosion.wav']}),
 
 		bulletOne: new Howl({src: ['sfx/bullet1.wav']}),
 		bulletTwo: new Howl({src: ['sfx/bullet2.wav']}),
-		bulletThree: new Howl({src: ['sfx/bullet3.wav']}),
+		laser: new Howl({src: ['sfx/laser.wav']}),
+
+		playerBullet: new Howl({src: ['sfx/playerbullet.wav']}),
+		powerUp: new Howl({src: ['sfx/powerup.wav']}),
+		bonus: new Howl({src: ['sfx/bonus.wav']}),
+
 		title: new Howl({src: ['bgm/title.ogg'], loop: true}),
 		level: new Howl({src: ['bgm/level.ogg']}),
-		boss: new Howl({src: ['bgm/boss.ogg']}),
+		boss: new Howl({src: ['bgm/boss.ogg']})
+
 	},
 
 	spawn(name){
@@ -23,8 +31,12 @@ module.exports = {
 			if(this.list[name].playing()) this.list[name].seek(0)
 			else {
 				let volume = this.volume;
-				if(name.indexOf('bullet') > -1) volume = 0.025
-				if(name.indexOf('graze') > -1) volume = 0.05
+				if(name.indexOf('playerBullet') > -1) volume *= .5;
+				else if(name.indexOf('laser') > -1) volume *= .75;
+				else if(name.indexOf('explosion') > -1) volume *= 1.5;
+				else if(name.indexOf('changeSelect') > -1) volume *= 1.5;
+				else if(name.indexOf('powerUp') > -1) volume *= 2;
+				else if(name.indexOf('startGame') > -1) volume *= 2;
 				this.list[name].volume(volume);
 				this.list[name].play();
 			}

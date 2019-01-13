@@ -112,10 +112,13 @@ module.exports = {
 				switch(chip.type){
 					case 'chipPower':
 						let amt = 5000;
-						if(player.power < 3) player.power++;
-						if(player.power == 3){
+						if(player.power < 3){
+							player.power++;
+							sound.spawn('powerUp');
+						} else if(player.power == 3){
 							amt = 50000;
 							chrome.addFieldLabel('Bonus/' + amt);
+							sound.spawn('bonus');
 						} else chrome.addFieldLabel('Pow Up', player.sprite);
 						globals.score += amt;
 						thisObj.sects[i][j].powerChip = false;
@@ -143,7 +146,6 @@ module.exports = {
 									bullet.grazed = true;
 									player.graze++;
 									graze.spawn(bullet);
-									sound.spawn('graze');
 								}
 							}
 						}
@@ -181,6 +183,7 @@ module.exports = {
 					const blockScore = blockHit.block.special ? globals.specialScore : 1000;
 					if(blockHit.block.special){
 						chrome.addFieldLabel('Bonus/' + globals.specialScore);
+						sound.spawn('bonus');
 						globals.specialScore *= 2;
 					}
 					globals.score += blockScore;

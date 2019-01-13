@@ -94,6 +94,7 @@ shot(){
 	}, startShot = () => {
 		if(this.didShootClock < interval / 3 * 2 && this.didShootClock % 4 == 0){
 			this.spawnBullets();
+			sound.spawn('playerBullet');
 		}
 		if(this.didShootClock >= interval){
 			this.didShootClock = 0;
