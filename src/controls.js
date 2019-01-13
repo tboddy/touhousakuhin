@@ -18,6 +18,8 @@ module.exports = {
 	shot: false,
 	isFullscreen: false,
 	gamepad: false,
+	pausingGamepad: false,
+	changingGamepad: false,
 
 	toggleFullscreen(){
 		this.isFullscreen = !this.isFullscreen;
@@ -26,22 +28,38 @@ module.exports = {
 
 	updateGamepad(){
 		if(navigator.getGamepads()[0]){
-			this.gamepad = navigator.getGamepads()[0];
-			const analogThresh = 0.15;
-			if(this.gamepad.axes[9]){
-				const dPad = this.gamepad.axes[9].toFixed(1);
-				this.moving.up = dPad == '-1.0' || dPad == '1.0' || dPad == '-0.7' ? true : false;
-				this.moving.down = dPad == '0.1' || dPad == '-0.1' || dPad == '0.4' ? true : false;
-				this.moving.left = dPad == '0.7' || dPad == '1.0' || dPad == '0.4' ? true : false;
-				this.moving.right = dPad == '-0.4' || dPad == '-0.1' || dPad == '-0.7' ? true : false; 
+			const gamepad = navigator.getGamepads()[0];
+			if(globals.starting){
+
+				if(gamepad.buttons[0].pressed) start.selectOption();
+
+				if(gamepad.axes[1] == -1 || gamepad.axes[1] == 1){
+					if(!controls.changingGamepad){
+						start.changeOption();
+						controls.changingGamepad = true;
+					}
+				} else if(controls.changingGamepad) controls.changingGamepad = false;
+
+
 			} else {
-				this.moving.up = this.gamepad.axes[1] < analogThresh * -1 ? true : false;
-				this.moving.down = this.gamepad.axes[1] > analogThresh ? true : false;
-				this.moving.left = this.gamepad.axes[0] < analogThresh * -1 ? true : false;
-				this.moving.right = this.gamepad.axes[0] > analogThresh ? true : false;
+				controls.moving.up = gamepad.axes[1] == -1 ? true : false;
+				controls.moving.down = gamepad.axes[1] == 1 ? true : false;
+				controls.moving.left = gamepad.axes[0] == -1 ? true : false;
+				controls.moving.right = gamepad.axes[0] == 1 ? true : false; 
+				if(globals.gameOver){
+					if(gamepad.buttons[0].pressed) location.reload();
+				} else {
+					controls.shot = gamepad.buttons[0].pressed ? true : false;
+					controls.focus = gamepad.buttons[1].pressed ? true : false;
+					if(gamepad.buttons[4].pressed){
+						if(!controls.pausingGamepad){
+							globals.paused = !globals.paused;
+							controls.pausingGamepad = true;
+						}
+					} else if(controls.pausingGamepad) controls.pausingGamepad = false;
+				}
+				if(gamepad.buttons[5].pressed) location.reload();
 			}
-			this.shot = this.gamepad.buttons[0].pressed ? true : false;
-			this.focus = this.gamepad.buttons[1].pressed ? true : false;
 		}
 	},
 
@@ -100,6 +118,7 @@ module.exports = {
 		};
 		document.addEventListener('keydown', keysDown);
 		document.addEventListener('keyup', keysUp);
+		globals.game.ticker.add(this.updateGamepad);
 	}
 
 }

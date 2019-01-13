@@ -88,21 +88,21 @@ module.exports = {
 				thisObj.sects[i][j].bullet = false;
 			}
 		}, checkObjAgainstPlayer = obj => {
-			const dx = player.sprite.x - obj.x, dy = player.sprite.y - obj.y, radii = (obj.width / 2) + (player.hitbox.width / 2 - 1);
+			const dx = player.sprite.x - obj.x, dy = player.sprite.y - obj.y, radii = (obj.width / 2) + (player.hitbox.width / 2 - 2);
 			if(dx * dx + dy * dy < radii * radii){
-				// if(!globals.gameOver && !player.bombClock){
-				// 	explosion.spawn(player.sprite, false, false, true);
-				// 	player.graze = 0;
-				// 	globals.removeBullets = true;
-				// 	if(!obj.isBoss) obj.y = -globals.gameHeight;
-				// 	if(player.lives - 1){
-				// 		player.invulnerableClock = 60 * 2;
-				// 		player.lives--;
-				// 	} else{
-				// 		globals.gameOver = true;
-				// 		globals.lostGame = true;
-				// 	}
-				// }
+				if(!globals.gameOver && !player.bombClock){
+					explosion.spawn(player.sprite, false, false, true);
+					player.graze = 0;
+					globals.removeBullets = true;
+					if(!obj.isBoss) obj.y = -globals.gameHeight;
+					if(player.lives - 1){
+						player.invulnerableClock = 60 * 2;
+						player.lives--;
+					} else{
+						globals.gameOver = true;
+						globals.lostGame = true;
+					}
+				}
 			}
 		}, checkChip = chip => {
 			if(chip.x + chip.width / 2 >= player.sprite.x - player.sprite.width / 2 && chip.x - chip.height / 2 <= player.sprite.x + player.sprite.width - player.sprite.width / 2 &&
@@ -115,11 +115,12 @@ module.exports = {
 						if(player.power < 3){
 							player.power++;
 							sound.spawn('powerUp');
+							chrome.addFieldLabel('Power+', player.sprite);
 						} else if(player.power == 3){
 							amt = 50000;
-							chrome.addFieldLabel('Bonus/' + amt);
+							chrome.showBonus(amt);
 							sound.spawn('bonus');
-						} else chrome.addFieldLabel('Pow Up', player.sprite);
+						}
 						globals.score += amt;
 						thisObj.sects[i][j].powerChip = false;
 						break;
@@ -182,7 +183,7 @@ module.exports = {
 				else {
 					const blockScore = blockHit.block.special ? globals.specialScore : 1000;
 					if(blockHit.block.special){
-						chrome.addFieldLabel('Bonus/' + globals.specialScore);
+						chrome.showBonus(globals.specialScore);
 						sound.spawn('bonus');
 						globals.specialScore *= 2;
 					}

@@ -1,7 +1,7 @@
 module.exports = {
 
 	muted: false,
-	volume: .15,
+	volume: .4,
 	bgmVolume: 1,
 
 	list: {
@@ -20,11 +20,15 @@ module.exports = {
 		powerUp: new Howl({src: ['sfx/powerup.wav']}),
 		bonus: new Howl({src: ['sfx/bonus.wav']}),
 
+		gameOver: new Howl({src: ['sfx/gameover.wav']}),
+		highScore: new Howl({src: ['sfx/highscore.wav']}),
+
 		title: new Howl({src: ['bgm/title.ogg'], loop: true}),
-		level: new Howl({src: ['bgm/level.ogg']}),
-		boss: new Howl({src: ['bgm/boss.ogg']})
+		level: new Howl({src: ['bgm/level.ogg'], loop: true}),
+		boss: new Howl({src: ['bgm/boss.ogg'], loop: true})
 
 	},
+
 
 	spawn(name){
 		if(!this.muted){
@@ -32,11 +36,12 @@ module.exports = {
 			else {
 				let volume = this.volume;
 				if(name.indexOf('playerBullet') > -1) volume *= .5;
-				else if(name.indexOf('laser') > -1) volume *= .75;
-				else if(name.indexOf('explosion') > -1) volume *= 1.5;
+				else if(name.indexOf('startGame') > -1) volume *= 1.5;
 				else if(name.indexOf('changeSelect') > -1) volume *= 1.5;
-				else if(name.indexOf('powerUp') > -1) volume *= 2;
-				else if(name.indexOf('startGame') > -1) volume *= 2;
+				else if(name.indexOf('gameOver') > -1) volume *= 2;
+				else if(name.indexOf('highScore') > -1) volume *= 2;
+				else if(name.indexOf('laser') > -1) volume *= 1.25;
+				else if(name.indexOf('graze') > -1) volume *= .2;
 				this.list[name].volume(volume);
 				this.list[name].play();
 			}

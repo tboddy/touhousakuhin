@@ -46,15 +46,18 @@ debugTimeLabel: false,
 debugBulletLabel: false,
 timeLabel: false,
 timeLabelShadow: false,
-rankDownLabel: false,
-rankDownClock: 0,
+bonusLabel: false,
+bonusLabelShadow: false,
+bonusScore: 0,
+bonusClock: 0,
+
 timeLimit: 120,
 elapsed: 0,
 fieldLabels: [],
 
 processScore(input){
 	input = String(input);
-	for(let i = input.length; i < 8; i++){
+	for(let i = input.length; i < 7; i++){
 		input = '0' + input;
 	}
 	return input;
@@ -89,7 +92,6 @@ frame(){
 	globals.game.stage.addChild(frameLeft);
 	globals.game.stage.addChild(frameRight);
 	globals.game.stage.addChild(borders);
-
 	globals.game.stage.addChild(logo);
 
 },
@@ -128,15 +130,6 @@ timeLeft(){
 	globals.game.stage.addChild(titleShadow);
 	globals.game.stage.addChild(this.timeLabel);
 	globals.game.stage.addChild(this.timeLabelShadow);
-},
-
-rankDown(){
-	this.rankDownLabel = PIXI.Sprite.fromImage('img/rankdown.png');
-	this.rankDownLabel.anchor.set(.5);
-	this.rankDownLabel.x = globals.gameX + globals.gameWidth / 2;
-	this.rankDownLabel.y = globals.gameHeight / 2;
-	this.rankDownLabel.zOrder = this.zOrder - 1;
-	globals.game.stage.addChild(this.rankDownLabel);
 },
 
 boss(){
@@ -193,6 +186,16 @@ pause(){
 	this.pausedLabelShadow.zOrder = this.zOrder + 10;
 	globals.game.stage.addChild(this.pausedLabel);
 	globals.game.stage.addChild(this.pausedLabelShadow);
+},
+
+bonus(){
+	const x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2, bonusString = 'Bonus ' + this.bonusScore;
+	this.bonusLabel = this.label(bonusString, x, y);
+	this.bonusLabelShadow = this.label(bonusString, x, y, 'dark');
+	this.bonusLabel.anchor.set(.5);
+	this.bonusLabelShadow.anchor.set(.5);
+	globals.game.stage.addChild(this.bonusLabel);
+	globals.game.stage.addChild(this.bonusLabelShadow);
 },
 
 debug(){
@@ -279,14 +282,7 @@ gameOver(){
 		globals.game.stage.addChild(shadow);
 	}, endResult = () => {
 		const x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2 - globals.grid - 4;
-		if(player.lives <= 1){
-			const lostLabel = this.label('Death Becomes You', x, y),
-				lostLabelShadow = this.label('Death Becomes You', x, y, 'dark');
-			lostLabel.anchor.set(.5);
-			lostLabelShadow.anchor.set(.5);
-			globals.game.stage.addChild(lostLabel);
-			globals.game.stage.addChild(lostLabelShadow);
-		} else if(globals.wonGame){
+		if(globals.wonGame){
 			const wonScore = 80000;
 			const wonLabel = this.label('Beat Time Limit! Bonus ' + (wonScore + 5000), x, y),
 				wonLabelShadow = this.label('Beat Time Limit! Bonus ' + (wonScore + 5000), x, y, 'dark');
@@ -295,6 +291,14 @@ gameOver(){
 			wonLabelShadow.anchor.set(.5);
 			globals.game.stage.addChild(wonLabel);
 			globals.game.stage.addChild(wonLabelShadow);
+		} else if(player.lives <= 1){
+			const endString = this.timeLimit - this.elapsed ? 'You Died' : 'Time Over';
+			const lostLabel = this.label(endString, x, y),
+				lostLabelShadow = this.label(endString, x, y, 'dark');
+			lostLabel.anchor.set(.5);
+			lostLabelShadow.anchor.set(.5);
+			globals.game.stage.addChild(lostLabel);
+			globals.game.stage.addChild(lostLabelShadow);
 		} else {
 			const wonLabel = this.label('Out of Time', x, y),
 				wonLabelShadow = this.label('Out of Time', x, y, 'dark');
@@ -315,8 +319,10 @@ gameOver(){
 		if(globals.score >= globals.highScore){
 			globals.savedData.highScore = globals.score;
 			storage.set('savedData', globals.savedData);
+			sound.spawn('highScore');
+		} else {
+			sound.spawn('gameOver');
 		}
-
 	}, restartString = () => {
 		const scoreString = 'Shoot to Return to Menu',
 			x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2 + globals.grid * 2 + 4 * 2;
@@ -330,29 +336,20 @@ gameOver(){
 	endResult();
 	scoreResult();
 	restartString();
+	sound.stopBgm();
 },
 
 addFieldLabel(input, pos){
 	input = String(input);
 	let fieldLabel = this.label(input, globals.gameX + globals.gameWidth / 2, globals.gameHeight / 2),
-		fieldLabelShadow = this.label(input, globals.gameX + globals.gameWidth / 2, globals.gameHeight / 2, 'dark'),
-		fieldLabelSecond = false, fieldLabelShadowSecond = false;
+		fieldLabelShadow = this.label(input, globals.gameX + globals.gameWidth / 2, globals.gameHeight / 2, 'dark');
 
-	if(pos){
-		fieldLabel.x = pos.x;
-		fieldLabel.y = pos.y;
-		fieldLabel.hasPos = true;
-
-		fieldLabelShadow.x = pos.x + 1;
-		fieldLabelShadow.y = pos.y + 1;
-		fieldLabelShadow.hasPos = true;
-	} else if(input.indexOf('/') > -1){
-		const mod = globals.grid / 2 + 2, firstLine = input.substring(0, input.indexOf('/')), secondLine = input.substring(input.indexOf('/') + 1);
-		fieldLabel = this.label(firstLine, globals.gameX + globals.gameWidth / 2, globals.gameHeight / 2 - mod);
-		fieldLabelShadow = this.label(firstLine, globals.gameX + globals.gameWidth / 2, globals.gameHeight / 2 - mod, 'dark');
-		fieldLabelSecond = this.label(secondLine, globals.gameX + globals.gameWidth / 2, globals.gameHeight / 2 + mod);
-		fieldLabelShadowSecond = this.label(secondLine, globals.gameX + globals.gameWidth / 2, globals.gameHeight / 2 + mod, 'dark');
-	}
+	fieldLabel.x = pos.x;
+	fieldLabel.y = pos.y;
+	fieldLabel.hasPos = true;
+	fieldLabelShadow.x = pos.x + 1;
+	fieldLabelShadow.y = pos.y + 1;
+	fieldLabelShadow.hasPos = true;
 
 	fieldLabel.type = 'fieldLabel';
 	fieldLabel.clock = 0;
@@ -367,31 +364,19 @@ addFieldLabel(input, pos){
 	this.fieldLabels.push(fieldLabel);
 	this.fieldLabels.push(fieldLabelShadow);
 
-	if(fieldLabelSecond){
+},
 
-		fieldLabelSecond.type = 'fieldLabel';
-		fieldLabelSecond.clock = 0;
-		fieldLabelSecond.anchor.set(.5);
-
-		fieldLabelShadowSecond.type = 'fieldLabel';
-		fieldLabelShadowSecond.clock = 0;
-		fieldLabelShadowSecond.anchor.set(.5);
-
-		globals.game.stage.addChild(fieldLabelSecond);
-		globals.game.stage.addChild(fieldLabelShadowSecond);
-		this.fieldLabels.push(fieldLabelSecond);
-		this.fieldLabels.push(fieldLabelShadowSecond);
-
-	}
-
+showBonus(score){
+	this.bonusScore = score;
+	this.bonusLabel.text = 'Bonus ' + this.bonusScore;
+	this.bonusLabelShadow.text = 'Bonus ' + this.bonusScore;
+	this.bonusClock = 90;
 },
 
 updateFieldLabel(label, i){
 	label.clock++;
-	if(label.hasPos){
-		label.y -= .5;
-		if(label.clock >= 45) globals.game.stage.removeChildAt(i);
-	} else if(label.clock > 90) globals.game.stage.removeChildAt(i);
+	label.y -= .5;
+	if(label.clock >= 45) globals.game.stage.removeChildAt(i);
 },
 
 update(){
@@ -423,6 +408,7 @@ update(){
 		}
 	}, updateGameOver = () => {
 		if(globals.gameOver && !this.didGameOver){
+			this.bonusClock = 0;
 			this.didGameOver = true;
 			this.gameOver();
 		}
@@ -478,11 +464,19 @@ update(){
 			this.timeLabelShadow.text = timeString;
 		}
 		if(!globals.paused && !globals.wonGame) this.elapsed++;
-	}, updateRankDown = () => {
-		if(this.rankDownClock){
-			if(!this.rankDownLabel.alpha) this.rankDownLabel.alpha = 1;
-			this.rankDownClock--;
-		} else if(this.rankDownLabel.alpha) this.rankDownLabel.alpha = 0;
+	}, updateBonus = () => {
+		if(this.bonusClock){
+			if(this.bonusLabel.alpha != 1){
+				this.bonusLabel.alpha = 1;
+				this.bonusLabelShadow.alpha = 1;
+			}
+			this.bonusClock--;
+		} else if(this.bonusLabel.alpha != 0){
+			this.bonusLabel.alpha = 0;
+			this.bonusLabelShadow.alpha = 0;
+			this.bonusLabel.text = '';
+			this.bonusLabelShadow.text = '';
+		}
 	};
 	updateScore();
 	updateBoss();
@@ -490,7 +484,7 @@ update(){
 	updateTimeLeft();
 	updatePaused();
 	updateGameOver();
-	updateRankDown();
+	updateBonus();
 	if(globals.stageFinished){
 		if(!this.didFinished) this.finishStage();
 		updateFinishStage();
@@ -504,7 +498,7 @@ init(){
 	this.pause();
 	this.debug();
 	this.timeLeft();
-	this.rankDown();
+	this.bonus();
 	globals.game.ticker.add(() => {
 		this.update()
 	});

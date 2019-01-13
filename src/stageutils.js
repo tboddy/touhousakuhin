@@ -211,8 +211,10 @@ nextStage(){
 nextWave(wave, thisObj){
 	thisObj.clock = -1;
 	thisObj.currentWave = () => {
-		thisObj[wave]();
-		if(!globals.paused) thisObj.clock++;
+		if(!globals.gameOver){
+			thisObj[wave]();
+			if(!globals.paused) thisObj.clock++;
+		}
 	}
 }
 

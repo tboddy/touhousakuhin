@@ -393,7 +393,7 @@ miniBoss(){
 			}
 			stageUtils.spawnEnemy(img, x, y, enemy => {
 				enemy.quadType = type;
-				enemy.health = 50;
+				enemy.health = 999;
 			}, enemy => {
 				const speed = 1.75;
 				if(enemy.finished){
@@ -469,8 +469,8 @@ miniBoss(){
 				enemy.health = 200;
 				enemy.bulletAngle = 0;
 				enemy.suicide = () => {
-					const score = 250000;
-					chrome.addFieldLabel('Bonus/' + score);
+					const score = 150000;
+					chrome.showBonus(score);
 					sound.spawn('bonus');
 					globals.score += score;
 				}
@@ -837,7 +837,7 @@ boss(){
 				let angle = Math.PI;
 				const count = 35;
 				if(opposite) angle += Math.PI / count;
-				sound.spawn('bulletTwo');
+				sound.spawn('bulletOne');
 				for(i = 0; i < count; i++){
 					stageUtils.spawnBullet('big-blue', enemy.x, enemy.y, angle, bullet => {
 						const speed = 3;
@@ -942,7 +942,7 @@ boss(){
 		stageUtils.spawnEnemy('yuka', globals.gameX + globals.gameWidth / 2, -31, enemy => {
 			enemy.speed = 2.5;
 			enemy.spellClock = 0;
-			enemy.health = 600;
+			enemy.health = 650;
 			enemy.spellAngleOne = 0;
 			enemy.spellAngleTwo = 0;
 			enemy.spellFlipOne = false;
@@ -973,7 +973,7 @@ boss(){
 					if(enemy.spellClock == 0) resetSpell(enemy);
 					spells[3](enemy);
 				}
-				enemy.x = enemy.initial - Math.sin(enemy.count) * globals.grid * 3.5;
+				enemy.x = enemy.initial - Math.sin(enemy.count) * globals.grid * 2;
 				enemy.count += .005;
 				enemy.spellClock++;
 	 			enemy.spellSubClock++;
@@ -997,8 +997,10 @@ boss(){
 },
 
 currentWave(){
-	this.waveOne();
-	if(!globals.paused) this.clock++;
+	if(!globals.gameOver){
+		this.waveOne();
+		if(!globals.paused) this.clock++;
+	}
 }
 
 };

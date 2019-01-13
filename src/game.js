@@ -84,7 +84,6 @@ const mainLoop = delta => {
 	collision.update();
 	stage.update();
 	sortZ();
-	controls.updateGamepad();
 	if(enemyDistances.length){
 		enemyDistances.forEach(enemy => {
 			if(enemy.enemy.y < globals.gameHeight - enemy.enemy.height / 2){
