@@ -20,19 +20,19 @@ const map = [
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
 
-	[0, 2, 0, 0, 0, 0, 2, 0],
 	[1, 0, 1, 0, 0, 1, 0, 1],
 	[0, 2, 0, 0, 0, 0, 2, 0],
 	[1, 0, 1, 0, 0, 1, 0, 1],
-	[0, 2, 0, 0, 0, 0, 2, 0],
 
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
 
-	[1, 0, 1, 0, 0, 1, 0, 1],
+	[0, 2, 0, 0, 0, 0, 2, 0],
+	[1, 4, 1, 0, 0, 1, 4, 1],
 	[0, 2, 0, 0, 0, 0, 2, 0],
 	[1, 0, 1, 0, 0, 1, 0, 1],
+	[0, 2, 0, 0, 0, 0, 2, 0],
 
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
@@ -61,7 +61,7 @@ const map = [
 	[0, 0, 0, 0, 0, 0, 0, 0],
 
 	[0, 1, 0, 0, 0, 0, 1, 0],
-	[2, 0, 2, 0, 0, 2, 0, 2],
+	[2, 4, 2, 0, 0, 2, 0, 2],
 	[0, 1, 0, 0, 0, 0, 1, 0],
 
 	[0, 0, 0, 0, 0, 0, 0, 0],
@@ -93,7 +93,7 @@ const map = [
 	[0, 0, 0, 0, 0, 0, 1, 0],
 	[0, 0, 0, 0, 0, 1, 2, 1],
 	[0, 0, 0, 0, 0, 1, 2, 1],
-	[0, 0, 0, 0, 0, 0, 1, 0],
+	[0, 0, 0, 0, 0, 4, 1, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 2, 0, 0, 0, 0],
 	[0, 0, 0, 0, 2, 0, 0, 0],
@@ -125,7 +125,7 @@ const map = [
 
 	[0, 2, 0, 2, 0, 0, 0, 0],
 	[1, 0, 1, 0, 1, 0, 0, 0],
-	[0, 2, 0, 2, 0, 0, 0, 0],
+	[0, 2, 0, 2, 0, 4, 0, 0],
 	[1, 0, 1, 0, 1, 0, 0, 0],
 	[0, 2, 0, 2, 0, 0, 0, 0],
 	[1, 0, 1, 0, 1, 0, 0, 0],
@@ -143,7 +143,7 @@ const map = [
 	[0, 0, 0, 0, 0, 0, 0, 0],
 
 	[0, 2, 0, 0, 0, 0, 1, 0],
-	[1, 0, 1, 0, 0, 2, 0, 2],
+	[1, 0, 1, 0, 0, 2, 4, 2],
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[1, 0, 1, 0, 0, 2, 0, 2],
 	[0, 0, 0, 0, 0, 0, 0, 0],
@@ -168,7 +168,7 @@ const map = [
 	[0, 0, 0, 0, 2, 1, 1, 2],
 	[2, 1, 1, 2, 2, 1, 1, 2],
 	[1, 2, 2, 1, 1, 2, 2, 1],
-	[1, 2, 2, 1, 0, 0, 0, 0],
+	[1, 2, 2, 1, 0, 0, 0, 4],
 	[2, 1, 1, 2, 0, 0, 0, 0],
 
 	[0, 0, 0, 0, 0, 0, 0, 0],
@@ -188,7 +188,9 @@ const map = [
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0]
 
-], enemies = require('./enemies.js')
+];
+
+const enemies = require('./enemies.js')
 
 module.exports = {
 
@@ -201,6 +203,7 @@ module.exports = {
 				case 1: thisObj.buildBlock(i, '0'); break;
 				case 2: thisObj.buildBlock(i, '1'); break;
 				case 3: thisObj.buildBlock(i, '2'); break;
+				case 4: thisObj.buildBlock(i, '3'); break;
 			}
 		}
 		map.splice(map.length - 1, 1)
@@ -216,9 +219,13 @@ module.exports = {
 		block.growing = true;
 		block.growSeed = Math.floor(Math.random() * 45);
 		block.clock = 0;
-		block.health = 2;
-		if(img != '2') block.rotation = Math.random() * Math.PI;
+		block.health = img == '3' ? 15 : 2;
 		if(img == '2') block.power = true;
+		else if(img == '3'){
+			block.special = true;
+			block.hitCount = 0;
+			block.alpha = 0;
+		} else if(img != '2') block.rotation = Math.random() * Math.PI;
 		globals.game.stage.addChild(block);
 	},
 
@@ -229,7 +236,7 @@ module.exports = {
 	updateBlock(block, index){
 		block.y += 1.5;
 		block.zOrder -= 0.001;
-		if(block.clock >= block.growSeed){
+		if(block.clock >= block.growSeed && !block.special){
 			const mod = 0.0025;
 			if((block.growing && block.scale.x >= 1.2) || (!block.growing && block.scale.x <= 1)) block.growing = !block.growing;
 			const diff = block.growing ? mod : -mod;

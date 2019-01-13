@@ -62,7 +62,10 @@ module.exports = {
 					case 39: thisObj.moving.right = true; break;
 					case 38: thisObj.moving.up = true; break;
 					case 40: thisObj.moving.down = true; break;
-					case 90: thisObj.shot = true; break;
+					case 90:
+						if(globals.gameOver) location.reload();
+						else thisObj.shot = true;
+						break;
 				}
 			}
 		}, keysUp = e => {
@@ -87,8 +90,7 @@ module.exports = {
 					case 38: thisObj.moving.up = false; break;
 					case 40: thisObj.moving.down = false; break;
 					case 90:
-						if(globals.gameOver) location.reload();
-						else thisObj.shot = false;
+						if(!globals.gameOver) thisObj.shot = false;
 						break;
 					case 82: location.reload(); break;
 					case 70: thisObj.toggleFullscreen(); break;

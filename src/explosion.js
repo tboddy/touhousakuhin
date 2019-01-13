@@ -22,7 +22,7 @@ module.exports = {
 			if(big) explosion.scale.set(2);
 			globals.game.stage.addChild(explosion);
 			this.count++;
-			sound.spawn('explosion');
+			// sound.spawn('explosion');
 		}
 	},
 

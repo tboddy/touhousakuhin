@@ -73,6 +73,9 @@ const mainLoop = delta => {
 					if(!globals.paused) stage.updateBlock(child, i);
 					collision.placeItem(child, i);
 					break;
+				case 'fieldLabel':
+					if(!globals.paused) chrome.updateFieldLabel(child, i);
+					break;
 				// case 'lifeImage': globals.game.stage.removeChildAt(i); break;
 				// case 'bombImage': globals.game.stage.removeChildAt(i); break;
 			}

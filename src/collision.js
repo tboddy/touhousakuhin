@@ -111,14 +111,13 @@ module.exports = {
 				chip.y = globals.gameHeight * 2;
 				switch(chip.type){
 					case 'chipPower':
+						let amt = 5000;
 						if(player.power < 3) player.power++;
-						chrome.powerUpLabel.text = 'POW UP';
 						if(player.power == 3){
-							const amt = 50000;
-							chrome.powerUpLabel.text + String(amt);
-							globals.score += amt;
-						} else globals.score += 5000;
-						chrome.showPowerUp = true;
+							amt = 50000;
+							chrome.addFieldLabel('Bonus/' + amt);
+						} else chrome.addFieldLabel('Pow Up', player.sprite);
+						globals.score += amt;
 						thisObj.sects[i][j].powerChip = false;
 						break;
 				}
@@ -170,13 +169,22 @@ module.exports = {
 			if(blockHit.block.health){
 				explosion.spawn(blockHit.bullet, true);
 				blockHit.block.health--;
+				if(blockHit.block.special){
+					if(blockHit.block.hitCount == 2 && blockHit.block.alpha != 1) blockHit.block.alpha = 1;
+					blockHit.block.hitCount++;
+				}
 			}
 			else {
 				explosion.spawn(blockHit.bullet, true, false, true);
-				if(blockHit.block.power){
-					chips.spawnPower(blockHit.block);
+				if(blockHit.block.power) chips.spawnPower(blockHit.block);
+				else {
+					const blockScore = blockHit.block.special ? globals.specialScore : 1000;
+					if(blockHit.block.special){
+						chrome.addFieldLabel('Bonus/' + globals.specialScore);
+						globals.specialScore *= 2;
+					}
+					globals.score += blockScore;
 				}
-				globals.score += 1000;
 				blockHit.block.hit = true;
 			}
 		}

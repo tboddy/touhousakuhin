@@ -18,27 +18,24 @@ bg(){
 title(){
 	const header = PIXI.Sprite.fromImage('img/start/header.png'),
 		title = PIXI.Sprite.fromImage('img/start/title.png');
-
 	title.anchor.set(.5, 0);
 	title.x = globals.winWidth / 2;
 	title.y = globals.grid * 7.5;
 	title.zOrder = 2;
-
 	header.anchor.set(.5, 0);
 	header.x = globals.winWidth / 2;
 	header.y = globals.grid * 5
 	header.zOrder = 2;
-
 	globals.game.stage.addChild(title);
 	globals.game.stage.addChild(header);
 },
 
 options(){
-	const x = globals.winWidth / 2, y = globals.gameHeight / 2 + globals.grid * 1.25;
+	const x = globals.winWidth / 2, y = globals.gameHeight / 2 + globals.grid ;
 	this.optionItems.forEach((item, i) => {
 		let color = item.active ? 'orange' : 'light';
-		item.label = chrome.label(item.text, x, y + i * (globals.grid + 2), color);
-		const shadow = chrome.label(item.text, x, y + i * (globals.grid + 2), 'dark');
+		item.label = chrome.label(item.text, x, y + i * (globals.grid + 4), color);
+		const shadow = chrome.label(item.text, x, y + i * (globals.grid + 4), 'dark');
 		item.label.anchor.set(.5, 0);
 		shadow.anchor.set(.5, 0)
 		globals.game.stage.addChild(shadow);
@@ -47,22 +44,43 @@ options(){
 },
 
 credit(){
-	const logo = PIXI.Sprite.fromImage('img/start/logo.png');
-	logo.anchor.set(.5, 1);
-	logo.x = globals.winWidth / 2;
-	logo.y = globals.gameHeight - globals.grid * 5;
-	logo.zOrder = 2;
-	globals.game.stage.addChild(logo);
+	const text = '2019 Peace Research Circle', x = globals.grid * 2, y = globals.gameHeight - globals.grid,
+		copyleft = PIXI.Sprite.fromImage('img/start/copyleft.png');
+	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
+	copyleft.anchor.set(0, 1);
+	label.anchor.set(0, 1);
+	shadow.anchor.set(0, 1);
+	copyleft.x = globals.grid;
+	copyleft.y = globals.gameHeight - globals.grid - 1;
+	copyleft.zOrder = this.zOrder;
+	globals.game.stage.addChild(copyleft);
+	globals.game.stage.addChild(shadow);
+	globals.game.stage.addChild(label);
 },
 
 version(){
 	const versionText = 'v0.01', x = globals.winWidth - globals.grid, y = globals.gameHeight - globals.grid;
 	const label = chrome.label(versionText, x, y),
 		shadow = chrome.label(versionText, x, y, 'dark');
-		label.anchor.set(1);
-		shadow.anchor.set(1);
-		globals.game.stage.addChild(shadow);
-		globals.game.stage.addChild(label);
+	label.anchor.set(1);
+	shadow.anchor.set(1);
+	globals.game.stage.addChild(shadow);
+	globals.game.stage.addChild(label);
+},
+
+highScore(){
+	const text = 'Current High Score', scoreText = chrome.processScore(globals.highScore), x = globals.winWidth / 2,
+		y = globals.gameHeight * .75 - globals.grid * 1.25;
+	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark'),
+		scoreLabel = chrome.label(scoreText, x, y + globals.grid + 4), scoreShadow = chrome.label(scoreText, x, y + globals.grid + 4, 'dark');
+	label.anchor.set(.5, 0);
+	shadow.anchor.set(.5, 0);
+	scoreLabel.anchor.set(.5, 0);
+	scoreShadow.anchor.set(.5, 0);
+	globals.game.stage.addChild(shadow);
+	globals.game.stage.addChild(label);
+	globals.game.stage.addChild(scoreShadow);
+	globals.game.stage.addChild(scoreLabel);
 },
 
 changeOption(){
@@ -81,12 +99,13 @@ selectOption(){
 },
 
 init(){
-	sound.playBgm('title');
+	// sound.playBgm('title');
 	this.bg();
 	this.title();
 	this.options();
 	this.credit();
 	this.version();
+	if(globals.highScore) this.highScore();
 	globals.startGame();
 }
 

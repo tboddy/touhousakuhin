@@ -78,8 +78,8 @@ move(){
 			else if(pos.x < this.sprite.x - pos.offsetNeg) pos.flipped = false;
 		}
 	};
-	doSide();
-	doSide(true);
+	// doSide();
+	// doSide(true);
 },
 
 shot(){
@@ -274,8 +274,8 @@ init(){
 
 	globals.game.stage.addChild(this.sprite);
 	globals.game.stage.addChild(this.hitbox);
-	globals.game.stage.addChild(this.sideLeft);
-	globals.game.stage.addChild(this.sideRight);
+	// globals.game.stage.addChild(this.sideLeft);
+	// globals.game.stage.addChild(this.sideRight);
 }
 
 };

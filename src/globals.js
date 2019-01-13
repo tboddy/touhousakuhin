@@ -4,6 +4,7 @@ module.exports = {
 
 	score: 0,
 	highScore: 0,
+	specialScore: 2000,
 
 	gameClock: 0,
 
@@ -84,7 +85,7 @@ module.exports = {
 	},
 
 	startGame(){
-		sound.stopBgm();
+		sound.playBgm('level');
 		globals.game.stage.removeChildren()
 		this.starting = false;
 		globals.game.ticker.add(mainLoop);
