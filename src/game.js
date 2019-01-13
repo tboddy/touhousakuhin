@@ -110,10 +110,21 @@ init = () => {
 	storage.get('savedData', (err, data) => {
 		globals.savedData = data;
 		if(globals.savedData.highScore) globals.highScore = globals.savedData.highScore;
+		if(globals.savedData.fullscreen){
+			controls.isFullscreen = true;
+			controls.mainWindow.setFullScreen(true);
+		} else globals.savedData.fullscreen = false;
+		const loader = new PIXI.loaders.Loader();
+		loader.add('pc98', './fonts/pc98.fnt');
+		loader.add('pc98dark', './fonts/pc98dark.fnt');
+		loader.add('pc98orange', './fonts/pc98orange.fnt');
+		loader.add('pc98brown', './fonts/pc98brown.fnt');
+		loader.load(loader => {
 			globals.initGame();
 			start.init();
 			controls.init();
+		});
 	});
 };
 
-setTimeout(init, 500)
+init();

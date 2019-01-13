@@ -80,7 +80,6 @@ module.exports = {
 			roundPixels: true
 		});
 		PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-		PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
 		document.body.appendChild(this.game.view);
 		globals.resize()
 	},

@@ -4,21 +4,19 @@ zOrder: 5000,
 offset: globals.grid / 2,
 
 label(input, x, y, color, large){
-	const style = {
-		fill: color ? globals.colors[color] : globals.colors.light,
-		fontFamily: 'socket',
-		fontSize: 16
+	let fontName = 'pc98', zOrder = this.zOrder + 20;
+	if(color){
+		if(color == 'dark'){
+			y++;
+			fontName = 'pc98dark';
+			zOrder--;
+		} else if(color == 'orange') fontName = 'pc98orange';
+		else if(color == 'brown') fontName = 'pc98brown';
 	}
-	if(color && (color == 'dark')) style.fill = globals.colors.indigo;
-	const label = new PIXI.Text(input, style);
+	const label = new PIXI.extras.BitmapText(input, {font: '16px ' + fontName});
 	label.x = x;
 	label.y = y;
-	label.zOrder = this.zOrder + 20;
-	if(color && (color == 'dark')){
-		label.zOrder--;
-		label.x++;
-		label.y++;
-	}
+	label.zOrder = zOrder;
 	return label;
 },
 

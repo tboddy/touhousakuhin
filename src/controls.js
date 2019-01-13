@@ -1,6 +1,6 @@
-const mainWindow = require('electron').remote.getCurrentWindow();
-
 module.exports = {
+
+	mainWindow: require('electron').remote.getCurrentWindow(),
 
 	focus: false,
 	moving: {
@@ -23,24 +23,22 @@ module.exports = {
 
 	toggleFullscreen(){
 		this.isFullscreen = !this.isFullscreen;
-		mainWindow.setFullScreen(this.isFullscreen);
+		this.mainWindow.setFullScreen(this.isFullscreen);
+		globals.savedData.fullscreen = this.isFullscreen;
+		storage.set('savedData', globals.savedData);
 	},
 
 	updateGamepad(){
 		if(navigator.getGamepads()[0]){
 			const gamepad = navigator.getGamepads()[0];
 			if(globals.starting){
-
 				if(gamepad.buttons[0].pressed) start.selectOption();
-
 				if(gamepad.axes[1] == -1 || gamepad.axes[1] == 1){
 					if(!controls.changingGamepad){
 						start.changeOption();
 						controls.changingGamepad = true;
 					}
 				} else if(controls.changingGamepad) controls.changingGamepad = false;
-
-
 			} else {
 				controls.moving.up = gamepad.axes[1] == -1 ? true : false;
 				controls.moving.down = gamepad.axes[1] == 1 ? true : false;
@@ -90,7 +88,7 @@ module.exports = {
 			if(globals.starting){
 				switch(e.which){
 					case 90: start.selectOption(); break;
-					case 82: location.reload(); break;
+					// case 82: location.reload(); break;
 					case 70: thisObj.toggleFullscreen(); break;
 					case 38: start.changeOption(); break;
 					case 40: start.changeOption(); break;
