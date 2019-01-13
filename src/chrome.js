@@ -292,8 +292,8 @@ update(){
 			this.scoreLabelShadow.text = score;
 			if(globals.score >= globals.highScore){
 				globals.highScoreLabel = globals.score;
-				this.highScoreLabel.text = score;
-				this.highScoreLabelShadow.text = score;
+				this.highScoreLabel.text = this.processScore(globals.score);
+				this.highScoreLabelShadow.text = this.processScore(globals.score);
 			}
 		}
 	}, updateGameOver = () => {

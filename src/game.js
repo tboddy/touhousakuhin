@@ -1,4 +1,4 @@
-// 東方作品 ～ Rank Down!
+// 東方作品!
 // touhou sakuhin
 
 const storage = require('electron-json-storage'),
