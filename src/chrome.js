@@ -100,7 +100,7 @@ score(){
 	const y = globals.grid, offset = globals.grid + 2;
 	const highScore = () => {
 		const x = globals.grid;
-		const title = this.label('Hi Score', x, y), titleShadow = this.label('Hi Score', x, y, 'dark');
+		const title = this.label('High', x, y), titleShadow = this.label('High', x, y, 'dark');
 		this.highScoreLabel = this.label(this.processScore(globals.highScore), x, y + offset);
 		this.highScoreLabelShadow = this.label(this.processScore(globals.highScore), x, y + offset, 'dark');
 		globals.game.stage.addChild(title);
@@ -308,7 +308,7 @@ gameOver(){
 			globals.game.stage.addChild(wonLabelShadow);
 		}
 	}, scoreResult = () => {
-		const scoreString = globals.score >= globals.highScore ? 'New High Score!' : 'No High Score...',
+		const scoreString = globals.score >= globals.highScore ? 'New High Score' : 'No High Score',
 			x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2;
 		const label = this.label(scoreString, x, y, globals.score >= globals.highScore ? 'orange' : 'light'),
 			shadow = this.label(scoreString, x, y, 'dark');
@@ -319,9 +319,11 @@ gameOver(){
 		if(globals.score >= globals.highScore){
 			globals.savedData.highScore = globals.score;
 			storage.set('savedData', globals.savedData);
-			sound.spawn('highScore');
+			sound.spawn('timeOut');
+		} else if(globals.wonGame){
+			sound.spawn('timeOut');
 		} else {
-			sound.spawn('gameOver');
+			player.lives <= 1 ? sound.spawn('gameOver') : sound.spawn('timeOut');
 		}
 	}, restartString = () => {
 		const scoreString = 'Shoot to Return to Menu',
@@ -332,11 +334,11 @@ gameOver(){
 		globals.game.stage.addChild(label);
 		globals.game.stage.addChild(shadow);
 	}
+	sound.stopBgm();
 	gameOverString();
 	endResult();
 	scoreResult();
 	restartString();
-	sound.stopBgm();
 },
 
 addFieldLabel(input, pos){

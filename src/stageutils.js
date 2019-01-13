@@ -3,6 +3,7 @@ module.exports = {
 canSpawn: true,
 bossPosition: {x: 0, y: 0},
 bossBorder: false,
+bossBorderShadow: false,
 
 spawnEnemy(type, x, y, initFunc, updateFunc){
 	let enemy;
@@ -46,14 +47,24 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 		case 'yinyang':
 			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang.png');
 			break;
-		case 'yuka':
-			enemy = PIXI.Sprite.fromImage('img/boss/yuka-center00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/yuka-center00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/boss/yuka-center01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/boss/yuka-center02.png');
+		case 'komachi':
+			enemy = PIXI.Sprite.fromImage('img/boss/komachi-center00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/komachi-center00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/boss/komachi-center01.png');
+			enemy.textureCenter2 = PIXI.Texture.fromImage('img/boss/komachi-center02.png');
 			enemy.idleClock = 0;
 			enemy.enemyType = 'boss';
-			globals.bossName = 'yuka';
+			globals.bossName = 'komachi';
+			break;
+		case 'eiki':
+			enemy = PIXI.Sprite.fromImage('img/boss/eiki-center00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/eiki-center00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/boss/eiki-center01.png');
+			enemy.textureCenter2 = PIXI.Texture.fromImage('img/boss/eiki-center02.png');
+			enemy.idleClock = 0;
+			enemy.enemyType = 'boss';
+			enemy.isBoss = true;
+			globals.bossName = 'eiki';
 			break;
 	}
 	enemy.anchor.set(.5);
@@ -71,10 +82,20 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 		this.bossBorder.type = 'bossBorder';
 		this.bossBorder.x = x;
 		this.bossBorder.y = y - 1;
-		this.bossBorder.zOrder = 11;
+		this.bossBorder.zOrder = 17;
 		this.bossBorder.clock = 0;
 		this.bossBorder.scaleUp = false;
 		globals.game.stage.addChild(this.bossBorder);
+		this.bossBorderShadow = PIXI.Sprite.fromImage('img/boss/border-shadow.png');
+		this.bossBorderShadow.anchor.set(.5);
+		this.bossBorderShadow.type = 'bossBorder';
+		this.bossBorderShadow.isShadow = true;
+		this.bossBorderShadow.x = x;
+		this.bossBorderShadow.y = y - 1;
+		this.bossBorderShadow.zOrder = 16.5;
+		this.bossBorderShadow.clock = 0;
+		this.bossBorderShadow.scaleUp = false;
+		globals.game.stage.addChild(this.bossBorderShadow);
 	}
 },
 
@@ -162,12 +183,13 @@ updateBullet(bullet, index){
 updateBossBorder(border, index){
 	border.x = this.bossPosition.x;
 	border.y = this.bossPosition.y;
-	border.rotation += Math.PI / 540;
+	if(border.isShadow) border.y++;
+	border.rotation += .01;
 	border.clock++;
-	const mod = 0.001;
+	const mod = 0.0015;
 	border.scaleUp ? border.scale.set(border.scale.x += mod) : border.scale.set(border.scale.x -= mod);
-	if(border.scale.x >= 1) border.scaleUp = false;
-	else if(border.scale.x <= .85) border.scaleUp = true;
+	if(border.scale.x >= 1.2) border.scaleUp = false;
+	else if(border.scale.x <= 1) border.scaleUp = true;
 	if(border.kill) globals.game.stage.removeChildAt(index);
 },
 

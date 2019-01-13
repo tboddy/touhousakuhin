@@ -367,159 +367,71 @@ waveEleven(){
 
 miniBoss(){
 	const spawnEnemy = () => {
-		const spawnQuad = type => {
-			let img = 'yinyang', x = globals.gameX, y = 0;
-			switch(type){
-				case 0:
-					x += -globals.grid * 4;
-					img += 'TopLeft';
-					y = globals.gameHeight / 8;
-					break;
-				case 1:
-					x += globals.gameWidth + globals.grid * 4;
-					img += 'TopRight';
-					y = globals.gameHeight / 8;
-					break;
-				case 2:
-					x += -globals.grid * 4;
-					img += 'BottomLeft';
-					y = globals.gameHeight - globals.gameHeight / 8;
-					break;
-				case 3:
-					x += globals.gameWidth + globals.grid * 4;
-					img += 'BottomRight';
-					y = globals.gameHeight - globals.gameHeight / 8;
-					break;
+		stageUtils.spawnEnemy('komachi', globals.gameX + globals.gameWidth / 2, -31, enemy => {
+			enemy.speed = 2.5;
+			enemy.speedMod = 0.025;
+			enemy.health = 150;
+			enemy.initHealth = enemy.health;
+			enemy.spinnerAngle = 0;
+			enemy.spinnerAngleTwo = Math.PI;
+			enemy.spinnerDir = true;
+			enemy.suicide = () => {
+				const score = 150000;
+				chrome.showBonus(score);
+				sound.spawn('bonus');
+				globals.score += score;
 			}
-			stageUtils.spawnEnemy(img, x, y, enemy => {
-				enemy.quadType = type;
-				enemy.health = 999;
-			}, enemy => {
-				const speed = 1.75;
+		}, enemy => {
+			if(enemy.ready){
 				if(enemy.finished){
-					if(!this.spawnedRegularMiniboss) spawnRegular(enemy);
-					enemy.y = globals.gameHeight * 2;
+					enemy.y += enemy.speed;
+					enemy.speed -= enemy.speedMod;
 				} else {
-					switch(enemy.quadType){
-						case 0:
-							if(enemy.flipped){
-								if(enemy.y + enemy.height / 2 < globals.gameHeight / 2) enemy.y += speed;
-								else if(enemy.y + enemy.height / 2 > globals.gameHeight / 2) enemy.y = globals.gameHeight / 2 - enemy.height / 2;
-								if(enemy.y == globals.gameHeight / 2 - enemy.height / 2) enemy.finished = true;
-							}
-							if(enemy.x + enemy.width / 2 < globals.gameX + globals.gameWidth / 2) enemy.x += speed;
-							else if(enemy.x + enemy.width / 2 > globals.gameX + globals.gameWidth / 2) enemy.x = globals.gameX + globals.gameWidth / 2 - enemy.width / 2
-							if(enemy.x == globals.gameX + globals.gameWidth / 2 - enemy.width / 2) enemy.flipped = true;
-							break;
-						case 1:
-							if(enemy.flipped){
-								if(enemy.y + enemy.height / 2 < globals.gameHeight / 2) enemy.y += speed;
-								else if(enemy.y + enemy.height / 2 > globals.gameHeight / 2) enemy.y = globals.gameHeight / 2 - enemy.height / 2;
-								if(enemy.y == globals.gameHeight / 2 - enemy.height / 2) enemy.finished = true;
-							}
-							if(enemy.x - enemy.width / 2 > globals.gameX + globals.gameWidth / 2) enemy.x -= speed;
-							else if(enemy.x - enemy.width / 2 < globals.gameX + globals.gameWidth / 2) enemy.x = globals.gameX + globals.gameWidth / 2 + enemy.width / 2
-							if(enemy.x == globals.gameX + globals.gameWidth / 2 + enemy.width / 2) enemy.flipped = true;
-							break;
-						case 2:
-							if(enemy.flipped){
-								if(enemy.y - enemy.height / 2 > globals.gameHeight / 2) enemy.y -= speed;
-								else if(enemy.y - enemy.height / 2 < globals.gameHeight / 2) enemy.y = globals.gameHeight / 2 + enemy.height / 2;
-								if(enemy.y == globals.gameHeight / 2 + enemy.height / 2) enemy.finished = true;
-							}
-							if(enemy.x + enemy.width / 2 < globals.gameX + globals.gameWidth / 2) enemy.x += speed;
-							else if(enemy.x + enemy.width / 2 > globals.gameX + globals.gameWidth / 2) enemy.x = globals.gameX + globals.gameWidth / 2 - enemy.width / 2;
-							if(enemy.x == globals.gameX + globals.gameWidth / 2 - enemy.width / 2) enemy.flipped = true;
-							break;
-						case 3:
-							if(enemy.flipped){
-								if(enemy.y - enemy.height / 2 > globals.gameHeight / 2) enemy.y -= speed;
-								else if(enemy.y - enemy.height / 2 < globals.gameHeight / 2) enemy.y = globals.gameHeight / 2 + enemy.height / 2;
-								if(enemy.y == globals.gameHeight / 2 + enemy.height / 2) enemy.finished = true;
-							}
-							if(enemy.x - enemy.width / 2 > globals.gameX + globals.gameWidth / 2) enemy.x -= speed;
-							else if(enemy.x - enemy.width / 2 < globals.gameX + globals.gameWidth / 2) enemy.x = globals.gameX + globals.gameWidth / 2 + enemy.width / 2
-							if(enemy.x == globals.gameX + globals.gameWidth / 2 + enemy.width / 2) enemy.flipped = true;
-							break;
-					}
+					if(enemy.clock % 12 == 0) spawnSpinners(enemy);
+					if(enemy.clock % 60 == 0 && enemy.clock != 0) spawnSpray(enemy);
+					if(this.clock >= 60 * 9.5) enemy.finished = true;
 				}
-			});
-		}, spawnRegular = quadEnemy => {
-			this.spawnedRegularMiniboss = true;
-			let x, y;
-			switch(quadEnemy.quadType){
-				case 0:
-					x = quadEnemy.x + quadEnemy.width / 2;
-					y = quadEnemy.y + quadEnemy.height / 2;
-					break;
-				case 1:
-					x = quadEnemy.x - quadEnemy.width / 2;
-					y = quadEnemy.y + quadEnemy.height / 2;
-					break;
-				case 2:
-					x = quadEnemy.x + quadEnemy.width / 2;
-					y = quadEnemy.y - quadEnemy.height / 2;
-					break;
-				case 3:
-					x = quadEnemy.x - quadEnemy.width / 2;
-					y = quadEnemy.y - quadEnemy.height / 2;
-					break;
+			} else {
+				enemy.y += enemy.speed;
+				enemy.speed -= enemy.speedMod;
+				enemy.health = enemy.initHealth;
+				if(enemy.speed <= 0){
+					enemy.speed = 0;
+					enemy.clock = -1;
+					enemy.ready = true;
+				}
 			}
-			stageUtils.spawnEnemy('yinyang', x, y, enemy => {
-				enemy.health = 200;
-				enemy.bulletAngle = 0;
-				enemy.suicide = () => {
-					const score = 150000;
-					chrome.showBonus(score);
-					sound.spawn('bonus');
-					globals.score += score;
-				}
-			}, enemy => {
-				const speed = 1.5, interval = 60, mod = Math.PI / 10, diff = Math.PI / 4;
-				enemy.rotation += 0.025
-				if(enemy.clock < interval){
-					if(enemy.clock == 0) enemy.bulletAngle = globals.getAngle(player.sprite, enemy) - diff;
-					enemy.x += speed;
-					spawnBullet(enemy);
-					enemy.bulletAngle += mod;
-				} else if(enemy.clock >= interval * 2 && enemy.clock < interval * 4){
-					if(enemy.clock == interval * 2) enemy.bulletAngle = globals.getAngle(player.sprite, enemy) + diff;
-					enemy.x -= speed;
-					spawnBullet(enemy);
-					enemy.bulletAngle -= mod;
-				} else if(enemy.clock >= interval * 5 && enemy.clock < interval * 6){
-					if(enemy.clock == interval * 5) enemy.bulletAngle = globals.getAngle(player.sprite, enemy) - diff;
-					enemy.x += speed;
-					spawnBullet(enemy);
-					enemy.bulletAngle += mod;
-				} else if(enemy.clock >= interval * 7) enemy.y += speed;
-
-			});
-		}
-		for(i = 0; i < 4; i++){
-			spawnQuad(i)
-		}
-	}, spawnBullet = enemy => {
-		const circle = () => {
-			sound.spawn('bulletTwo');
-			stageUtils.spawnBullet('big-red', enemy.x, enemy.y, enemy.bulletAngle, bullet => {
-				bullet.speed = 3.5;
-			}, bullet => {
-				bullet.velocity = {x: Math.cos(bullet.angle) * bullet.speed, y: Math.sin(bullet.angle) * bullet.speed};
-			});
-		}, spray = () => {
-			const mod = .2;
-			let angle = globals.getAngle(player.sprite, enemy) - mod;
-			angle += Math.random() * (mod * 2)
-			sound.spawn('bulletOne');
-			stageUtils.spawnBullet('bullet-blue', enemy.x, enemy.y, angle, bullet => {
-				const speed = 2.75;
+		});
+	}, spawnSpinners = enemy => {
+		const spawnSpinner = (enemy, x, opposite, yOffset) => {
+			stageUtils.spawnBullet('bullet-red', x, enemy.y, opposite ? enemy.spinnerAngleTwo : enemy.spinnerAngle, bullet => {
+				const speed = 3.5;
+				if(yOffset) bullet.y -= globals.grid * 2
 				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-				bullet.zOrder++;
+				explosion.spawn({x: bullet.x, y: bullet.y})
 			});
 		};
-		circle();
-		if(enemy.clock % 8 == 0) spray();
+		const offset = globals.grid * 5;
+		spawnSpinner(enemy, enemy.x - offset, false, true);
+		spawnSpinner(enemy, enemy.x - offset / 2, true);
+		spawnSpinner(enemy, enemy.x + offset / 2);
+		spawnSpinner(enemy, enemy.x + offset, true, true);
+		const mod = 0.15;
+		enemy.spinnerAngle += enemy.spinnerDir ? mod : -mod;
+		enemy.spinnerAngleTwo += enemy.spinnerDir ? -mod : mod;
+		if(enemy.clock % (60 * 2) == 0 && enemy.clock != 0) enemy.spinnerDir = !enemy.spinnerDir;
+	}, spawnSpray = enemy => {
+		const count = 5, mod = Math.PI / 40;
+		let angle = globals.getAngle(player.sprite, enemy) - mod * 2;
+		for(i = 0; i < count; i++){
+			stageUtils.spawnBullet('big-blue', enemy.x, enemy.y, angle, bullet => {
+				const speed = 2.5;
+				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
+				bullet.zOrder++;
+				bullet.zOrder += i * .01;
+			});
+			angle += mod;
+		}
 	};
 	if(this.clock == 0) spawnEnemy();
 	if(this.clock == 60 * 10.5) stageUtils.nextWave('waveTwelve', this);
@@ -734,7 +646,7 @@ boss(){
 							if(opposite) mod = -mod;
 							bullet.mod = enemy.spellFlipOne ? mod : -mod;
 							bullet.speed = 3.5;
-							bullet.scale.set(1.5)
+							bullet.scale.set(1.25)
 						}, bullet => {
 							bullet.velocity = {x: Math.cos(bullet.angle) * bullet.speed, y: Math.sin(bullet.angle) * bullet.speed};
 							bullet.rotation = bullet.angle;
@@ -746,7 +658,7 @@ boss(){
 					stageUtils.spawnBullet('big-red', enemy.x, enemy.y, enemy.spellAngleOne, bullet => {
 						const speed = 2.5;
 						bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-						bullet.scale.set(1.5)
+						bullet.scale.set(1.25)
 						bullet.zOrder++;
 					});
 					const mod = Math.PI / 10;
@@ -780,7 +692,7 @@ boss(){
 						const speed = 2.75;
 						bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
 						bullet.rotation = bullet.angle;
-						bullet.scale.set(1.5);
+						bullet.scale.set(1.25);
 						bullet.zOrder--;
 					})
 				};
@@ -822,7 +734,7 @@ boss(){
 				const count = 13, speed = 4;
 				for(i = 0; i < count; i++){
 					stageUtils.spawnBullet('arrow-red', enemy.x, enemy.y, angle, bullet => {
-						bullet.scale.set(1.5);
+						bullet.scale.set(1.25);
 						bullet.initial = bullet.angle;
 						bullet.count = 0;
 					}, bullet => {
@@ -900,7 +812,7 @@ boss(){
 						bullet.speed = 3;
 						bullet.zOrder += 2;
 						bullet.zOrder -= i * .01;
-						bullet.scale.set(1.5);
+						bullet.scale.set(1.25);
 						bullet.initial = bullet.angle;
 						if(opposite) bullet.opposite = true;
 					}, bullet => {
@@ -939,10 +851,11 @@ boss(){
 		}
 	], spawnEnemy = () => {
 		sound.playBgm('boss');
-		stageUtils.spawnEnemy('yuka', globals.gameX + globals.gameWidth / 2, -31, enemy => {
+		stageUtils.spawnEnemy('eiki', globals.gameX + globals.gameWidth / 2, -31, enemy => {
 			enemy.speed = 2.5;
 			enemy.spellClock = 0;
 			enemy.health = 650;
+			enemy.initHealth = enemy.health;
 			enemy.spellAngleOne = 0;
 			enemy.spellAngleTwo = 0;
 			enemy.spellFlipOne = false;
@@ -980,6 +893,7 @@ boss(){
 			} else {
 				enemy.y += enemy.speed;
 				enemy.speed -= 0.025;
+				enemy.health = enemy.initHealth;
 				if(enemy.speed <= 0){
 					enemy.speed = 0;
 					enemy.ready = true;

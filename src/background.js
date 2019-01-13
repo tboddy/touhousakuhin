@@ -59,7 +59,7 @@ draw(){
 },
 
 update(){
-	const currentTime = Math.floor(chrome.elapsed / 60), limit = chrome.timeLimit - 44;
+	const currentTime = Math.floor(chrome.elapsed / 60), limit = chrome.timeLimit - 45;
 	if(currentTime >= limit){
 		if(!this.bossBg){
 			this.bossBg = new PIXI.Sprite.fromImage('img/bg/boss-00.png');
