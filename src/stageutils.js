@@ -3,49 +3,62 @@ module.exports = {
 canSpawn: true,
 bossPosition: {x: 0, y: 0},
 bossBorder: false,
-bossBorderShadow: false,
 
 spawnEnemy(type, x, y, initFunc, updateFunc){
 	let enemy;
 	switch(type){
 		case 'fairyBlue':
-			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-blue-center00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-blue-center00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-blue-center01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-blue-center02.png');
+			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-blue-00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-blue-00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-blue-01.png');
+			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-blue-02.png');
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
 			break;
 		case 'fairyRed':
-			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-red-center00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-red-center00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-red-center01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-red-center02.png');
+			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-red-00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-red-00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-red-01.png');
+			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-red-02.png');
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
 			break;
 		case 'fairyGreen':
-			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-green-center00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-green-center00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-green-center01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-green-center02.png');
+			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-green-00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-green-00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-green-01.png');
+			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-green-02.png');
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
 			break;
-		case 'yinyangTopLeft':
-			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang-topleft.png');
+		case 'lily':
+			enemy = PIXI.Sprite.fromImage('img/enemies/lily-00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/lily-00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/lily-01.png');
+			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/lily-02.png');
+			enemy.enemyType = 'fairy';
+			enemy.idleClock = 0;
 			break;
-		case 'yinyangTopRight':
-			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang-topright.png');
+		case 'kedamaRed':
+			enemy = PIXI.Sprite.fromImage('img/enemies/kedama-red-00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/kedama-red-00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-red-01.png');
+			enemy.enemyType = 'kedama';
+			enemy.idleClock = 0;
 			break;
-		case 'yinyangBottomLeft':
-			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang-bottomleft.png');
+		case 'kedamaBlue':
+			enemy = PIXI.Sprite.fromImage('img/enemies/kedama-blue-00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/kedama-blue-00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-blue-01.png');
+			enemy.enemyType = 'kedama';
+			enemy.idleClock = 0;
 			break;
-		case 'yinyangBottomRight':
-			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang-bottomright.png');
-			break;
-		case 'yinyang':
-			enemy = PIXI.Sprite.fromImage('img/enemies/yinyang.png');
+		case 'kedamaGreen':
+			enemy = PIXI.Sprite.fromImage('img/enemies/kedama-green-00.png');
+			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/kedama-green-00.png');
+			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-green-01.png');
+			enemy.enemyType = 'kedama';
+			enemy.idleClock = 0;
 			break;
 		case 'komachi':
 			enemy = PIXI.Sprite.fromImage('img/boss/komachi-center00.png');
@@ -54,6 +67,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter2 = PIXI.Texture.fromImage('img/boss/komachi-center02.png');
 			enemy.idleClock = 0;
 			enemy.enemyType = 'boss';
+			enemy.isBoss = true;
 			globals.bossName = 'komachi';
 			break;
 		case 'eiki':
@@ -72,6 +86,8 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 	enemy.x = Math.round(x);
 	enemy.y = Math.round(y);
 	enemy.clock = 0;
+
+
 	enemy.zOrder = 50;
 	enemy.updateFunc = updateFunc;
 	initFunc(enemy);
@@ -86,16 +102,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 		this.bossBorder.clock = 0;
 		this.bossBorder.scaleUp = false;
 		globals.game.stage.addChild(this.bossBorder);
-		this.bossBorderShadow = PIXI.Sprite.fromImage('img/boss/border-shadow.png');
-		this.bossBorderShadow.anchor.set(.5);
-		this.bossBorderShadow.type = 'bossBorder';
-		this.bossBorderShadow.isShadow = true;
-		this.bossBorderShadow.x = x;
-		this.bossBorderShadow.y = y - 1;
-		this.bossBorderShadow.zOrder = 16.5;
-		this.bossBorderShadow.clock = 0;
-		this.bossBorderShadow.scaleUp = false;
-		globals.game.stage.addChild(this.bossBorderShadow);
 	}
 },
 
@@ -104,15 +110,14 @@ updateEnemy(enemy, index){
 	if(!globals.paused){
 		switch(enemy.enemyType){
 			case 'fairy':
-				const color = enemy.texture.baseTexture.imageUrl.indexOf('red') > -1 ? 'red' : 'blue';
-				if(enemy.angle == Math.PI / 2 && enemy.texture.baseTexture.imageUrl.indexOf('center') == -1){
-					enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-center00.png');
-					enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-center01.png');
-					enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-' + color + '-center02.png');
-				}
 				if(enemy.idleClock % globals.idleInterval == 0) enemy.texture = enemy.textureCenter0;
 				else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 4 || enemy.idleClock % globals.idleInterval == globals.idleInterval / 4 * 3) enemy.texture = enemy.textureCenter1;
 				else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 2) enemy.texture = enemy.textureCenter2;
+				enemy.idleClock++;
+				break;
+			case 'kedama':
+				if(enemy.idleClock % globals.idleInterval == 0) enemy.texture = enemy.textureCenter0;
+				else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 2) enemy.texture = enemy.textureCenter1;
 				enemy.idleClock++;
 				break;
 			case 'boss':
@@ -175,7 +180,9 @@ updateBullet(bullet, index){
 		bullet.x >= globals.gameX + globals.gameWidth + globals.gameWidth / 4 ||
 		bullet.x <= globals.gameX - globals.gameWidth / 4)) globals.game.stage.removeChildAt(index);
 	if(globals.removeBullets){
-		if(bullet.clock > 10) explosion.spawn(bullet, bullet.texture.baseTexture.imageUrl.indexOf('blue') > -1)
+
+		explosion.spawn(bullet, bullet.texture.baseTexture.imageUrl.indexOf('blue') > -1, false, false, true)
+
 		globals.game.stage.removeChildAt(index);
 	}
 },
@@ -210,24 +217,6 @@ killBoss(enemy){
 },
 
 nextStage(){
-	// if(chrome.finishedBg.y == 0){
-	// 	player.sprite.x = globals.gameWidth / 2 - player.hitbox.width / 2;
-	// 	player.sprite.y = globals.gameHeight - 30 - player.hitbox.height / 2;
-	// 	stages.currentStage++;
-	// 	globals.stageFinished = false;
-	// 	background.reset();
-	// 	globals.game.stage.removeChild(chrome.finishedBg);
-	// 	globals.game.stage.removeChild(chrome.finishedTitle);
-	// 	globals.game.stage.removeChild(chrome.finishedTitleShadow);
-	// 	globals.game.stage.removeChild(chrome.finishedNoMissLabel);
-	// 	globals.game.stage.removeChild(chrome.finishedNoMissLabelShadow);
-	// 	globals.game.stage.removeChild(chrome.finishedBombLabel);
-	// 	globals.game.stage.removeChild(chrome.finishedBombLabelShadow);
-	// 	globals.game.stage.removeChild(chrome.finishedGrazeLabel);
-	// 	globals.game.stage.removeChild(chrome.finishedGrazeLabelShadow);
-	// 	globals.game.stage.removeChild(chrome.finishedTotalLabel);
-	// 	globals.game.stage.removeChild(chrome.finishedTotalLabelShadow);
-	// }
 },
 
 nextWave(wave, thisObj){

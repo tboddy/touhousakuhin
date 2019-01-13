@@ -55,10 +55,6 @@ const mainLoop = delta => {
 					collision.placeItem(child, i);
 					bulletCount++;
 					break;
-				case 'chip':
-					if(!globals.paused) chips.update(child, i, delta);
-					collision.placeItem(child, i);
-					break;
 				case 'chipPower':
 					if(!globals.paused) chips.updatePower(child, i, delta);
 					collision.placeItem(child, i);
@@ -76,8 +72,6 @@ const mainLoop = delta => {
 				case 'fieldLabel':
 					if(!globals.paused) chrome.updateFieldLabel(child, i);
 					break;
-				// case 'lifeImage': globals.game.stage.removeChildAt(i); break;
-				// case 'bombImage': globals.game.stage.removeChildAt(i); break;
 			}
 		}
 	}

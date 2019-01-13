@@ -5,8 +5,8 @@ module.exports = {
 
 	count: 0,
 
-	spawn(bullet, blue, zOrder, big){
-		if(this.count < 10 || player.bombClock){
+	spawn(bullet, blue, zOrder, big, always){
+		if(this.count < 10 || player.bombClock || always){
 			const suffix = blue ? '-blue' : '';
 			const explosion = PIXI.Sprite.fromImage('img/explosions/explosion' + suffix + '01.png');
 			explosion.textureB = PIXI.Texture.fromImage('img/explosions/explosion' + suffix + '02.png');

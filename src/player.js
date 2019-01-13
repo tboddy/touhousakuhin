@@ -21,8 +21,6 @@ didShoot: false,
 
 sprite: false,
 hitbox: new PIXI.Sprite.fromImage('img/player/hitbox.png'),
-sideLeft: false,
-sideRight: false,
 
 textureCenter: false,
 textureLeft: false,
@@ -60,26 +58,6 @@ move(){
 	}
 	if(controls.focus && this.hitbox.alpha != 1) this.hitbox.alpha = 1;
 	else if(!controls.focus && this.hitbox.alpha == 1) this.hitbox.alpha = 0;
-	const doSide = opposite => {
-		let mod = .75;
-		const pos = opposite ? this.sideLeft : this.sideRight;
-		pos.rotation += opposite ? Math.PI / 90 : -(Math.PI / 90)
-		if(pos.flipped) mod *= -1;
-		if(mod > 0) pos.zOrder = this.zIndex + (opposite ? 1 : -1); 
-		else if(mod < 0) pos.zOrder = this.zIndex + (opposite ? -1 : 1); 
-		pos.offset += opposite ? mod : -mod;
-		pos.x = this.sprite.x - pos.offset;
-		pos.y = this.sprite.y + 4;
-		if(opposite){
-			if(pos.x < this.sprite.x - pos.offsetNeg && !pos.flipped) pos.flipped = true;
-			else if(pos.x > this.sprite.x + pos.offsetNeg) pos.flipped = false;
-		} else {
-			if(pos.x > this.sprite.x + pos.offsetNeg && !pos.flipped) pos.flipped = true;
-			else if(pos.x < this.sprite.x - pos.offsetNeg) pos.flipped = false;
-		}
-	};
-	// doSide();
-	// doSide(true);
 },
 
 shot(){
@@ -186,21 +164,15 @@ die(){
 		if(this.invulnerableClock % interval < interval / 2){
 			this.sprite.alpha = 0;
 			this.hitbox.alpha = 0;
-			this.sideLeft.alpha = 0;
-			this.sideRight.alpha = 0;
 		} else if(!this.sprite.alpha){
 			this.sprite.alpha = 1;
 			this.hitbox.alpha = 1;
-			this.sideLeft.alpha = 1;
-			this.sideRight.alpha = 1;
 		}
 		this.invulnerableClock--;
 	} else {
 		if(!this.sprite.alpha){
 			this.sprite.alpha = 1;
 			this.hitbox.alpha = 1;
-			this.sideLeft.alpha = 1;
-			this.sideRight.alpha = 1;
 		}
 		if(this.removed) this.removed = false;
 	}
@@ -220,8 +192,6 @@ update(player, index){
 			this.hitbox.alpha = 0;
 			player.x = globals.gameWidth / 2;
 			player.y = globals.gameHeight * 2;
-			this.sideLeft.alpha = 0;
-			this.sideRight.alpha = 0;
 		}
 	}
 },
@@ -256,27 +226,8 @@ init(){
 	this.hitbox.zOrder = this.zIndex + 2;
 	this.hitbox.alpha = 0;
 
-	const sideOffset = globals.grid * 1.5;
-
-	this.sideLeft = new PIXI.Sprite.fromImage('img/player/side.png', false, PIXI.SCALE_MODES.NEAREST);
-	this.sideRight = new PIXI.Sprite.fromImage('img/player/side.png', false, PIXI.SCALE_MODES.NEAREST);
-
-	this.sideLeft.anchor.set(.5);
-	this.sideLeft.offset = -sideOffset;
-	this.sideLeft.offsetNeg = sideOffset;
-	this.sideLeft.type = 'playerSide';
-	this.sideLeft.zOrder = this.zIndex;
-
-	this.sideRight.anchor.set(.5);
-	this.sideRight.offset = sideOffset;
-	this.sideRight.offsetNeg = sideOffset;
-	this.sideRight.type = 'playerSide';
-	this.sideRight.zOrder = this.zIndex;
-
 	globals.game.stage.addChild(this.sprite);
 	globals.game.stage.addChild(this.hitbox);
-	// globals.game.stage.addChild(this.sideLeft);
-	// globals.game.stage.addChild(this.sideRight);
 }
 
 };

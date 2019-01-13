@@ -27,16 +27,6 @@ highScoreLabelShadow: false,
 scoreLabel: false,
 scoreLabelShadow: false,
 transitionTime: 0.5,
-bossBar: false,
-bossBarContainer: false,
-bossBarNotchA: false,
-bossBarNotchB: false,
-bossBarNotchC: false,
-bossIndicator: false,
-initialBossHealth: false,
-bossMax: globals.grid * 9 - 2,
-spellTitle: false,
-spellTitleShadow: false,
 pausedOverlay: false,
 pausedLabel: false,
 pausedLabelShadow: false,
@@ -134,37 +124,6 @@ timeLeft(){
 
 boss(){
 
-	const containerY = globals.grid + 7, containerX = globals.grid * 3;
-
-	this.bossBarContainer = new PIXI.Graphics();
-	this.bossBarContainer.beginFill(globals.hex.light);
-
-	this.bossBarContainer.drawRect(containerX + 1, containerY, globals.grid * 9 - 2, 1);
-	this.bossBarContainer.drawRect(containerX, containerY + 1, 1, 7);
-	this.bossBarContainer.drawRect(globals.grid * 12 - 1, containerY + 1, 1, 7);
-	this.bossBarContainer.drawRect(containerX + 1, containerY + 8, globals.grid * 9 - 2, 1);
-
-	this.bossBarContainer.endFill();
-	this.bossBarContainer.beginFill(globals.hex.dark);
-	this.bossBarContainer.drawRect(containerX + 1, containerY + 1, globals.grid * 9 - 2, 1);
-	this.bossBarContainer.drawRect(containerX + 1, containerY + 9, globals.grid * 9 - 2, 1);
-	this.bossBarContainer.drawRect(containerX, containerY + 8, 1, 1);
-	this.bossBarContainer.drawRect(globals.grid * 12 - 1, containerY + 8, 1, 1);
-
-	this.bossBarContainer.zOrder = this.zOrder;
-	this.bossBarContainer.alpha = 0;
-	globals.game.stage.addChild(this.bossBarContainer);
-
-	this.bossBar = new PIXI.extras.TilingSprite(new PIXI.Texture.fromImage('img/bossbar.png'));
-	this.bossBar.x = containerX + 1;
-	this.bossBar.y = containerY + 1;
-	this.bossBar.zOrder = this.zOrder + 1;
-	this.bossBar.width = 100;
-	this.bossBar.height = 7;
-	this.bossBar.alpha = 0;
-
-	globals.game.stage.addChild(this.bossBar);
-
 },
 
 pause(){
@@ -209,60 +168,6 @@ debug(){
 	// globals.game.stage.addChild(this.debugBulletLabel);
 },
 
-finishedBg: false,
-finishedTitle: false,
-finishedTitleShadow: false,
-finishedNoMissLabel: false,
-finishedNoMissLabelShadow: false,
-finishedBombLabel: false,
-finishedBombLabelShadow: false,
-finishedGrazeLabel: false,
-finishedGrazeLabelShadow: false,
-finishedTotalLabel: false,
-finishedTotalLabelShadow: false,
-didFinished: false,
-finishedClock: 0,
-
-finishStage(){
-	this.didFinished = true;
-	controls.shot = false;
-	const y = globals.gameHeight + globals.grid * 7, x = globals.grid * 3.75;
-
-	this.finishedBg = PIXI.Sprite.fromImage('img/stagefinished.png');
-	this.finishedBg.x = 0;
-	this.finishedBg.y = globals.gameHeight;
-	this.finishedBg.zOrder = this.zOrder - 2;
-	globals.game.stage.addChild(this.finishedBg);
-
-	this.finishedTitle = this.label('STAGE ' + (stages.currentStage + 1) + ' CLEAR', globals.gameWidth / 2, y);
-	this.finishedTitleShadow = this.label('STAGE ' + (stages.currentStage + 1) + ' CLEAR', globals.gameWidth / 2, y, 'dark');
-	this.finishedTitle.anchor.set(.5, 0);
-	this.finishedTitleShadow.anchor.set(.5, 0);
-	globals.game.stage.addChild(this.finishedTitle);
-	globals.game.stage.addChild(this.finishedTitleShadow);
-
-	this.finishedNoMissLabel = this.label('NO-MISS', x, y + globals.grid * 2);
-	this.finishedNoMissLabelShadow = this.label('NO-MISS', x, y + globals.grid * 2, 'dark');
-	globals.game.stage.addChild(this.finishedNoMissLabel);
-	globals.game.stage.addChild(this.finishedNoMissLabelShadow);
-
-	this.finishedBombLabel = this.label('   BOMB', x, y + globals.grid * 3);
-	this.finishedBombLabelShadow = this.label('   BOMB', x, y + globals.grid * 3, 'dark');
-	globals.game.stage.addChild(this.finishedBombLabel);
-	globals.game.stage.addChild(this.finishedBombLabelShadow);
-
-	this.finishedGrazeLabel = this.label('  GRAZE', x, y + globals.grid * 4);
-	this.finishedGrazeLabelShadow = this.label('  GRAZE', x, y + globals.grid * 4, 'dark');
-	globals.game.stage.addChild(this.finishedGrazeLabel);
-	globals.game.stage.addChild(this.finishedGrazeLabelShadow);
-
-	this.finishedTotalLabel = this.label('  TOTAL', x, y + globals.grid * 5.5);
-	this.finishedTotalLabelShadow = this.label('  TOTAL', x, y + globals.grid * 5.5, 'dark');
-	globals.game.stage.addChild(this.finishedTotalLabel);
-	globals.game.stage.addChild(this.finishedTotalLabelShadow);
-
-},
-
 didGameOver: false,
 
 gameOver(){
@@ -283,7 +188,7 @@ gameOver(){
 	}, endResult = () => {
 		const x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2 - globals.grid - 4;
 		if(globals.wonGame){
-			const wonScore = 80000;
+			const wonScore = 200000;
 			const wonLabel = this.label('Beat Time Limit! Bonus ' + (wonScore + 5000), x, y),
 				wonLabelShadow = this.label('Beat Time Limit! Bonus ' + (wonScore + 5000), x, y, 'dark');
 			globals.score += wonScore;
@@ -292,7 +197,7 @@ gameOver(){
 			globals.game.stage.addChild(wonLabel);
 			globals.game.stage.addChild(wonLabelShadow);
 		} else if(player.lives <= 1){
-			const endString = this.timeLimit - this.elapsed ? 'You Died' : 'Time Over';
+			const endString = this.timeLimit - this.elapsed ? 'You Lose...' : 'Time Out...';
 			const lostLabel = this.label(endString, x, y),
 				lostLabelShadow = this.label(endString, x, y, 'dark');
 			lostLabel.anchor.set(.5);
@@ -308,7 +213,7 @@ gameOver(){
 			globals.game.stage.addChild(wonLabelShadow);
 		}
 	}, scoreResult = () => {
-		const scoreString = globals.score >= globals.highScore ? 'New High Score' : 'No High Score',
+		const scoreString = globals.score >= globals.highScore ? 'New Hi Score!' : 'No High Score',
 			x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2;
 		const label = this.label(scoreString, x, y, globals.score >= globals.highScore ? 'orange' : 'light'),
 			shadow = this.label(scoreString, x, y, 'dark');
@@ -393,21 +298,6 @@ update(){
 				this.highScoreLabelShadow.text = score;
 			}
 		}
-	}, updateBoss = () => {
-		if(globals.bossActive){
-			if(!this.initialBossHealth) this.initialBossHealth = globals.bossHealth;
-			if(this.bossBarContainer.alpha != 1){
-				this.bossBarContainer.alpha = 1;
-				this.bossBar.alpha = 1;
-			}
-			const num = Math.floor(globals.bossHealth / this.initialBossHealth * this.bossMax);
-			if(this.bossBar.width != num) this.bossBar.width = num;
-			// if(this.bossIndicator.alpha != 1) this.bossIndicator.alpha = 1;
-		} else if(this.bossBarContainer.alpha) {
-			this.bossBarContainer.alpha = 0;
-			this.bossBar.alpha = 0;
-			this.initialBossHealth = false;
-		}
 	}, updateGameOver = () => {
 		if(globals.gameOver && !this.didGameOver){
 			this.bonusClock = 0;
@@ -427,29 +317,6 @@ update(){
 	}, updateDebug = () => {
 		this.debugBulletLabel.text = bulletCount + ' B';
 		this.debugTimeLabel.text = (globals.gameClock / 60).toFixed(0) + ' T';
-	}, updateFinishStage = () => {
-		const mod = 8;
-		if(this.finishedClock < 60 && this.finishedClock % 5 == 0){
-			const explosionMod = globals.grid * 2;
-			explosion.spawn({
-				x: globals.deadBoss.x - explosionMod + Math.random() * (explosionMod * 2),
-				y: globals.deadBoss.y - explosionMod + Math.random() * (explosionMod * 2)
-			}, false, false, true)
-		}
-		else if(this.finishedBg.y > 0 && this.finishedClock >= 90){
-			this.finishedBg.y -= mod;
-			this.finishedTitle.y -= mod;
-			this.finishedTitleShadow.y -= mod;
-			this.finishedNoMissLabel.y -= mod;
-			this.finishedNoMissLabelShadow.y -= mod;
-			this.finishedBombLabel.y -= mod;
-			this.finishedBombLabelShadow.y -= mod;
-			this.finishedGrazeLabel.y -= mod;
-			this.finishedGrazeLabelShadow.y -= mod;
-			this.finishedTotalLabel.y -= mod;
-			this.finishedTotalLabelShadow.y -= mod;
-		}
-		this.finishedClock++
 	}, updateTimeLeft = () => {
 		let timeLeft = this.timeLimit - this.elapsed / 60;
 		if(timeLeft <= 0){
@@ -481,22 +348,16 @@ update(){
 		}
 	};
 	updateScore();
-	updateBoss();
 	updateDebug();
 	updateTimeLeft();
 	updatePaused();
 	updateGameOver();
 	updateBonus();
-	if(globals.stageFinished){
-		if(!this.didFinished) this.finishStage();
-		updateFinishStage();
-	}
 },
 
 init(){
 	this.frame();
 	this.score();
-	this.boss();
 	this.pause();
 	this.debug();
 	this.timeLeft();
