@@ -202,7 +202,7 @@ waveSeven(){
 		stageUtils.spawnEnemy('lily', globals.gameX + globals.grid * 4, globals.gameHeight + globals.grid, enemy => {
 			enemy.speed = 2.25;
 			enemy.speedInit = enemy.speed;
-			enemy.health = 25;
+			enemy.health = 30;
 			enemy.bulletAngle = 0;
 			enemy.bulletDirection = false;
 			enemy.bulletMod = 0;
@@ -614,7 +614,7 @@ waveSixteen(){
 	const spawnEnemy = () => {
 		stageUtils.spawnEnemy('lily', globals.gameWidth + globals.gameX - globals.grid * 4, -globals.grid, enemy => {
 			enemy.speed = 6;
-			enemy.health = 25;
+			enemy.health = 30;
 			enemy.shotOpposite = false;
 			enemy.suicide = () => {
 				const score = 50000;
