@@ -127,4 +127,6 @@ init = () => {
 	});
 };
 
-init();
+document.addEventListener('DOMContentLoaded', () => {
+	setTimeout(init, 500);
+});

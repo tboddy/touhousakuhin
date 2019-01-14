@@ -415,6 +415,7 @@ miniBoss(){
 				sound.spawn('bonus');
 				globals.score += score;
 				globals.removeBullets = true;
+				stageUtils.bossBorder.kill = true;
 			}
 		}, enemy => {
 			if(enemy.ready){
@@ -422,7 +423,7 @@ miniBoss(){
 					enemy.y += enemy.speed;
 					enemy.speed -= enemy.speedMod;
 					stageUtils.bossBorder.kill = true;
-				} else {
+				} else if(!globals.gameOver){
 					if(enemy.clock % 10 == 0) spawnSpinners(enemy);
 					if(enemy.clock % 60 == 0 && enemy.clock != 0) spawnSpray(enemy);
 					if(this.clock >= 60 * 9.5) enemy.finished = true;
@@ -913,9 +914,10 @@ boss(){
 				globals.wonGame = true;
 				globals.gameOver = true;
 				globals.removeBullets = true;
+				stageUtils.bossBorder.kill = true;
 			}
 		}, enemy => {
-			if(enemy.ready){
+			if(enemy.ready && !globals.gameOver){
 				const spellInterval = 60 * 10, wait = 45;
 				if(enemy.spellClock < spellInterval){
 					if(enemy.spellClock == 0) resetSpell(enemy);
@@ -937,7 +939,7 @@ boss(){
 				enemy.count += .005;
 				enemy.spellClock++;
 	 			enemy.spellSubClock++;
-			} else {
+			} else if(!globals.gameOver) {
 				enemy.y += enemy.speed;
 				enemy.speed -= 0.025;
 				enemy.health = enemy.initHealth;
