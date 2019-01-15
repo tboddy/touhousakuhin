@@ -3,8 +3,9 @@ module.exports = {
 currentOption: 0,
 
 optionItems: [
-	{text: '2 Minute Mode', active: true},
-	{text: 'Quit', active: false}
+	{text: '2 MINUTE MODE'},
+	{text: '5 MINUTE MODE'},
+	{text: 'EXIT GAME'}
 ],
 
 bg(){
@@ -16,25 +17,28 @@ bg(){
 },
 
 title(){
-	const header = PIXI.Sprite.fromImage('img/start/header.png'),
+	const y = globals.grid * 5.5, headerText = 'WINTER CARNIVAL \'19';
+	const header = chrome.label(headerText, globals.winWidth / 2, y),
+		headerShadow = chrome.label(headerText, globals.winWidth / 2, y, 'dark'),
 		title = PIXI.Sprite.fromImage('img/start/title.png');
 
 	header.anchor.set(.5, 0);
-	header.x = globals.winWidth / 2;
-	header.y = globals.grid * 3
 	header.zOrder = 2;
+	headerShadow.anchor.set(.5, 0);
+	headerShadow.zOrder = 2;
 
 	title.anchor.set(.5, 0);
 	title.x = globals.winWidth / 2;
-	title.y = globals.grid * 5 + 2;
+	title.y = y + globals.grid * 2.25
 	title.zOrder = 2;
 
 	globals.game.stage.addChild(title);
+	globals.game.stage.addChild(headerShadow);
 	globals.game.stage.addChild(header);
 },
 
 options(){
-	const x = globals.winWidth / 2, y = globals.grid * 12.5;
+	const x = globals.winWidth / 2, y = globals.gameHeight / 2 + globals.grid;
 	this.optionItems.forEach((item, i) => {
 		item.label = chrome.label(item.text, x, y + i * (globals.grid + 4));
 		item.activeLabel = chrome.label(item.text, x, y + i * (globals.grid + 4), 'orange');
@@ -42,7 +46,8 @@ options(){
 		item.label.anchor.set(.5, 0);
 		item.activeLabel.anchor.set(.5, 0);
 		item.activeLabel.zOrder++;
-		item.activeLabel.alpha = item.active ? 1 : 0;
+		item.activeLabel.alpha = i == 0 ? 1 : 0;
+		item.index = i;
 		shadow.anchor.set(.5, 0)
 		globals.game.stage.addChild(shadow);
 		globals.game.stage.addChild(item.label);
@@ -51,7 +56,7 @@ options(){
 },
 
 credit(){
-	const text = '2019 Peace Research Circle', x = globals.grid * 2, y = globals.gameHeight - globals.grid,
+	const text = '2019 PEACE RESEARCH', x = globals.grid * 2 + 2, y = globals.gameHeight - globals.grid,
 		copyleft = PIXI.Sprite.fromImage('img/start/copyleft.png');
 	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
 	copyleft.anchor.set(0, 1);
@@ -66,7 +71,7 @@ credit(){
 },
 
 version(){
-	const versionText = 'v0.01', x = globals.winWidth - globals.grid, y = globals.gameHeight - globals.grid;
+	const versionText = 'v0.02', x = globals.winWidth - globals.grid, y = globals.gameHeight - globals.grid;
 	const label = chrome.label(versionText, x, y),
 		shadow = chrome.label(versionText, x, y, 'dark');
 	label.anchor.set(1);
@@ -76,24 +81,24 @@ version(){
 },
 
 highScore(){
-	const text = 'High Score: ' + chrome.processScore(globals.highScore), x = globals.winWidth / 2,
-		y = globals.grid * 18.75;
-	const label = chrome.label(text, x, y - globals.grid - 4), shadow = chrome.label(text, x, y - globals.grid - 4, 'dark');
+	const text = 'HIGH SCORE: ' + chrome.processScore(globals.highScore), x = globals.winWidth / 2,
+		y = globals.gameHeight - globals.grid;
+	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
 	label.anchor.set(.5, 1);
 	shadow.anchor.set(.5, 1);
 	globals.game.stage.addChild(shadow);
 	globals.game.stage.addChild(label);
 },
 
-changeOption(){
-	const changeStyle = index => {
-		const other = index == 1 ? 0 : 1;
-		this.optionItems[index].active = false;
-		this.optionItems[index].activeLabel.alpha = 0;
-		this.optionItems[other].active = true;
-		this.optionItems[other].activeLabel.alpha = 1;
-	}
-	this.optionItems[0].active ? changeStyle(0) : changeStyle(1);
+changeOption(down){
+	if(down) this.currentOption++;
+	else this.currentOption--;
+	if(this.currentOption == this.optionItems.length) this.currentOption = 0;
+	if(this.currentOption == -1) this.currentOption = this.optionItems.length - 1;
+	this.optionItems.forEach((item, i) => {
+		if(i == this.currentOption) item.activeLabel.alpha = 1;
+		else if(item.activeLabel.alpha) item.activeLabel.alpha = 0;
+	});
 	sound.spawn('changeSelect');
 },
 
@@ -121,10 +126,19 @@ controlText(){
 },
 
 selectOption(){
-	if(this.optionItems[0].active){
-		sound.spawn('startGame');
-		globals.startGame();
-	} else require('electron').remote.app.quit();
+	switch(this.currentOption){
+		case 0:
+			sound.spawn('startGame');
+			globals.startGame();
+			break;
+		case 1:
+			sound.spawn('startGame');
+			globals.startGame();
+			break;
+		case 2:
+			require('electron').remote.app.quit();
+			break;
+	}
 },
 
 init(){
@@ -134,7 +148,7 @@ init(){
 	this.options();
 	this.credit();
 	this.version();
-	this.controlText();
+	// this.controlText();
 	this.highScore();
 	// globals.startGame();
 }

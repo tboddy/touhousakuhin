@@ -114,7 +114,14 @@ resize(){
 
 returnToTitle(){
 	// location.reload();
+
 	this.game.stage.removeChildren();
+
+	enemyCount = 0;
+	bulletCount = 0;
+	chipCount = 0;
+	lastEnemyCount = 0;
+
 	this.starting = true;
 	this.game.ticker.remove(mainLoop);
 	this.score = 0;
@@ -123,14 +130,28 @@ returnToTitle(){
 	this.wonGame = false;
 	this.timeOver = false;
 	this.paused = false;
-	enemyCount = 0;
-	bulletCount = 0;
-	chipCount = 0;
-	lastEnemyCount = 0;
+
 	chrome.elapsed = 0;
-	player.lives = 1;
 	chrome.timeLimit = chrome.baseTimeLimit;
 	chrome.didGameOver = false;
+
+	player.lives = 1;
+
+	controls.focus = false;
+	controls.moving.left = false;
+	controls.moving.right = false;
+	controls.moving.up = false;
+	controls.moving.down = false;
+	controls.movingStart.left = false;
+	controls.movingStart.right = false;
+	controls.movingStart.up = false;
+	controls.movingStart.down = false;
+	controls.shot =false;
+	controls.isFullscreen =false;
+	controls.gamepad =false;
+	controls.pausingGamepad =false;
+	controls.changingGamepad =false;
+
 	stageUtils.nextWave('waveOne', enemies);
 	start.init();
 }

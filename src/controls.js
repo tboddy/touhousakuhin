@@ -87,7 +87,7 @@ module.exports = {
 					case 90: start.selectOption(); break;
 					case 70: thisObj.toggleFullscreen(); break;
 					case 38: start.changeOption(); break;
-					case 40: start.changeOption(); break;
+					case 40: start.changeOption(true); break;
 				}
 			} else {
 				switch(e.which){

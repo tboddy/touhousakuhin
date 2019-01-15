@@ -28,14 +28,14 @@ elapsed: 0,
 fieldLabels: [],
 
 label(input, x, y, color, large){
-	let fontName = 'pc98', zOrder = this.zOrder + 20;
+	let fontName = 'goldbox', zOrder = this.zOrder + 20;
 	if(color){
 		if(color == 'dark'){
 			y++;
-			fontName = 'pc98dark';
+			fontName = 'goldboxdark';
 			zOrder--;
-		} else if(color == 'orange') fontName = 'pc98orange';
-		else if(color == 'brown') fontName = 'pc98brown';
+		} else if(color == 'orange') fontName = 'goldboxorange';
+		else if(color == 'brown') fontName = 'goldboxbrown';
 	}
 	const label = new PIXI.extras.BitmapText(input, {font: '16px ' + fontName});
 	label.x = x;
@@ -88,8 +88,8 @@ frame(){
 score(){
 	const y = globals.grid, offset = globals.grid + 2;
 	const highScore = () => {
-		const x = globals.grid;
-		const title = this.label('High', x, y), titleShadow = this.label('High', x, y, 'dark');
+		const x = globals.grid, str = 'HIGH SCORE';
+		const title = this.label(str, x, y), titleShadow = this.label(str, x, y, 'dark');
 		this.highScoreLabel = this.label(this.processScore(globals.highScore), x, y + offset);
 		this.highScoreLabelShadow = this.label(this.processScore(globals.highScore), x, y + offset, 'dark');
 		globals.game.stage.addChild(title);
@@ -97,8 +97,8 @@ score(){
 		globals.game.stage.addChild(this.highScoreLabel);
 		globals.game.stage.addChild(this.highScoreLabelShadow);
 	}, playerScore = () => {
-		const x = globals.gameX + globals.gameWidth + globals.grid;
-		const title = this.label('Score', x, y), titleShadow = this.label('Score', x, y, 'dark');
+		const x = globals.gameX + globals.gameWidth + globals.grid, str = 'SCORE';
+		const title = this.label(str, x, y), titleShadow = this.label(str, x, y, 'dark');
 		this.scoreLabel = this.label(this.processScore(globals.score), x, y + offset);
 		this.scoreLabelShadow = this.label(this.processScore(globals.score), x, y + offset, 'dark');
 		globals.game.stage.addChild(title);
@@ -111,8 +111,8 @@ score(){
 },
 
 timeLeft(){
-	const x = globals.gameX + globals.gameWidth + globals.grid, y = globals.grid * 4, offset = globals.grid + 2;
-	const title = this.label('Time', x, y), titleShadow = this.label('Time', x, y, 'dark');
+	const x = globals.gameX + globals.gameWidth + globals.grid, y = globals.grid * 4, offset = globals.grid + 2, str = 'TIME';
+	const title = this.label(str, x, y), titleShadow = this.label(str, x, y, 'dark');
 	this.timeLabel = this.label(this.processTime(this.timeLimit), x, y + offset);
 	this.timeLabelShadow = this.label(this.processTime(this.timeLimit), x, y + offset, 'dark');
 	globals.game.stage.addChild(title);
@@ -178,8 +178,9 @@ gameOver(){
 	overlay.zOrder = this.zOrder - 1;
 	globals.game.stage.addChild(overlay);
 	const gameOverString = () => {
-		const x = globals.gameWidth / 2 + globals.gameX, y = globals.gameHeight / 2 - globals.grid * 2 - 4 * 2;
-		const label = this.label('Game Over', x, y, false, true), shadow = this.label('Game Over', x, y, 'dark', true);
+		const x = globals.gameWidth / 2 + globals.gameX, y = globals.gameHeight / 2 - globals.grid * 2 - 4 * 2,
+			str = 'GAME OVER';
+		const label = this.label(str, x, y, false, true), shadow = this.label(str, x, y, 'dark', true);
 		label.anchor.set(.5)
 		shadow.anchor.set(.5)
 		globals.game.stage.addChild(label);
@@ -187,16 +188,16 @@ gameOver(){
 	}, endResult = () => {
 		const x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2 - globals.grid - 4;
 		if(globals.wonGame){
-			const wonScore = 200000;
-			const wonLabel = this.label('Beat Time Limit! Bonus ' + (wonScore + 5000), x, y),
-				wonLabelShadow = this.label('Beat Time Limit! Bonus ' + (wonScore + 5000), x, y, 'dark');
+			const wonScore = 200000, wonStr = 'BEAT TIME LIMIT! BONUS ' + (wonScore + 5000)
+			const wonLabel = this.label(winStr, x, y),
+				wonLabelShadow = this.label(winStr, x, y, 'dark');
 			globals.score += wonScore;
 			wonLabel.anchor.set(.5);
 			wonLabelShadow.anchor.set(.5);
 			globals.game.stage.addChild(wonLabel);
 			globals.game.stage.addChild(wonLabelShadow);
 		} else if(player.lives <= 1){
-			const endString = this.timeLimit - this.elapsed ? 'You Lose...' : 'Time Out...';
+			const endString = this.timeLimit - this.elapsed ? 'YOU LOSE...' : 'TIME OUT...';
 			const lostLabel = this.label(endString, x, y),
 				lostLabelShadow = this.label(endString, x, y, 'dark');
 			lostLabel.anchor.set(.5);
@@ -204,15 +205,16 @@ gameOver(){
 			globals.game.stage.addChild(lostLabel);
 			globals.game.stage.addChild(lostLabelShadow);
 		} else {
-			const wonLabel = this.label('Out of Time', x, y),
-				wonLabelShadow = this.label('Out of Time', x, y, 'dark');
+			const str = 'OUT OF TIME';
+			const wonLabel = this.label(str, x, y),
+				wonLabelShadow = this.label(str, x, y, 'dark');
 			wonLabel.anchor.set(.5);
 			wonLabelShadow.anchor.set(.5);
 			globals.game.stage.addChild(wonLabel);
 			globals.game.stage.addChild(wonLabelShadow);
 		}
 	}, scoreResult = () => {
-		const scoreString = globals.score >= globals.highScore ? 'New Hi Score!' : 'No High Score',
+		const scoreString = globals.score >= globals.highScore ? 'NEW HIGH SCORE!' : 'NO HIGH SCORE',
 			x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2;
 		const label = this.label(scoreString, x, y, globals.score >= globals.highScore ? 'orange' : 'light'),
 			shadow = this.label(scoreString, x, y, 'dark');
@@ -230,7 +232,7 @@ gameOver(){
 			player.lives <= 1 ? sound.spawn('gameOver') : sound.spawn('timeOut');
 		}
 	}, restartString = () => {
-		const scoreString = 'Shoot to Return to Menu',
+		const scoreString = 'SHOOT TO RETURN TO MENU',
 			x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2 + globals.grid * 2 + 4 * 2;
 		const label = this.label(scoreString, x, y), shadow = this.label(scoreString, x, y, 'dark');
 		label.anchor.set(.5);
@@ -274,8 +276,8 @@ addFieldLabel(input, pos){
 
 showBonus(score){
 	this.bonusScore = score;
-	this.bonusLabel.text = 'Bonus ' + this.bonusScore;
-	this.bonusLabelShadow.text = 'Bonus ' + this.bonusScore;
+	this.bonusLabel.text = 'BONUS ' + this.bonusScore;
+	this.bonusLabelShadow.text = 'BONUS ' + this.bonusScore;
 	this.bonusClock = 90;
 },
 

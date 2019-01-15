@@ -115,7 +115,7 @@ module.exports = {
 						if(player.power < 3){
 							player.power++;
 							sound.spawn('powerUp');
-							chrome.addFieldLabel('Power+', player.sprite);
+							chrome.addFieldLabel('POWER+', player.sprite);
 						} else if(player.power == 3){
 							amt = 50000;
 							chrome.showBonus(amt);
