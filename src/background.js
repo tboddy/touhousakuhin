@@ -1,5 +1,6 @@
 module.exports = {
 
+started: false,
 bg: false,
 bottom: false,
 top: false,
@@ -99,9 +100,12 @@ reset(){
 init(){
 	const thisObj = this;
 	this.draw();
-	globals.game.ticker.add(() => {
-		if(!globals.paused) thisObj.update();
-	});
+	if(!this.started){
+		this.started = true;
+		globals.game.ticker.add(() => {
+			if(!globals.paused) thisObj.update();
+		});
+	}
 }
 
 };

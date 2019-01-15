@@ -16,7 +16,8 @@ const storage = require('electron-json-storage'),
 	chips = require('./src/chips.js'),
 	sound = require('./src/sound.js'),
 	graze = require('./src/graze.js'),
-	pixiProjection = require('pixi-projection');
+	pixiProjection = require('pixi-projection'),
+	enemies = require('./src/enemies.js');
 
 let enemyCount = 0, bulletCount = 0, chipCount = 0, lastEnemyCount = 0;
 
@@ -127,4 +128,4 @@ init = () => {
 	});
 };
 
-setTimeout(init, 1000);
+document.addEventListener('DOMContentLoaded', init);

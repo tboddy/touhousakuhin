@@ -1,25 +1,8 @@
 module.exports = {
 
+started: false,
 zOrder: 5000,
 offset: globals.grid / 2,
-
-label(input, x, y, color, large){
-	let fontName = 'pc98', zOrder = this.zOrder + 20;
-	if(color){
-		if(color == 'dark'){
-			y++;
-			fontName = 'pc98dark';
-			zOrder--;
-		} else if(color == 'orange') fontName = 'pc98orange';
-		else if(color == 'brown') fontName = 'pc98brown';
-	}
-	const label = new PIXI.extras.BitmapText(input, {font: '16px ' + fontName});
-	label.x = x;
-	label.y = y;
-	label.zOrder = zOrder;
-	return label;
-},
-
 highScoreLabel: false,
 highScoreLabelShadow: false,
 scoreLabel: false,
@@ -40,8 +23,26 @@ bonusScore: 0,
 bonusClock: 0,
 
 timeLimit: 120,
+baseTimeLimit: 120,
 elapsed: 0,
 fieldLabels: [],
+
+label(input, x, y, color, large){
+	let fontName = 'pc98', zOrder = this.zOrder + 20;
+	if(color){
+		if(color == 'dark'){
+			y++;
+			fontName = 'pc98dark';
+			zOrder--;
+		} else if(color == 'orange') fontName = 'pc98orange';
+		else if(color == 'brown') fontName = 'pc98brown';
+	}
+	const label = new PIXI.extras.BitmapText(input, {font: '16px ' + fontName});
+	label.x = x;
+	label.y = y;
+	label.zOrder = zOrder;
+	return label;
+},
 
 processScore(input){
 	input = String(input);
@@ -345,12 +346,14 @@ update(){
 			this.bonusLabelShadow.text = '';
 		}
 	};
-	updateScore();
-	updateDebug();
-	updateTimeLeft();
-	updatePaused();
-	updateGameOver();
-	updateBonus();
+	if(!globals.starting){
+		updateScore();
+		updateDebug();
+		updateTimeLeft();
+		updatePaused();
+		updateGameOver();
+		updateBonus();
+	}
 },
 
 init(){
@@ -360,9 +363,12 @@ init(){
 	this.debug();
 	this.timeLeft();
 	this.bonus();
-	globals.game.ticker.add(() => {
-		this.update()
-	});
+	if(!this.started){
+		this.started = true;
+		globals.game.ticker.add(() => {
+			this.update()
+		});
+	}
 }
 
 }

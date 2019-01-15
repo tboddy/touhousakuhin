@@ -184,14 +184,14 @@ const map = [
 
 ];
 
-const enemies = require('./enemies.js')
-
 module.exports = {
 
 	gridWidth: (globals.gameWidth - globals.grid * 2) / map[0].length,
 
+	tempMap: false,
+
 	addRow(){
-		const currentRow = map[map.length - 1], thisObj = this;
+		const currentRow = this.tempMap[this.tempMap.length - 1], thisObj = this;
 		for(i = 0; i < currentRow.length; i++){
 			switch(currentRow[i]){
 				case 1: thisObj.buildBlock(i, '0'); break;
@@ -200,7 +200,7 @@ module.exports = {
 				case 4: thisObj.buildBlock(i, '3'); break;
 			}
 		}
-		map.splice(map.length - 1, 1)
+		this.tempMap.splice(this.tempMap.length - 1, 1)
 	},
 
 	buildBlock(index, img){
@@ -224,7 +224,7 @@ module.exports = {
 	},
 
 	updateMap(){
-		if(globals.gameClock % 28 == 0 && map.length) this.addRow();
+		if(globals.gameClock % 28 == 0 && this.tempMap.length) this.addRow();
 	},
 
 	updateBlock(block, index){
@@ -243,6 +243,10 @@ module.exports = {
 	update(){
 		if(!globals.paused) this.updateMap();
 		if(!globals.stageFinished) enemies.currentWave();
+	},
+
+	init(){
+		this.tempMap = map;
 	}
 
 };

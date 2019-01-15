@@ -1,5 +1,7 @@
 module.exports = {
 
+	started: false,
+
 	mainWindow: require('electron').remote.getCurrentWindow(),
 
 	focus: false,
@@ -45,7 +47,7 @@ module.exports = {
 				controls.moving.left = gamepad.axes[0] == -1 ? true : false;
 				controls.moving.right = gamepad.axes[0] == 1 ? true : false; 
 				if(globals.gameOver){
-					if(gamepad.buttons[0].pressed) location.reload();
+					if(gamepad.buttons[0].pressed) globals.returnToTitle();
 				} else {
 					controls.shot = gamepad.buttons[0].pressed ? true : false;
 					controls.focus = gamepad.buttons[1].pressed ? true : false;
@@ -56,7 +58,7 @@ module.exports = {
 						}
 					} else if(controls.pausingGamepad) controls.pausingGamepad = false;
 				}
-				if(gamepad.buttons[5].pressed) location.reload();
+				if(gamepad.buttons[5].pressed) globals.returnToTitle();
 			}
 		}
 	},
@@ -69,8 +71,6 @@ module.exports = {
 					case 38: thisObj.movingStart.up = true; break;
 					case 40: thisObj.movingStart.down = true; break;
 				}
-			} else if(globals.stageFinished){
-
 			} else {
 				switch(e.which){
 					case 16: thisObj.focus = true; break;
@@ -78,25 +78,16 @@ module.exports = {
 					case 39: thisObj.moving.right = true; break;
 					case 38: thisObj.moving.up = true; break;
 					case 40: thisObj.moving.down = true; break;
-					case 90:
-						if(globals.gameOver) location.reload();
-						else thisObj.shot = true;
-						break;
+					case 90: thisObj.shot = true; break;
 				}
 			}
 		}, keysUp = e => {
 			if(globals.starting){
 				switch(e.which){
 					case 90: start.selectOption(); break;
-					// case 82: location.reload(); break;
 					case 70: thisObj.toggleFullscreen(); break;
 					case 38: start.changeOption(); break;
 					case 40: start.changeOption(); break;
-				}
-			} else if(globals.stageFinished){
-				switch(e.which){
-					case 90: stageUtils.nextStage(); break;
-					case 82: location.reload(); break;
 				}
 			} else {
 				switch(e.which){
@@ -106,9 +97,10 @@ module.exports = {
 					case 38: thisObj.moving.up = false; break;
 					case 40: thisObj.moving.down = false; break;
 					case 90:
-						if(!globals.gameOver) thisObj.shot = false;
+						if(globals.gameOver) globals.returnToTitle();
+						else thisObj.shot = false;
 						break;
-					case 82: location.reload(); break;
+					case 82: globals.returnToTitle(); break;
 					case 70: thisObj.toggleFullscreen(); break;
 					case 27: if(!globals.gameOver) globals.paused = !globals.paused; break;
 				}
@@ -116,7 +108,10 @@ module.exports = {
 		};
 		document.addEventListener('keydown', keysDown);
 		document.addEventListener('keyup', keysUp);
-		globals.game.ticker.add(this.updateGamepad);
+		if(!this.started){
+			this.started = true;
+			globals.game.ticker.add(this.updateGamepad);
+		}
 	}
 
 }
