@@ -7,12 +7,9 @@ highScoreLabel: false,
 highScoreLabelShadow: false,
 scoreLabel: false,
 scoreLabelShadow: false,
-transitionTime: 0.5,
 pausedOverlay: false,
 pausedLabel: false,
 pausedLabelShadow: false,
-lastLives: false,
-lastBombs: false,
 debugTimeLabel: false,
 debugBulletLabel: false,
 timeLabel: false,
@@ -371,6 +368,29 @@ init(){
 			this.update()
 		});
 	}
+},
+
+wipe(){
+
+	this.highScoreLabel = false;
+	this.highScoreLabelShadow = false;
+	this.scoreLabel = false;
+	this.scoreLabelShadow = false;
+	this.pausedOverlay = false;
+	this.pausedLabel = false;
+	this.pausedLabelShadow = false;
+	this.debugTimeLabel = false;
+	this.debugBulletLabel = false;
+	this.timeLabel = false;
+	this.timeLabelShadow = false;
+	this.bonusLabel = false;
+	this.bonusLabelShadow = false;
+	this.bonusScore = 0;
+	this.bonusClock = 0;
+	this.timeLimit = 120;
+	this.elapsed = 0;
+	this.fieldLabels = [];
+
 }
 
 }

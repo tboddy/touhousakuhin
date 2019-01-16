@@ -103,9 +103,25 @@ init(){
 	if(!this.started){
 		this.started = true;
 		globals.game.ticker.add(() => {
-			if(!globals.paused) thisObj.update();
+			if(!globals.paused && !globals.starting) thisObj.update();
 		});
 	}
+},
+
+wipe(){
+	this.bg = false;
+	this.bottom = false;
+	this.top = false;
+	this.fade = false;
+	this.overlay = false;
+	this.speed = 1.5;
+	this.speedOverlay = 2.5;
+	this.bossBg = false;
+	this.bossTexture00 = false;
+	this.bossTexture01 = false;
+	this.bossTexture02 = false;
+	this.bossClock = 0;
+	this.bossCurveClock = 5;
 }
 
 };

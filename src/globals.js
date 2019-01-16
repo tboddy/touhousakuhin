@@ -13,7 +13,6 @@ gameHeight: 480,
 
 enemyCount: 0,
 
-isCaravan: false,
 savedData: false,
 
 timeLeft: 150 * 60,
@@ -31,7 +30,6 @@ lostGame: false,
 wonGame: false,
 timeOver: false,
 paused: false,
-stageFinished: false,
 deadBoss: false,
 currentStage: 1,
 currentLoop: 1,
@@ -113,8 +111,6 @@ resize(){
 },
 
 returnToTitle(){
-	// location.reload();
-
 	this.game.stage.removeChildren();
 
 	enemyCount = 0;
@@ -131,26 +127,12 @@ returnToTitle(){
 	this.timeOver = false;
 	this.paused = false;
 
-	chrome.elapsed = 0;
-	chrome.timeLimit = chrome.baseTimeLimit;
-	chrome.didGameOver = false;
+	background.wipe();
+	chrome.wipe();
+	player.wipe();
+	controls.wipe();
 
-	player.lives = 1;
-
-	controls.focus = false;
-	controls.moving.left = false;
-	controls.moving.right = false;
-	controls.moving.up = false;
-	controls.moving.down = false;
-	controls.movingStart.left = false;
-	controls.movingStart.right = false;
-	controls.movingStart.up = false;
-	controls.movingStart.down = false;
-	controls.shot =false;
-	controls.isFullscreen =false;
-	controls.gamepad =false;
-	controls.pausingGamepad =false;
-	controls.changingGamepad =false;
+	explosion.count = 0;
 
 	stageUtils.nextWave('waveOne', enemies);
 	start.init();

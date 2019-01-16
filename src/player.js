@@ -1,21 +1,13 @@
 module.exports = {
 
-type: 'marisa',
-
 zIndex: 20,
 speed: 5,
 shotClock: 0,
 didShootClock: 0,
 skewDiff: .1,
-lives: 1,
-bombsInit: 2,
-bombs: 2,
 power: 0,
 graze: 0,
-invulnerableClock: 0,
 removed: false,
-bombClock: 0,
-bombY: globals.gameHeight,
 bulletSpeed: 35,
 didShoot: false,
 
@@ -121,70 +113,11 @@ spawnBullets(){
 	}
 },
 
-bomb(){
-	if(controls.bomb && !this.bombClock && player.bombs){
-		this.bombClock = 90;
-		player.bombs--;
-		sound.spawn('bomb')
-	}
-	if(this.bombClock){
-		globals.removeBullets = true;
-		globals.removeBulletsTime = 30;
-		if(this.bombClock % 10 == 0){
-			const offset = globals.grid * 3;
-			for(i = 0; i < 6; i++){
-				explosion.spawn({x: i * offset, y: this.bombY - offset}, false, 200, true);
-				explosion.spawn({x: i * offset, y: this.bombY}, false, 200, true);
-				explosion.spawn({x: i * offset + (offset / 2), y: this.bombY + offset}, false, 200, true);
-			}
-			this.bombY -= offset;
-		}
-		this.bombClock--;
-		if(!this.bombClock){
-			this.bombY = globals.gameHeight;
-			globals.removeBullets = false;
-			globals.removeBulletsTime = 0;
-		}
-	}
-},
-
-die(){
-	if(this.invulnerableClock > 0){
-		if(!this.removed){
-			this.removed = true;
-			this.sprite.x = globals.gameWidth / 2;
-			this.sprite.y = globals.gameHeight - this.sprite.height * .75;
-			this.hitbox.x = this.sprite.x;
-			this.hitbox.y = this.sprite.y + 2;
-			this.power -= 1;
-			this.bombs = this.bombsInit
-			if(this.power < 0) this.power = 0;
-		}
-		const interval = globals.grid;
-		if(this.invulnerableClock % interval < interval / 2){
-			this.sprite.alpha = 0;
-			this.hitbox.alpha = 0;
-		} else if(!this.sprite.alpha){
-			this.sprite.alpha = 1;
-			this.hitbox.alpha = 1;
-		}
-		this.invulnerableClock--;
-	} else {
-		if(!this.sprite.alpha){
-			this.sprite.alpha = 1;
-			this.hitbox.alpha = 1;
-		}
-		if(this.removed) this.removed = false;
-	}
-},
-
 update(player, index){
 	if(!globals.gameOver){
 		if(!globals.paused){
 			this.move();
 			this.shot();
-			this.bomb();
-			this.die();
 		}
 	} else{
 		if(player.alpha != 0){
@@ -228,6 +161,20 @@ init(){
 
 	globals.game.stage.addChild(this.sprite);
 	globals.game.stage.addChild(this.hitbox);
+},
+
+wipe(){
+	this.shotClock = 0;
+	this.didShootClock = 0;
+	this.power = 0;
+	this.graze = 0;
+	this.removed = false;
+	this.didShoot = false;
+	this.sprite = false;
+	this.hitbox = new PIXI.Sprite.fromImage('img/player/hitbox.png');
+	this.textureCenter = false;
+	this.textureLeft = false;
+	this.textureRight = false;
 }
 
 };

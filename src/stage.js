@@ -186,8 +186,7 @@ const map = [
 
 module.exports = {
 
-	gridWidth: (globals.gameWidth - globals.grid * 2) / map[0].length,
-
+	gridWidth: false,
 	tempMap: false,
 
 	addRow(){
@@ -247,6 +246,7 @@ module.exports = {
 
 	init(){
 		this.tempMap = map;
+		this.gridWidth = (globals.gameWidth - globals.grid * 2) / this.tempMap[0].length;
 	}
 
 };
