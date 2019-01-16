@@ -63,9 +63,8 @@ updateGamepad(){
 	}
 },
 
-init(){
-	const thisObj = this,
-	keysDown = e => {
+setupKeyboard(){
+	const thisObj = this, keysDown = e => {
 		if(globals.starting){
 			switch(e.which){
 				case 38: thisObj.movingStart.up = true; break;
@@ -97,7 +96,7 @@ init(){
 				case 38: thisObj.moving.up = false; break;
 				case 40: thisObj.moving.down = false; break;
 				case 90:
-					if(globals.gameOver) globals.returnToTitle();
+					if(globals.gameOver && globals.gameOverClock >= 30) globals.returnToTitle();
 					else thisObj.shot = false;
 					break;
 				case 82: globals.returnToTitle(); break;
@@ -108,8 +107,12 @@ init(){
 	};
 	document.addEventListener('keydown', keysDown);
 	document.addEventListener('keyup', keysUp);
+},
+
+init(){
 	if(!this.started){
 		this.started = true;
+		this.setupKeyboard();
 		globals.game.ticker.add(this.updateGamepad);
 	}
 },

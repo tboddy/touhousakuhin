@@ -245,7 +245,7 @@ module.exports = {
 	},
 
 	init(){
-		this.tempMap = map;
+		this.tempMap = map.slice(0);
 		this.gridWidth = (globals.gameWidth - globals.grid * 2) / this.tempMap[0].length;
 	}
 

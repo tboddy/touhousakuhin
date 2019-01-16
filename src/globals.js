@@ -29,6 +29,7 @@ gameOver: false,
 lostGame: false,
 wonGame: false,
 timeOver: false,
+gameOverClock: false,
 paused: false,
 deadBoss: false,
 currentStage: 1,
@@ -111,7 +112,6 @@ resize(){
 },
 
 returnToTitle(){
-	this.game.stage.removeChildren();
 
 	enemyCount = 0;
 	bulletCount = 0;
@@ -119,13 +119,14 @@ returnToTitle(){
 	lastEnemyCount = 0;
 
 	this.starting = true;
-	this.game.ticker.remove(mainLoop);
 	this.score = 0;
 	this.gameOver = false;
 	this.lostGame = false;
 	this.wonGame = false;
 	this.timeOver = false;
 	this.paused = false;
+	this.gameClock = 0;
+	this.gameOverClock = 0;
 
 	background.wipe();
 	chrome.wipe();
@@ -134,7 +135,10 @@ returnToTitle(){
 
 	explosion.count = 0;
 
+	this.game.ticker.remove(mainLoop);
+	this.game.stage.removeChildren();
 	stageUtils.nextWave('waveOne', enemies);
+
 	start.init();
 }
 

@@ -94,6 +94,7 @@ const mainLoop = delta => {
 		if(!globals.removeBulletsTime) globals.removeBullets = false;
 	}
 	if(globals.gameClock % 2 == 0) lastEnemyCount = enemyCount;
+	if(globals.gameOver) globals.gameOverClock++;
 	globals.gameClock++;
 },
 

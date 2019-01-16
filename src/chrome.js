@@ -18,6 +18,7 @@ bonusLabel: false,
 bonusLabelShadow: false,
 bonusScore: 0,
 bonusClock: 0,
+gameOverClock: 0,
 
 timeLimit: 120,
 baseTimeLimit: 120,
@@ -242,6 +243,7 @@ gameOver(){
 	endResult();
 	scoreResult();
 	restartString();
+	console.log('game over')
 },
 
 addFieldLabel(input, pos){
@@ -390,6 +392,7 @@ wipe(){
 	this.timeLimit = 120;
 	this.elapsed = 0;
 	this.fieldLabels = [];
+	this.didGameOver = false;
 
 }
 
