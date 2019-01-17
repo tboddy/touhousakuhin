@@ -26,7 +26,6 @@ const mainLoop = delta => {
 	enemyCount = 0;
 	globals.enemyCount = 0;
 	bulletCount = 0;
-	let enemyDistances = [];
 	for(var i = 0; i < globals.game.stage.children.length; i++){
 		const child = globals.game.stage.children[i]
 		if(child.type){
@@ -43,12 +42,6 @@ const mainLoop = delta => {
 				case 'enemy':
 					stageUtils.updateEnemy(child, i);
 					collision.placeItem(child, i);
-					if(child.seen){
-						enemyDistances.push({
-							enemy: child,
-							distance: Math.hypot(child.x - player.sprite.x, child.y - player.sprite.y)
-						})
-					}
 					enemyCount++;
 					break;
 				case 'bullet':
@@ -79,14 +72,6 @@ const mainLoop = delta => {
 	collision.update();
 	stage.update();
 	sortZ();
-	if(enemyDistances.length){
-		enemyDistances.forEach(enemy => {
-			if(enemy.enemy.y < globals.gameHeight - enemy.enemy.height / 2){
-				if(!globals.lowestDistance) globals.lowestDistance = enemy.enemy;
-				else if(enemy.distance < globals.lowestDistance.distance) globals.lowestDistance = enemy.enemy;
-			}
-		});
-	} else globals.lowestDistance = false;
 	if(!globals.paused) globals.timeLeft--;
 	if(globals.removeBullets){
 		if(!globals.removeBulletsTime) globals.removeBulletsTime = 30;

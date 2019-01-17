@@ -39,7 +39,8 @@ title(){
 
 options(){
 	const x = globals.winWidth / 2, y = globals.gameHeight / 2 + globals.grid;
-	this.optionItems.forEach((item, i) => {
+	for(i = 0; i < this.optionItems.length; i++){
+		const item = this.optionItems[i];
 		item.label = chrome.label(item.text, x, y + i * (globals.grid + 4));
 		item.activeLabel = chrome.label(item.text, x, y + i * (globals.grid + 4), 'orange');
 		const shadow = chrome.label(item.text, x, y + i * (globals.grid + 4), 'dark');
@@ -52,7 +53,7 @@ options(){
 		globals.game.stage.addChild(shadow);
 		globals.game.stage.addChild(item.label);
 		globals.game.stage.addChild(item.activeLabel);
-	});
+	}
 },
 
 credit(){
@@ -95,34 +96,12 @@ changeOption(down){
 	else this.currentOption--;
 	if(this.currentOption == this.optionItems.length) this.currentOption = 0;
 	if(this.currentOption == -1) this.currentOption = this.optionItems.length - 1;
-	this.optionItems.forEach((item, i) => {
+	for(i = 0; i < this.optionItems.length; i++){
+		const item = this.optionItems[i];
 		if(i == this.currentOption) item.activeLabel.alpha = 1;
 		else if(item.activeLabel.alpha) item.activeLabel.alpha = 0;
-	});
+	}
 	sound.spawn('changeSelect');
-},
-
-controlText(){
-	const y = globals.grid * 19.5,
-		labels = [
-			'Arrow Keys / D-Pad: Move            ',
-			'Z / Btn 1: Shoot  ',
-			'Shift / Btn 2: Focus      ',
-			'Esc / Btn 5: Pause    ',
-			'         R / Btn 6: Return to Title',
-			'            F: Fullscreen'
-
-		],
-		x = globals.winWidth / 2,
-		addLabel = (input, i) => {
-			const offset = (globals.grid * 1 + 4) * i;
-			const label = chrome.label(input, x, y + offset, 'brown'), shadow = chrome.label(input, x, y + offset, 'dark');
-			label.anchor.set(.5, 0);
-			shadow.anchor.set(.5, 0);
-			globals.game.stage.addChild(shadow);
-			globals.game.stage.addChild(label);
-		}
-	labels.forEach(addLabel);
 },
 
 selectOption(){
@@ -144,7 +123,6 @@ init(){
 	this.options();
 	this.credit();
 	this.version();
-	// this.controlText();
 	this.highScore();
 	// globals.startGame();
 }

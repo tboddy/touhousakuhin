@@ -99,7 +99,6 @@ getAngle(a, b){
 },
 
 homingAngle: false,
-lowestDistance: false,
 
 resize(){
 	const canvasEl = document.getElementsByTagName('CANVAS')[0];

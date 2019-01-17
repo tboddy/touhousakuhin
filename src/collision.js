@@ -98,7 +98,10 @@ module.exports = {
 					if(player.power > 0){
 						player.invulnerableClock = 60 * 2;
 						player.power--;
-					} else globals.gameOver = true;
+					} else{
+						player.lives = 0;
+						globals.gameOver = true;
+					}
 				}
 			}
 		}, checkChip = chip => {

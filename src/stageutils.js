@@ -207,9 +207,9 @@ updateBossBorder(border, index){
 
 checkEnemies(){
 	let hasEnemies = false;
-	globals.game.stage.children.forEach(child => {
-		if(child.type && (child.type == 'enemy') && !hasEnemies) hasEnemies = true;
-	});
+	for(i = 0; i < globals.game.stage.children.length; i++){
+		if(globals.game.stage.children.length[i].type && (globals.game.stage.children.length[i].type == 'enemy') && !hasEnemies) hasEnemies = true;
+	}
 	return hasEnemies;
 },
 
