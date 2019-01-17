@@ -7,9 +7,16 @@ didShootClock: 0,
 skewDiff: .1,
 power: 0,
 graze: 0,
+invulnerableClock: 0,
 removed: false,
 bulletSpeed: 35,
 didShoot: false,
+lives: 1,
+livesInit: 1,
+bombsInit: 2,
+bombs: 2,
+bombClock: 0,
+bombY: globals.gameHeight,
 
 sprite: false,
 hitbox: new PIXI.Sprite.fromImage('img/player/hitbox.png'),
@@ -113,11 +120,42 @@ spawnBullets(){
 	}
 },
 
+die(){
+	if(this.invulnerableClock > 0){
+		if(!this.removed){
+			this.removed = true;
+			this.sprite.x = globals.gameWidth / 2;
+			this.sprite.y = globals.gameHeight - this.sprite.height * .75;
+			this.hitbox.x = this.sprite.x;
+			this.hitbox.y = this.sprite.y;
+			this.power -= 1;
+			this.bombs = this.bombsInit
+			if(this.power < 0) this.power = 0;
+		}
+		const interval = globals.grid;
+		if(this.invulnerableClock % interval < interval / 2){
+			this.sprite.alpha = 0;
+			this.hitbox.alpha = 0;
+		} else if(!this.sprite.alpha){
+			this.sprite.alpha = 1;
+			this.hitbox.alpha = 1;
+		}
+		this.invulnerableClock--;
+	} else {
+		if(!this.sprite.alpha){
+			this.sprite.alpha = 1;
+			this.hitbox.alpha = 1;
+		}
+		if(this.removed) this.removed = false;
+	}
+},
+
 update(player, index){
 	if(!globals.gameOver){
 		if(!globals.paused){
 			this.move();
 			this.shot();
+			this.die();
 		}
 	} else{
 		if(player.alpha != 0){
@@ -175,6 +213,7 @@ wipe(){
 	this.textureCenter = false;
 	this.textureLeft = false;
 	this.textureRight = false;
+	this.lives = this.livesInit;
 }
 
 };

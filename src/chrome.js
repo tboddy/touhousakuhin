@@ -56,7 +56,7 @@ processTime(input){
 
 frame(){
 	const frameLeft = PIXI.Sprite.fromImage('img/frame/bg-left.png'), frameRight = PIXI.Sprite.fromImage('img/frame/bg-right.png'),
-		borders = new PIXI.Graphics(), logo = PIXI.Sprite.fromImage('img/frame/logo.png');
+		logo = PIXI.Sprite.fromImage('img/frame/logo.png');
 
 	frameLeft.zOrder = this.zOrder - 11;
 	frameRight.zOrder = this.zOrder - 11;
@@ -65,12 +65,6 @@ frame(){
 	frameRight.x = globals.gameX + globals.gameWidth;
 	frameRight.y = 0;
 
-	borders.zOrder = this.zOrder - 10;
-	borders.beginFill(globals.hex.indigo);
-	borders.drawRect(globals.gameX - 1, 0, 1, globals.gameHeight);
-	borders.drawRect(globals.gameX + globals.gameWidth, 0, 1, globals.gameHeight);
-	borders.endFill();
-
 	logo.anchor.set(.5, 1);
 	logo.zOrder = this.zOrder;
 	logo.x = globals.gameX * 1.5 + globals.gameWidth
@@ -78,7 +72,6 @@ frame(){
 
 	globals.game.stage.addChild(frameLeft);
 	globals.game.stage.addChild(frameRight);
-	globals.game.stage.addChild(borders);
 	globals.game.stage.addChild(logo);
 
 },
@@ -95,10 +88,12 @@ score(){
 		globals.game.stage.addChild(this.highScoreLabel);
 		globals.game.stage.addChild(this.highScoreLabelShadow);
 	}, playerScore = () => {
-		const x = globals.gameX + globals.gameWidth + globals.grid, str = 'SCORE';
-		const title = this.label(str, x, y), titleShadow = this.label(str, x, y, 'dark');
+		const x = globals.winWidth - globals.grid * 4.5, str = 'SCORE';
+		const title = this.label(str, x + globals.grid, y), titleShadow = this.label(str, x + globals.grid, y, 'dark');
 		this.scoreLabel = this.label(this.processScore(globals.score), x, y + offset);
 		this.scoreLabelShadow = this.label(this.processScore(globals.score), x, y + offset, 'dark');
+		// this.scoreLabel.anchor.set(0, 1)
+		// this.scoreLabelShadow.anchor.set(0, 1)
 		globals.game.stage.addChild(title);
 		globals.game.stage.addChild(titleShadow);
 		globals.game.stage.addChild(this.scoreLabel);
@@ -109,7 +104,7 @@ score(){
 },
 
 timeLeft(){
-	const x = globals.gameX + globals.gameWidth + globals.grid, y = globals.grid * 4, offset = globals.grid + 2, str = 'TIME';
+	const x = globals.winWidth - globals.grid * 3, y = globals.grid * 4, offset = globals.grid + 2, str = 'TIME';
 	const title = this.label(str, x, y), titleShadow = this.label(str, x, y, 'dark');
 	this.timeLabel = this.label(this.processTime(this.timeLimit), x, y + offset);
 	this.timeLabelShadow = this.label(this.processTime(this.timeLimit), x, y + offset, 'dark');
@@ -332,7 +327,7 @@ update(){
 			this.timeLabel.text = timeString;
 			this.timeLabelShadow.text = timeString;
 		}
-		if(!globals.paused && !globals.wonGame) this.elapsed++;
+		if(!globals.paused && !globals.wonGame && !globals.gameOver) this.elapsed++;
 	}, updateBonus = () => {
 		if(this.bonusClock){
 			if(this.bonusLabel.alpha != 1){

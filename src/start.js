@@ -17,7 +17,7 @@ bg(){
 },
 
 title(){
-	const y = globals.grid * 5.5, headerText = 'WINTER CARAVAN \'19';
+	const y = globals.grid * 5.5, headerText = 'WINTER CARNIVAL \'19';
 	const header = chrome.label(headerText, globals.winWidth / 2, y),
 		headerShadow = chrome.label(headerText, globals.winWidth / 2, y, 'dark'),
 		title = PIXI.Sprite.fromImage('img/start/title.png');
@@ -150,7 +150,7 @@ init(){
 	this.version();
 	// this.controlText();
 	this.highScore();
-	// globals.startGame();
+	globals.startGame();
 }
 
 };
