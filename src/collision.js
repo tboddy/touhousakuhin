@@ -95,9 +95,9 @@ module.exports = {
 					player.graze = 0;
 					globals.removeBullets = true;
 					if(!obj.isBoss) obj.y = -globals.gameHeight;
-					if(player.lives - 1){
+					if(player.power > 0){
 						player.invulnerableClock = 60 * 2;
-						player.lives--;
+						player.power--;
 					} else globals.gameOver = true;
 				}
 			}

@@ -3,6 +3,8 @@ module.exports = {
 canSpawn: true,
 bossPosition: {x: 0, y: 0},
 bossBorder: false,
+fairyScale: 1.15,
+kedamaScale: 1.1,
 
 spawnEnemy(type, x, y, initFunc, updateFunc){
 	let enemy;
@@ -14,6 +16,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-blue-02.png');
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
+			enemy.scale.set(this.fairyScale)
 			break;
 		case 'fairyRed':
 			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-red-00.png');
@@ -22,6 +25,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-red-02.png');
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
+			enemy.scale.set(this.fairyScale)
 			break;
 		case 'fairyGreen':
 			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-green-00.png');
@@ -30,6 +34,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-green-02.png');
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
+			enemy.scale.set(this.fairyScale)
 			break;
 		case 'lily':
 			enemy = PIXI.Sprite.fromImage('img/enemies/lily-00.png');
@@ -44,6 +49,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/kedama-red-00.png');
 			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-red-01.png');
 			enemy.enemyType = 'kedama';
+			enemy.scale.set(this.kedamaScale);
 			enemy.idleClock = 0;
 			break;
 		case 'kedamaBlue':
@@ -52,6 +58,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-blue-01.png');
 			enemy.enemyType = 'kedama';
 			enemy.idleClock = 0;
+			enemy.scale.set(this.kedamaScale);
 			break;
 		case 'kedamaGreen':
 			enemy = PIXI.Sprite.fromImage('img/enemies/kedama-green-00.png');
@@ -59,6 +66,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-green-01.png');
 			enemy.enemyType = 'kedama';
 			enemy.idleClock = 0;
+			enemy.scale.set(this.kedamaScale);
 			break;
 		case 'komachi':
 			enemy = PIXI.Sprite.fromImage('img/boss/komachi-center00.png');
@@ -86,8 +94,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 	enemy.x = Math.round(x);
 	enemy.y = Math.round(y);
 	enemy.clock = 0;
-
-
 	enemy.zOrder = 50;
 	enemy.updateFunc = updateFunc;
 	initFunc(enemy);

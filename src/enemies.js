@@ -2,7 +2,6 @@ module.exports = {
 clock: 0,
 waveX: 0,
 waveDrop: 0,
-spawnedRegularMiniboss: false,
 
 waveOne(){
 	const spawnEnemy = () => {
@@ -480,7 +479,7 @@ waveTwelve(){
 	const spawnEnemy = x => {
 		stageUtils.spawnEnemy('fairyRed', x, -globals.grid, enemy => {
 			enemy.speed = 2;
-			enemy.health = 6;
+			enemy.health = 5;
 			enemy.healthInit = enemy.health;
 			enemy.angle = globals.getAngle(player.sprite, enemy);
 		}, enemy => {

@@ -22,6 +22,7 @@ isFullscreen: false,
 gamepad: false,
 pausingGamepad: false,
 changingGamepad: false,
+pressed: [false, false, false, false, false, false],
 
 toggleFullscreen(){
 	this.isFullscreen = !this.isFullscreen;
@@ -33,11 +34,15 @@ toggleFullscreen(){
 updateGamepad(){
 	if(navigator.getGamepads()[0]){
 		const gamepad = navigator.getGamepads()[0];
+
+
+
+
 		if(globals.starting){
-			if(gamepad.buttons[0].pressed) start.selectOption();
+			if(gamepad.buttons[0].pressed && !controls.pressed[0]) start.selectOption();
 			if(gamepad.axes[1] == -1 || gamepad.axes[1] == 1){
 				if(!controls.changingGamepad){
-					start.changeOption();
+					start.changeOption(gamepad.axes[1] == 1);
 					controls.changingGamepad = true;
 				}
 			} else if(controls.changingGamepad) controls.changingGamepad = false;
@@ -47,7 +52,7 @@ updateGamepad(){
 			controls.moving.left = gamepad.axes[0] == -1 ? true : false;
 			controls.moving.right = gamepad.axes[0] == 1 ? true : false; 
 			if(globals.gameOver){
-				if(gamepad.buttons[0].pressed) globals.returnToTitle();
+				if(gamepad.buttons[0].pressed && !controls.pressed[0]) globals.returnToTitle();
 			} else {
 				controls.shot = gamepad.buttons[0].pressed ? true : false;
 				controls.focus = gamepad.buttons[1].pressed ? true : false;
@@ -60,6 +65,12 @@ updateGamepad(){
 			}
 			if(gamepad.buttons[5].pressed) globals.returnToTitle();
 		}
+		
+		for(i = 0; i < controls.pressed.length; i++){
+			if(gamepad.buttons[i].pressed && !controls.pressed[i]) controls.pressed[i] = true;
+			else if(!gamepad.buttons[i].pressed && controls.pressed[i]) controls.pressed[i] = false;
+		};
+
 	}
 },
 

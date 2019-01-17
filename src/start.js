@@ -4,7 +4,7 @@ currentOption: 0,
 
 optionItems: [
 	{text: '2 MINUTE MODE'},
-	{text: '5 MINUTE MODE'},
+	// {text: '5 MINUTE MODE'},
 	{text: 'EXIT GAME'}
 ],
 
@@ -132,10 +132,6 @@ selectOption(){
 			globals.startGame();
 			break;
 		case 1:
-			sound.spawn('startGame');
-			globals.startGame();
-			break;
-		case 2:
 			require('electron').remote.app.quit();
 			break;
 	}

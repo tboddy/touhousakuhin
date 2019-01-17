@@ -182,8 +182,8 @@ gameOver(){
 		const x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2 - globals.grid - 4;
 		if(globals.wonGame){
 			const wonScore = 200000, wonStr = 'BEAT TIME LIMIT! BONUS ' + (wonScore + 5000)
-			const wonLabel = this.label(winStr, x, y),
-				wonLabelShadow = this.label(winStr, x, y, 'dark');
+			const wonLabel = this.label(wonStr, x, y),
+				wonLabelShadow = this.label(wonStr, x, y, 'dark');
 			globals.score += wonScore;
 			wonLabel.anchor.set(.5);
 			wonLabelShadow.anchor.set(.5);

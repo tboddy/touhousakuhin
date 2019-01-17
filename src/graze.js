@@ -11,7 +11,7 @@ module.exports = {
 		item.velocity = {x: Math.cos(angle) * speed, y: Math.sin(angle) * speed};
 		item.clock = 0;
 		globals.game.stage.addChild(item);
-		globals.score += 15;
+		globals.score += 25;
 		sound.spawn('graze');
 	},
 

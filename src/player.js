@@ -11,8 +11,9 @@ invulnerableClock: 0,
 removed: false,
 bulletSpeed: 35,
 didShoot: false,
-lives: 1,
+lives: 3,
 livesInit: 1,
+spriteInit: false,
 
 sprite: false,
 hitbox: new PIXI.Sprite.fromImage('img/player/hitbox.png'),
@@ -56,27 +57,15 @@ move(){
 },
 
 shot(){
-	const interval = 30, check = () => {
-		if(controls.shot){
-			if(this.shotClock % interval == 0){
-				this.didShootClock = 0;
-				this.didShoot = true;
-			}
-			this.shotClock++;
-		} else if(this.shotClock) this.shotClock = 0;
-	}, startShot = () => {
-		if(this.didShootClock < interval / 3 * 2 && this.didShootClock % 4 == 0){
+	const startShot = () => {
+		if(this.shotClock % 6 == 1){
 			this.spawnBullets();
 			sound.spawn('playerBullet');
 		}
-		if(this.didShootClock >= interval){
-			this.didShootClock = 0;
-			this.didShoot = false;
-		}
 		this.didShootClock++;
 	};
-	check();
-	if(this.didShoot) startShot();
+	controls.shot ? this.shotClock++ : this.shotClock = 0;
+	if(this.shotClock) startShot();
 },
 
 spawnBullets(){
@@ -118,15 +107,7 @@ spawnBullets(){
 
 die(){
 	if(this.invulnerableClock > 0){
-		if(!this.removed){
-			this.removed = true;
-			this.sprite.x = globals.gameWidth / 2;
-			this.sprite.y = globals.gameHeight - this.sprite.height * .75;
-			this.hitbox.x = this.sprite.x;
-			this.hitbox.y = this.sprite.y;
-			this.power -= 1;
-			if(this.power < 0) this.power = 0;
-		}
+		if(!this.removed) this.removed = true;
 		const interval = globals.grid;
 		if(this.invulnerableClock % interval < interval / 2){
 			this.sprite.alpha = 0;
@@ -174,14 +155,15 @@ updateBullet(bullet, index){
 },
 
 init(){
+	this.spriteInit = {x: globals.gameX + globals.gameWidth / 2, y: globals.gameHeight - globals.grid * 2.75};
 	this.sprite = new PIXI.Sprite.fromImage('img/player/center.png');
 	this.textureCenter = PIXI.Texture.fromImage('img/player/center.png');
 	this.textureLeft = PIXI.Texture.fromImage('img/player/left.png');
 	this.textureRight = PIXI.Texture.fromImage('img/player/right.png');
 
 	this.sprite.anchor.set(.5);
-	this.sprite.x = globals.gameWidth / 2 - this.hitbox.width / 2 + globals.gameX;
-	this.sprite.y = globals.gameHeight - 30 - this.hitbox.height / 2;
+	this.sprite.x = this.spriteInit.x;
+	this.sprite.y = this.spriteInit.y;
 	this.sprite.type = 'player';
 	this.sprite.zOrder = this.zIndex;
 
