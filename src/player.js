@@ -13,10 +13,6 @@ bulletSpeed: 35,
 didShoot: false,
 lives: 1,
 livesInit: 1,
-bombsInit: 2,
-bombs: 2,
-bombClock: 0,
-bombY: globals.gameHeight,
 
 sprite: false,
 hitbox: new PIXI.Sprite.fromImage('img/player/hitbox.png'),
@@ -129,7 +125,6 @@ die(){
 			this.hitbox.x = this.sprite.x;
 			this.hitbox.y = this.sprite.y;
 			this.power -= 1;
-			this.bombs = this.bombsInit
 			if(this.power < 0) this.power = 0;
 		}
 		const interval = globals.grid;

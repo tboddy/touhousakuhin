@@ -238,7 +238,6 @@ gameOver(){
 	endResult();
 	scoreResult();
 	restartString();
-	console.log('game over')
 },
 
 addFieldLabel(input, pos){

@@ -3,6 +3,7 @@ module.exports = {
 score: 0,
 highScore: 0,
 specialScore: 2000,
+specialScoreInit: 2000,
 
 gameClock: 0,
 
@@ -127,6 +128,7 @@ returnToTitle(){
 	this.paused = false;
 	this.gameClock = 0;
 	this.gameOverClock = 0;
+	this.specialScore = this.specialScoreInit;
 
 	background.wipe();
 	chrome.wipe();

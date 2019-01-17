@@ -150,7 +150,7 @@ init(){
 	this.version();
 	// this.controlText();
 	this.highScore();
-	globals.startGame();
+	// globals.startGame();
 }
 
 };

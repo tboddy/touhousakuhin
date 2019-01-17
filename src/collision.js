@@ -90,7 +90,7 @@ module.exports = {
 		}, checkObjAgainstPlayer = obj => {
 			const dx = player.sprite.x - obj.x, dy = player.sprite.y - obj.y, radii = (obj.width / 2) + (player.hitbox.width / 2 - 4);
 			if(dx * dx + dy * dy < radii * radii){
-				if(!globals.gameOver && !player.bombClock){
+				if(!globals.gameOver){
 					explosion.spawn(player.sprite, false, false, true);
 					player.graze = 0;
 					globals.removeBullets = true;
