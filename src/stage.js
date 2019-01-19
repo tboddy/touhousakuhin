@@ -178,7 +178,6 @@ const mapTwoMin = [
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0]
 ], mapFiveMin = [
 	[0, 0, 0, 0, 0, 0, 0, 0]
@@ -223,7 +222,7 @@ buildBlock(index, img){
 },
 
 updateMap(){
-	if(globals.gameClock % 28 == 0 && this.tempMap.length) this.addRow();
+	if(globals.gameClock % 29 == 0 && this.tempMap.length) this.addRow();
 },
 
 updateBlock(block, index){
@@ -236,7 +235,7 @@ updateBlock(block, index){
 		block.scale.set(block.scale.x + diff);
 	}
 	block.clock++;
-	if(block.baseY > globals.gameHeight || block.hit) globals.game.stage.removeChildAt(index);
+	if(block.baseY > globals.winHeight || block.hit) globals.game.stage.removeChildAt(index);
 },
 
 update(){

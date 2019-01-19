@@ -14,46 +14,60 @@ didShoot: false,
 lives: 3,
 livesInit: 1,
 spriteInit: false,
-
-sprite: false,
-hitbox: new PIXI.Sprite.fromImage('img/player/hitbox.png'),
-
-textureCenter: false,
-textureLeft: false,
-textureRight: false,
+focusClock: 0,
+idleClock: 0,
+leftClock: 0,
+rightClock: 0,
 
 move(){
 	let speed = controls.focus ? this.speed / 2 : this.speed;
 	const currentImage = this.sprite.texture.baseTexture.imageUrl;
 	if(controls.moving.left){
 		this.sprite.x -= speed;
-		if(currentImage.indexOf('left') == -1) this.sprite.texture = this.textureLeft;
+		this.sprite.texture = this.leftClock < globals.idleInterval / 4 ? sprites.playerLeft0 : sprites.playerLeft1;
+		this.leftClock++;
+		if(this.idleClock) this.idleClock = 0;
+		if(this.rightClock) this.rightClock = 0;
 	} else if(controls.moving.right){
 		this.sprite.x += speed;
-		if(currentImage.indexOf('right') == -1) this.sprite.texture = this.textureRight;
+		this.sprite.texture = this.rightClock < globals.idleInterval / 4 ? sprites.playerRight0 : sprites.playerRight1;
+		this.rightClock++;
+		if(this.idleClock) this.idleClock = 0;
+		if(this.leftClock) this.leftClock = 0;
 	} else if(!controls.moving.left && !controls.moving.right){
-		this.sprite.texture = this.textureCenter;
+		if(this.idleClock % globals.idleInterval == 0) this.sprite.texture = sprites.playerCenter0;
+		else if(this.idleClock % globals.idleInterval == globals.idleInterval / 4 || this.idleClock % globals.idleInterval == globals.idleInterval / 4 * 3) this.sprite.texture = sprites.playerCenter1;
+		else if(this.idleClock % globals.idleInterval == globals.idleInterval / 2) this.sprite.texture = sprites.playerCenter2;
+		this.idleClock++;
+		if(this.leftClock) this.leftClock = 0;
+		if(this.rightClock) this.rightClock = 0;
 	}
 	if(controls.moving.up) this.sprite.y -= speed;
 	else if(controls.moving.down) this.sprite.y += speed;
 	this.hitbox.x = this.sprite.x;
 	this.hitbox.y = this.sprite.y + 2;
-	if(this.hitbox.x - this.hitbox.width / 2 < globals.gameX){
-		this.sprite.x = this.hitbox.width / 2 + globals.gameX;
-		this.hitbox.x = this.sprite.x;
-	} else if(this.hitbox.x + this.hitbox.width / 2 > globals.gameWidth + globals.gameX){
-		this.sprite.x = globals.gameWidth - this.hitbox.width / 2 + globals.gameX;
-		this.hitbox.x = this.sprite.x;
+	if(this.hitbox.x - this.hitbox.width / 2 < globals.gameX) this.sprite.x = this.hitbox.width / 2 + globals.gameX;
+	else if(this.hitbox.x + this.hitbox.width / 2 > globals.gameWidth + globals.gameX) this.sprite.x = globals.gameWidth - this.hitbox.width / 2 + globals.gameX;
+	if(this.hitbox.y - this.hitbox.height / 2 < globals.grid) this.sprite.y = this.hitbox.height / 2 - 2 + globals.grid;
+	else if(this.hitbox.y + this.hitbox.height / 2 > globals.winHeight - globals.grid) this.sprite.y = globals.winHeight - this.hitbox.height / 2 - 2 - globals.grid;
+	this.hitbox.x = this.sprite.x;
+	this.hitbox.y = this.sprite.y + 2;
+	this.focus.x = this.sprite.x;
+	this.focus.y = this.sprite.y;
+	if(controls.focus && this.hitbox.alpha != 1){
+		this.hitbox.alpha = 1;
+		this.focus.alpha = 1;
+	} else if(!controls.focus && this.hitbox.alpha == 1){
+		this.hitbox.alpha = 0;
+		this.focus.alpha = 0;
+		this.focusClock = 0;
+		this.focus.scale.set(.25)
 	}
-	if(this.hitbox.y - this.hitbox.height / 2 < 0){
-		this.sprite.y = this.hitbox.height / 2 - 2;
-		this.hitbox.y = this.sprite.y + 2;
-	} else if(this.hitbox.y + this.hitbox.height / 2 > globals.gameHeight){
-		this.sprite.y = globals.gameHeight - this.hitbox.height / 2 - 2;
-		this.hitbox.y = this.sprite.y + 2;
-	}
-	if(controls.focus && this.hitbox.alpha != 1) this.hitbox.alpha = 1;
-	else if(!controls.focus && this.hitbox.alpha == 1) this.hitbox.alpha = 0;
+	if(this.focus.alpha && this.focus.scale.x < 1){
+		const mod = 0.125;
+		this.focus.scale.x += mod;
+		this.focus.scale.y += mod;
+	} else if (this.focus.scale > 1) this.focus.scale.set(1)
 },
 
 shot(){
@@ -112,15 +126,18 @@ die(){
 		if(this.invulnerableClock % interval < interval / 2){
 			this.sprite.alpha = 0;
 			this.hitbox.alpha = 0;
+			this.focus.alpha = 0;
 		} else if(!this.sprite.alpha){
 			this.sprite.alpha = 1;
 			this.hitbox.alpha = 1;
+			this.focus.alpha = 1;
 		}
 		this.invulnerableClock--;
 	} else {
 		if(!this.sprite.alpha){
 			this.sprite.alpha = 1;
 			this.hitbox.alpha = 1;
+			this.focus.alpha = 1;
 		}
 		if(this.removed) this.removed = false;
 	}
@@ -137,8 +154,9 @@ update(player, index){
 		if(player.alpha != 0){
 			player.alpha = 0;
 			this.hitbox.alpha = 0;
+			this.focus.alpha = 0;
 			player.x = globals.gameWidth / 2;
-			player.y = globals.gameHeight * 2;
+			player.y = globals.winHeight * 2;
 		}
 	}
 },
@@ -155,11 +173,12 @@ updateBullet(bullet, index){
 },
 
 init(){
+
+	this.sprite = new PIXI.Sprite.from(sprites.playerCenter0);
+	this.hitbox = new PIXI.Sprite.from(sprites.hitbox);
+	this.focus = new PIXI.Sprite.from(sprites.focus);
+
 	this.spriteInit = {x: globals.gameX + globals.gameWidth / 2, y: globals.gameHeight - globals.grid * 2.75};
-	this.sprite = new PIXI.Sprite.fromImage('img/player/center.png');
-	this.textureCenter = PIXI.Texture.fromImage('img/player/center.png');
-	this.textureLeft = PIXI.Texture.fromImage('img/player/left.png');
-	this.textureRight = PIXI.Texture.fromImage('img/player/right.png');
 
 	this.sprite.anchor.set(.5);
 	this.sprite.x = this.spriteInit.x;
@@ -170,12 +189,19 @@ init(){
 	this.hitbox.anchor.set(.5);
 	this.hitbox.x = this.sprite.x;
 	this.hitbox.y = this.sprite.y + 2;
-	this.hitbox.type = 'playerHitbox';
 	this.hitbox.zOrder = this.zIndex + 2;
 	this.hitbox.alpha = 0;
 
+	this.focus.anchor.set(.5);
+	this.focus.x = this.sprite.x;
+	this.focus.y = this.sprite.y + 2;
+	this.focus.zOrder = this.zIndex + 2;
+	this.focus.alpha = 0;
+	this.focus.scale.set(.25);
+
 	globals.game.stage.addChild(this.sprite);
 	globals.game.stage.addChild(this.hitbox);
+	globals.game.stage.addChild(this.focus);
 },
 
 wipe(){
@@ -185,11 +211,6 @@ wipe(){
 	this.graze = 0;
 	this.removed = false;
 	this.didShoot = false;
-	this.sprite = false;
-	this.hitbox = new PIXI.Sprite.fromImage('img/player/hitbox.png');
-	this.textureCenter = false;
-	this.textureLeft = false;
-	this.textureRight = false;
 	this.lives = this.livesInit;
 }
 

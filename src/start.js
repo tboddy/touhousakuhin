@@ -38,7 +38,7 @@ title(){
 },
 
 options(){
-	const x = globals.winWidth / 2, y = globals.gameHeight / 2 + globals.grid;
+	const x = globals.winWidth / 2, y = globals.winHeight / 2 + globals.grid;
 	for(i = 0; i < this.optionItems.length; i++){
 		const item = this.optionItems[i];
 		item.label = chrome.label(item.text, x, y + i * (globals.grid + 4));
@@ -57,14 +57,14 @@ options(){
 },
 
 credit(){
-	const text = '2019 PEACE RESEARCH', x = globals.grid * 2 + 2, y = globals.gameHeight - globals.grid,
+	const text = '2019 PEACE RESEARCH', x = globals.grid * 2 + 2, y = globals.winHeight - globals.grid,
 		copyleft = PIXI.Sprite.fromImage('img/start/copyleft.png');
 	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
 	copyleft.anchor.set(0, 1);
 	label.anchor.set(0, 1);
 	shadow.anchor.set(0, 1);
 	copyleft.x = globals.grid;
-	copyleft.y = globals.gameHeight - globals.grid - 1;
+	copyleft.y = globals.winHeight - globals.grid - 1;
 	copyleft.zOrder = this.zOrder;
 	globals.game.stage.addChild(copyleft);
 	globals.game.stage.addChild(shadow);
@@ -72,7 +72,7 @@ credit(){
 },
 
 version(){
-	const versionText = 'v0.02', x = globals.winWidth - globals.grid, y = globals.gameHeight - globals.grid;
+	const versionText = 'v0.02', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
 	const label = chrome.label(versionText, x, y),
 		shadow = chrome.label(versionText, x, y, 'dark');
 	label.anchor.set(1);
@@ -83,7 +83,7 @@ version(){
 
 highScore(){
 	const text = 'HIGH SCORE: ' + chrome.processScore(globals.highScore), x = globals.winWidth / 2,
-		y = globals.gameHeight - globals.grid;
+		y = globals.winHeight - globals.grid;
 	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
 	label.anchor.set(.5, 1);
 	shadow.anchor.set(.5, 1);
@@ -124,7 +124,7 @@ init(){
 	this.credit();
 	this.version();
 	this.highScore();
-	// globals.startGame();
+	globals.startGame();
 }
 
 };

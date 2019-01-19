@@ -21,8 +21,8 @@ waveOne(){
 
 waveTwo(){
 	const spawnEnemy = opposite => {
-		let y = globals.gameHeight / 4 + Math.floor(Math.random() * globals.gameHeight / 4);
-		if(opposite) y -= globals.gameHeight / 6;
+		let y = globals.winHeight / 4 + Math.floor(Math.random() * globals.winHeight / 4);
+		if(opposite) y -= globals.winHeight / 6;
 		stageUtils.spawnEnemy('fairyBlue', opposite ? globals.gameX + globals.gameWidth + globals.grid : globals.gameX - globals.grid, y, enemy => {
 			enemy.health = 2;
 			enemy.speed = 3;
@@ -198,7 +198,7 @@ waveSix(){
 
 waveSeven(){
 	const spawnEnemy = () => {
-		stageUtils.spawnEnemy('lily', globals.gameX + globals.grid * 4, globals.gameHeight + globals.grid, enemy => {
+		stageUtils.spawnEnemy('lily', globals.gameX + globals.grid * 4, globals.winHeight + globals.grid, enemy => {
 			enemy.speed = 2.25;
 			enemy.speedInit = enemy.speed;
 			enemy.health = 30;
@@ -217,7 +217,7 @@ waveSeven(){
 			const interval = 30
 			if(enemy.clock % interval >= interval / 2 && enemy.clock < 60 * 2.5){
 				if(enemy.clock % interval == interval / 2){
-					enemy.bulletAngle = globals.getAngle({x: globals.gameX + globals.gameWidth, y: globals.gameHeight / 2}, enemy);
+					enemy.bulletAngle = globals.getAngle({x: globals.gameX + globals.gameWidth, y: globals.winHeight / 2}, enemy);
 					enemy.bulletMod = 0;
 					enemy.bulletDirection = !enemy.bulletDirection;
 				}
@@ -273,7 +273,7 @@ waveNine(){
 	const spawnEnemy = opposite => {
 		stageUtils.spawnEnemy('kedamaRed',
 			opposite ? globals.gameX + globals.gameWidth + globals.grid : globals.gameX - globals.grid,
-			opposite ? globals.gameHeight / 6 : globals.gameHeight / 6 * 2, enemy => {
+			opposite ? globals.winHeight / 6 : globals.winHeight / 6 * 2, enemy => {
 			enemy.angle = opposite ? Math.PI : 0;
 			enemy.speed = 3;
 			enemy.health = 6;
@@ -511,7 +511,7 @@ waveTwelve(){
 waveThirteen(){
 	const spawnEnemy = () => {
 		const x = globals.gameX + globals.grid * 3 + Math.floor(Math.random() * (globals.gameWidth - globals.grid * 6));
-		stageUtils.spawnEnemy('fairyGreen', x, globals.gameHeight + globals.grid, enemy => {
+		stageUtils.spawnEnemy('fairyGreen', x, globals.winHeight + globals.grid, enemy => {
 			enemy.speed = 0;
 			enemy.health = 2;
 		}, enemy => {
@@ -530,7 +530,7 @@ waveFourteen(){
 		const offset = globals.grid * 3, spawnEnemy = opposite => {
 			stageUtils.spawnEnemy('kedamaRed',
 				opposite ? globals.gameX + globals.gameWidth - offset : globals.gameX + offset,
-				globals.gameHeight + globals.grid, enemy => {
+				globals.winHeight + globals.grid, enemy => {
 				const angle = -Math.PI / 2;
 				enemy.speed = 3;
 				enemy.health = 2;

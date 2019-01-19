@@ -4,6 +4,7 @@
 const storage = require('electron-json-storage'),
 	PIXI = require('pixi.js'),
 	globals = require('./src/globals.js'),
+	sprites = require('./src/sprites.js'),
 	chrome = require('./src/chrome.js'),
 	player = require('./src/player.js'),
 	controls = require('./src/controls.js'),
@@ -107,6 +108,7 @@ init = () => {
 		loader.add('goldboxorange', './fonts/goldboxorange.fnt');
 		loader.add('goldboxbrown', './fonts/goldboxbrown.fnt');
 		loader.load(loader => {
+			sprites.load();
 			globals.initGame();
 			start.init();
 			controls.init();

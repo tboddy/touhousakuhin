@@ -72,7 +72,7 @@ module.exports = {
 					bullet: {x: bullet.x, y: bullet.y},
 					sect: thisObj.sects[i][j]
 				};
-				bullet.y = -globals.gameHeight;
+				bullet.y = -globals.winHeight;
 				thisObj.sects[i][j].bullet = false;
 			}
 		}, checkPlayerBulletAgainstBlock = (bullet, block, i, j) => {
@@ -84,17 +84,17 @@ module.exports = {
 					bullet: {x: bullet.x, y: bullet.y},
 					sect: thisObj.sects[i][j]
 				};
-				bullet.y = -globals.gameHeight;
+				bullet.y = -globals.winHeight;
 				thisObj.sects[i][j].bullet = false;
 			}
 		}, checkObjAgainstPlayer = obj => {
-			const dx = player.sprite.x - obj.x, dy = player.sprite.y - obj.y, radii = (obj.width / 2) + (player.hitbox.width / 2 - 4);
+			const dx = player.sprite.x - obj.x, dy = player.sprite.y - obj.y, radii = obj.width / 2;
 			if(dx * dx + dy * dy < radii * radii){
 				if(!globals.gameOver){
 					explosion.spawn(player.sprite, false, false, true);
 					player.graze = 0;
 					globals.removeBullets = true;
-					if(!obj.isBoss) obj.y = -globals.gameHeight;
+					if(!obj.isBoss) obj.y = -globals.winHeight;
 					if(player.power > 0){
 						player.invulnerableClock = 60 * 2;
 						player.power--;
@@ -108,7 +108,7 @@ module.exports = {
 			if(chip.x + chip.width / 2 >= player.sprite.x - player.sprite.width / 2 && chip.x - chip.height / 2 <= player.sprite.x + player.sprite.width - player.sprite.width / 2 &&
 			  chip.y + chip.height / 2 >= player.sprite.y - player.sprite.height / 2 && chip.y - chip.height / 2 <= player.sprite.y + player.sprite.height - player.sprite.height / 2 &&
 				chip.y - chip.height / 2 > 0){
-				chip.y = globals.gameHeight * 2;
+				chip.y = globals.winHeight * 2;
 				switch(chip.type){
 					case 'chipPower':
 						let amt = 5000;
@@ -164,7 +164,7 @@ module.exports = {
 				explosion.spawn(enemyHit.bullet, true, false, true);
 				globals.score += 5000;
 				if(enemyHit.enemy.suicide) enemyHit.enemy.suicide(enemyHit.enemy);
-				enemyHit.enemy.y = globals.gameHeight * 2;
+				enemyHit.enemy.y = globals.winHeight * 2;
 				enemyHit.sect.enemy = false;
 			}
 		}

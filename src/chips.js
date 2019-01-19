@@ -18,7 +18,7 @@ updatePower(chip, index){
 	chip.y += 1.5;
 	chip.x = chip.initial - Math.sin(chip.count) * globals.grid * 3.5;
 	chip.count += .075;
-	if(chip.y - chip.height / 2 > globals.gameHeight) globals.game.stage.removeChildAt(index)
+	if(chip.y - chip.height / 2 > globals.winHeight) globals.game.stage.removeChildAt(index)
 }
 
 };

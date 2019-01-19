@@ -55,25 +55,11 @@ processTime(input){
 },
 
 frame(){
-	const frameLeft = PIXI.Sprite.fromImage('img/frame/bg-left.png'), frameRight = PIXI.Sprite.fromImage('img/frame/bg-right.png'),
-		logo = PIXI.Sprite.fromImage('img/frame/logo.png');
-
-	frameLeft.zOrder = this.zOrder - 11;
-	frameRight.zOrder = this.zOrder - 11;
-	frameLeft.x = 0;
-	frameLeft.y = 0;
-	frameRight.x = globals.gameX + globals.gameWidth;
-	frameRight.y = 0;
-
-	logo.anchor.set(.5, 1);
-	logo.zOrder = this.zOrder;
-	logo.x = globals.gameX * 1.5 + globals.gameWidth
-	logo.y = globals.gameHeight -globals.grid;
-
-	globals.game.stage.addChild(frameLeft);
-	globals.game.stage.addChild(frameRight);
-	globals.game.stage.addChild(logo);
-
+	const img = PIXI.Sprite.from(sprites.frame);
+	img.x = 0;
+	img.y = 0;
+	img.zOrder = this.zOrder - 11;
+	globals.game.stage.addChild(img);
 },
 
 score(){
@@ -119,16 +105,16 @@ boss(){
 },
 
 pause(){
-	this.pausedOverlay = new PIXI.extras.TilingSprite(new PIXI.Texture.fromImage('img/pausedoverlay.png'));
+	this.pausedOverlay = new PIXI.extras.TilingSprite(sprites.pausedOverlay);
 	this.pausedOverlay.x = globals.gameX;
-	this.pausedOverlay.y = 0;
+	this.pausedOverlay.y = globals.grid;
 	this.pausedOverlay.width = globals.gameWidth;
 	this.pausedOverlay.height = globals.gameHeight;
 	this.pausedOverlay.alpha = 0;
 	this.pausedOverlay.zOrder = this.zOrder + 10;
 	globals.game.stage.addChild(this.pausedOverlay);
-	this.pausedLabel = this.label('PAUSED', globals.gameWidth / 2 + globals.gameX, globals.gameHeight / 2);
-	this.pausedLabelShadow = this.label('PAUSED', globals.gameWidth / 2 + globals.gameX, globals.gameHeight / 2, 'dark');
+	this.pausedLabel = this.label('PAUSED', globals.gameWidth / 2 + globals.gameX, globals.winHeight / 2);
+	this.pausedLabelShadow = this.label('PAUSED', globals.gameWidth / 2 + globals.gameX, globals.winHeight / 2, 'dark');
 	this.pausedLabel.anchor.set(.5);
 	this.pausedLabelShadow.anchor.set(.5);
 	this.pausedLabel.alpha = 0;
@@ -140,7 +126,7 @@ pause(){
 },
 
 bonus(){
-	const x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2, bonusString = 'Bonus ' + this.bonusScore;
+	const x = globals.gameX + globals.gameWidth / 2, y = globals.winHeight / 2, bonusString = 'Bonus ' + this.bonusScore;
 	this.bonusLabel = this.label(bonusString, x, y);
 	this.bonusLabelShadow = this.label(bonusString, x, y, 'dark');
 	this.bonusLabel.anchor.set(.5);
@@ -150,28 +136,28 @@ bonus(){
 },
 
 debug(){
-	this.debugTimeLabel = this.label('0', globals.gameWidth - globals.grid / 2, globals.gameHeight - globals.grid / 2, 'red');
-	this.debugTimeLabel.anchor.set(1);
-	this.debugTimeLabel.zOrder = this.zOrder;
+	// this.debugTimeLabel = this.label('0', globals.gameWidth - globals.grid / 2, globals.gameHeight - globals.grid / 2, 'red');
+	// this.debugTimeLabel.anchor.set(1);
+	// this.debugTimeLabel.zOrder = this.zOrder;
 	// globals.game.stage.addChild(this.debugTimeLabel);
-	this.debugBulletLabel = this.label('0', globals.gameWidth - globals.grid / 2, globals.gameHeight - 16 - 4, 'red');
-	this.debugBulletLabel.anchor.set(1);
-	this.debugBulletLabel.zOrder = this.zOrder;
+	// this.debugBulletLabel = this.label('0', globals.gameWidth - globals.grid / 2, globals.gameHeight - 16 - 4, 'red');
+	// this.debugBulletLabel.anchor.set(1);
+	// this.debugBulletLabel.zOrder = this.zOrder;
 	// globals.game.stage.addChild(this.debugBulletLabel);
 },
 
 didGameOver: false,
 
 gameOver(){
-	const overlay = new PIXI.extras.TilingSprite(new PIXI.Texture.fromImage('img/pausedoverlay.png'));
+	const overlay = new PIXI.extras.TilingSprite(sprites.pausedOverlay);
 	overlay.x = globals.gameX;
-	overlay.y = 0;
+	overlay.y = globals.grid;
 	overlay.width = globals.gameWidth;
 	overlay.height = globals.gameHeight;
 	overlay.zOrder = this.zOrder - 1;
 	globals.game.stage.addChild(overlay);
 	const gameOverString = () => {
-		const x = globals.gameWidth / 2 + globals.gameX, y = globals.gameHeight / 2 - globals.grid * 2 - 4 * 2,
+		const x = globals.gameWidth / 2 + globals.gameX, y = globals.winHeight / 2 - globals.grid * 2 - 4 * 2,
 			str = 'GAME OVER';
 		const label = this.label(str, x, y, false, true), shadow = this.label(str, x, y, 'dark', true);
 		label.anchor.set(.5)
@@ -179,7 +165,7 @@ gameOver(){
 		globals.game.stage.addChild(label);
 		globals.game.stage.addChild(shadow);
 	}, endResult = () => {
-		const x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2 - globals.grid - 4;
+		const x = globals.gameX + globals.gameWidth / 2, y = globals.winHeight / 2 - globals.grid - 4;
 		if(globals.wonGame){
 			const wonScore = 200000, wonStr = 'BEAT TIME LIMIT! BONUS ' + (wonScore + 5000)
 			const wonLabel = this.label(wonStr, x, y),
@@ -208,7 +194,7 @@ gameOver(){
 		}
 	}, scoreResult = () => {
 		const scoreString = globals.score >= globals.highScore ? 'NEW HIGH SCORE!' : 'NO HIGH SCORE',
-			x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2;
+			x = globals.gameX + globals.gameWidth / 2, y = globals.winHeight / 2;
 		const label = this.label(scoreString, x, y, globals.score >= globals.highScore ? 'orange' : 'light'),
 			shadow = this.label(scoreString, x, y, 'dark');
 		label.anchor.set(.5);
@@ -226,7 +212,7 @@ gameOver(){
 		}
 	}, restartString = () => {
 		const scoreString = 'SHOOT TO RETURN TO MENU',
-			x = globals.gameX + globals.gameWidth / 2, y = globals.gameHeight / 2 + globals.grid * 2 + 4 * 2;
+			x = globals.gameX + globals.gameWidth / 2, y = globals.winHeight / 2 + globals.grid * 2 + 4 * 2;
 		const label = this.label(scoreString, x, y), shadow = this.label(scoreString, x, y, 'dark');
 		label.anchor.set(.5);
 		shadow.anchor.set(.5);
@@ -242,8 +228,8 @@ gameOver(){
 
 addFieldLabel(input, pos){
 	input = String(input);
-	let fieldLabel = this.label(input, globals.gameX + globals.gameWidth / 2, globals.gameHeight / 2),
-		fieldLabelShadow = this.label(input, globals.gameX + globals.gameWidth / 2, globals.gameHeight / 2, 'dark');
+	let fieldLabel = this.label(input, globals.gameX + globals.gameWidth / 2, globals.winHeight / 2),
+		fieldLabelShadow = this.label(input, globals.gameX + globals.gameWidth / 2, globals.winHeight / 2, 'dark');
 
 	fieldLabel.x = pos.x;
 	fieldLabel.y = pos.y;

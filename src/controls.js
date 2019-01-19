@@ -34,10 +34,6 @@ toggleFullscreen(){
 updateGamepad(){
 	if(navigator.getGamepads()[0]){
 		const gamepad = navigator.getGamepads()[0];
-
-
-
-
 		if(globals.starting){
 			if(gamepad.buttons[0].pressed && !controls.pressed[0]) start.selectOption();
 			if(gamepad.axes[1] == -1 || gamepad.axes[1] == 1){
@@ -65,12 +61,10 @@ updateGamepad(){
 			}
 			if(gamepad.buttons[5].pressed) globals.returnToTitle();
 		}
-		
 		for(i = 0; i < controls.pressed.length; i++){
 			if(gamepad.buttons[i].pressed && !controls.pressed[i]) controls.pressed[i] = true;
 			else if(!gamepad.buttons[i].pressed && controls.pressed[i]) controls.pressed[i] = false;
 		};
-
 	}
 },
 

@@ -19,28 +19,30 @@ draw(){
 
 	this.bottom = new PIXI.projection.Container2d();
 	this.bottom.x = globals.gameX;
-	this.bottom.y = 0;
+	this.bottom.y = globals.grid;
+	this.bottom.width = globals.gameWidth;
+	this.bottom.height = globals.gameHeight;
 	this.bottom.zOrder = 1;
 
 	this.top = new PIXI.projection.Container2d();
 	this.top.x = globals.gameX;
-	this.top.y = 0;
+	this.top.y = globals.grid;
+	this.top.width = globals.gameWidth;
+	this.top.height = globals.gameHeight;
 	this.top.zOrder = 3;
 
 	this.bg = new PIXI.projection.TilingSprite2d(new PIXI.Texture.fromImage('img/bg/bottom.png', false, PIXI.SCALE_MODES.NEAREST));
 	this.bg.width = globals.gameWidth
 	this.bg.height = globals.gameHeight;
-	// this.bg.tilePosition.x = 8;
 
 	this.fade = new PIXI.Sprite.fromImage('img/bg/fade.png');
 	this.fade.x = globals.gameX;
-	this.fade.y = 0;
+	this.fade.y = globals.grid;
 	this.fade.zOrder = 2;
 
 	this.overlay = new PIXI.projection.TilingSprite2d(new PIXI.Texture.fromImage('img/bg/overlay.png', false, PIXI.SCALE_MODES.NEAREST));
 	this.overlay.width = globals.gameWidth;
 	this.overlay.height = globals.gameHeight;
-	// this.overlay.tilePosition.x = globals.grid * 3.75;
 
 	this.bottom.addChild(this.bg);
 	this.top.addChild(this.overlay);
@@ -68,7 +70,7 @@ update(){
 			this.bossTexture01 = PIXI.Texture.fromImage('img/bg/boss-01.png');
 			this.bossTexture02 = PIXI.Texture.fromImage('img/bg/boss.png');
 			this.bossBg.x = globals.gameX;
-			this.bossBg.y = 0;
+			this.bossBg.y = globals.grid;
 			this.bossBg.zOrder = 4;
 			globals.game.stage.addChild(this.bossBg);
 		}

@@ -3,8 +3,6 @@ module.exports = {
 canSpawn: true,
 bossPosition: {x: 0, y: 0},
 bossBorder: false,
-fairyScale: 1.15,
-kedamaScale: 1.1,
 
 spawnEnemy(type, x, y, initFunc, updateFunc){
 	let enemy;
@@ -16,7 +14,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-blue-02.png');
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
-			enemy.scale.set(this.fairyScale)
 			break;
 		case 'fairyRed':
 			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-red-00.png');
@@ -25,7 +22,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-red-02.png');
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
-			enemy.scale.set(this.fairyScale)
 			break;
 		case 'fairyGreen':
 			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-green-00.png');
@@ -34,7 +30,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-green-02.png');
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
-			enemy.scale.set(this.fairyScale)
 			break;
 		case 'lily':
 			enemy = PIXI.Sprite.fromImage('img/enemies/lily-00.png');
@@ -49,7 +44,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/kedama-red-00.png');
 			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-red-01.png');
 			enemy.enemyType = 'kedama';
-			enemy.scale.set(this.kedamaScale);
 			enemy.idleClock = 0;
 			break;
 		case 'kedamaBlue':
@@ -58,7 +52,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-blue-01.png');
 			enemy.enemyType = 'kedama';
 			enemy.idleClock = 0;
-			enemy.scale.set(this.kedamaScale);
 			break;
 		case 'kedamaGreen':
 			enemy = PIXI.Sprite.fromImage('img/enemies/kedama-green-00.png');
@@ -66,7 +59,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-green-01.png');
 			enemy.enemyType = 'kedama';
 			enemy.idleClock = 0;
-			enemy.scale.set(this.kedamaScale);
 			break;
 		case 'komachi':
 			enemy = PIXI.Sprite.fromImage('img/boss/komachi-center00.png');
@@ -146,15 +138,15 @@ updateEnemy(enemy, index){
 		if(enemy.updateFunc) enemy.updateFunc(enemy, index);
 		enemy.clock++;
 		if(enemy.x >= globals.gameX && enemy.y >= 0 &&
-			enemy.x <= globals.gameWidth + globals.gameX && enemy.y <= globals.gameHeight && !enemy.seen) enemy.seen = true;
-		if(enemy.seen && (enemy.y >= globals.gameHeight + enemy.height / 2 || enemy.y <= -enemy.height / 2 ||
+			enemy.x <= globals.gameWidth + globals.gameX && enemy.y <= globals.winHeight && !enemy.seen) enemy.seen = true;
+		if(enemy.seen && (enemy.y >= globals.winHeight + enemy.height / 2 || enemy.y <= -enemy.height / 2 ||
 			enemy.x >= globals.gameWidth + enemy.width / 2 + globals.gameX ||
 			enemy.x <= -enemy.width / 2 + globals.gameX)) globals.game.stage.removeChildAt(index);
 	}
 },
 
 spawnBullet(type, x, y, angle, initFunc, updateFunc){
-	if(x >= -globals.gameWidth / 2 && x <= globals.gameWidth * 1.5 && y >= -globals.gameHeight / 2 && y <= globals.gameHeight * 1.5 &&
+	if(x >= -globals.gameWidth / 2 && x <= globals.gameWidth * 1.5 && y >= -globals.winHeight / 2 && y <= globals.winHeight * 1.5 &&
 		!globals.gameOver){
 		const bullet = PIXI.Sprite.fromImage('img/bullets/' + type + '.png');
 		bullet.anchor.set(.5);
@@ -181,9 +173,9 @@ updateBullet(bullet, index){
 	if(bullet.x >= globals.gameX - bullet.width / 2 &&
 		bullet.y >= 0 - bullet.height / 2 &&
 		bullet.x < globals.gameX + globals.gameWidth + bullet.width / 2 &&
-		bullet.y < globals.gameHeight + bullet.height / 2 && !bullet.seen) bullet.seen = true;
-	if(bullet.seen && (bullet.y >= globals.gameHeight + globals.gameHeight / 4 ||
-		bullet.y <= -globals.gameHeight / 4 ||
+		bullet.y < globals.winHeight + bullet.height / 2 && !bullet.seen) bullet.seen = true;
+	if(bullet.seen && (bullet.y >= globals.winHeight + globals.winHeight / 4 ||
+		bullet.y <= -globals.winHeight / 4 ||
 		bullet.x >= globals.gameX + globals.gameWidth + globals.gameWidth / 4 ||
 		bullet.x <= globals.gameX - globals.gameWidth / 4)) globals.game.stage.removeChildAt(index);
 	if(globals.removeBullets){
@@ -216,7 +208,7 @@ checkEnemies(){
 killBoss(enemy){
 	globals.deadBoss = {x: enemy.x, y: enemy.y};
 	globals.stageFinished = true;
-	enemy.y = globals.gameHeight * 2;
+	enemy.y = globals.winHeight * 2;
 	this.bossBorder.kill = true;
 	globals.bossActive = false;
 },

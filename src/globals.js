@@ -9,8 +9,8 @@ gameClock: 0,
 
 grid: 16,
 winWidth: 640,
-gameWidth: 360,
-gameHeight: 480,
+gameWidth: 384,
+winHeight: 480,
 
 enemyCount: 0,
 
@@ -69,11 +69,12 @@ colors: {
 hex: {},
 
 initGame(){
-	this.gameX = (this.winWidth - this.gameWidth) / 2
+	this.gameX = (this.winWidth - this.gameWidth) / 2;
+	this.gameHeight = this.winHeight - this.grid * 2;
 	for(color in this.colors) this.hex[color] = '0x' + this.colors[color].substring(1);
 	this.game = new PIXI.Application({
 		width: this.winWidth,
-		height: this.gameHeight,
+		height: this.winHeight,
 		backgroundColor: '0x000000',
 		roundPixels: true
 	});
@@ -97,8 +98,6 @@ getAngle(a, b){
 	const angle = Math.atan2(a.y - b.y, a.x - b.x);
 	return angle;
 },
-
-homingAngle: false,
 
 resize(){
 	const canvasEl = document.getElementsByTagName('CANVAS')[0];
