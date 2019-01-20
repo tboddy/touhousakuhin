@@ -14,6 +14,8 @@ bossTexture01: false,
 bossTexture02: false,
 bossClock: 0,
 bossCurveClock: 5,
+twoActive: true,
+didTwoUpdate: false,
 
 draw(){
 
@@ -31,16 +33,16 @@ draw(){
 	this.top.height = globals.gameHeight;
 	this.top.zOrder = 3;
 
-	this.bg = new PIXI.projection.TilingSprite2d(new PIXI.Texture.fromImage('img/bg/bottom.png', false, PIXI.SCALE_MODES.NEAREST));
+	this.bg = new PIXI.projection.TilingSprite2d(sprites.background.bottom);
 	this.bg.width = globals.gameWidth
 	this.bg.height = globals.gameHeight;
 
-	this.fade = new PIXI.Sprite.fromImage('img/bg/fade.png');
+	this.fade = new PIXI.Sprite.from(sprites.background.fade);
 	this.fade.x = globals.gameX;
 	this.fade.y = globals.grid;
 	this.fade.zOrder = 2;
 
-	this.overlay = new PIXI.projection.TilingSprite2d(new PIXI.Texture.fromImage('img/bg/overlay.png', false, PIXI.SCALE_MODES.NEAREST));
+	this.overlay = new PIXI.projection.TilingSprite2d(sprites.background.overlay);
 	this.overlay.width = globals.gameWidth;
 	this.overlay.height = globals.gameHeight;
 
@@ -61,7 +63,15 @@ draw(){
 
 },
 
+changeTwo(){
+	this.didTwoUpdate = true;
+	this.bg.texture = sprites.background.bottom2;
+	this.fade.texture = sprites.background.fade2;
+	this.overlay.texture = sprites.background.overlay2;
+},
+
 update(){
+	if(this.twoActive && !this.didTwoUpdate) this.changeTwo();
 	const currentTime = Math.floor(chrome.elapsed / 60), limit = chrome.timeLimit - 45;
 	if(currentTime >= limit && !globals.gameOver){
 		if(!this.bossBg){

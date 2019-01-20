@@ -112,34 +112,37 @@ resize(){
 
 returnToTitle(){
 
-	enemyCount = 0;
-	bulletCount = 0;
-	chipCount = 0;
-	lastEnemyCount = 0;
+	location.reload()
 
-	this.starting = true;
-	this.score = 0;
-	this.gameOver = false;
-	this.lostGame = false;
-	this.wonGame = false;
-	this.timeOver = false;
-	this.paused = false;
-	this.gameClock = 0;
-	this.gameOverClock = 0;
-	this.specialScore = this.specialScoreInit;
+	// enemyCount = 0;
+	// bulletCount = 0;
+	// chipCount = 0;
+	// lastEnemyCount = 0;
 
-	background.wipe();
-	chrome.wipe();
-	player.wipe();
-	controls.wipe();
+	// this.starting = true;
+	// this.score = 0;
+	// this.gameOver = false;
+	// this.lostGame = false;
+	// this.wonGame = false;
+	// this.timeOver = false;
+	// this.paused = false;
+	// this.gameClock = 0;
+	// this.gameOverClock = 0;
+	// this.specialScore = this.specialScoreInit;
 
-	explosion.count = 0;
+	// background.wipe();
+	// chrome.wipe();
+	// player.wipe();
+	// controls.wipe();
 
-	this.game.ticker.remove(mainLoop);
-	this.game.stage.removeChildren();
-	stageUtils.nextWave('waveOne', enemies);
+	// explosion.count = 0;
 
-	start.init();
+	// this.game.ticker.remove(mainLoop);
+	// this.game.stage.removeChildren();
+	// stageUtils.nextWave('waveOne', enemies);
+
+	// start.init();
+
 }
 
 };

@@ -2,7 +2,7 @@ module.exports = {
 
 	muted: true,
 	volume: .375,
-	bgmVolume: 1,
+	bgmVolume: 0,
 
 	list: {
 

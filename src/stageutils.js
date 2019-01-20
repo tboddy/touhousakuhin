@@ -8,29 +8,70 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 	let enemy;
 	switch(type){
 		case 'fairyBlue':
-			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-blue-00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-blue-00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-blue-01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-blue-02.png');
+			enemy = PIXI.Sprite.from(sprites.enemies.fairyBlue.center0);
+			enemy.textureCenter0 = sprites.enemies.fairyBlue.center0;
+			enemy.textureCenter1 = sprites.enemies.fairyBlue.center1;
+			enemy.textureCenter2 = sprites.enemies.fairyBlue.center2;
+			enemy.textureLeft0 = sprites.enemies.fairyBlue.left0;
+			enemy.textureLeft1 = sprites.enemies.fairyBlue.left1;
+			enemy.textureLeft2 = sprites.enemies.fairyBlue.left2;
+			enemy.textureRight0 = sprites.enemies.fairyBlue.right0;
+			enemy.textureRight1 = sprites.enemies.fairyBlue.right1;
+			enemy.textureRight2 = sprites.enemies.fairyBlue.right2;
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
 			break;
 		case 'fairyRed':
-			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-red-00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-red-00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-red-01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-red-02.png');
+			enemy = PIXI.Sprite.from(sprites.enemies.fairyRed.center0);
+			enemy.textureCenter0 = sprites.enemies.fairyRed.center0;
+			enemy.textureCenter1 = sprites.enemies.fairyRed.center1;
+			enemy.textureCenter2 = sprites.enemies.fairyRed.center2;
+			enemy.textureLeft0 = sprites.enemies.fairyRed.left0;
+			enemy.textureLeft1 = sprites.enemies.fairyRed.left1;
+			enemy.textureLeft2 = sprites.enemies.fairyRed.left2;
+			enemy.textureRight0 = sprites.enemies.fairyRed.right0;
+			enemy.textureRight1 = sprites.enemies.fairyRed.right1;
+			enemy.textureRight2 = sprites.enemies.fairyRed.right2;
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
 			break;
 		case 'fairyGreen':
-			enemy = PIXI.Sprite.fromImage('img/enemies/fairy-green-00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/fairy-green-00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/fairy-green-01.png');
-			enemy.textureCenter2 = PIXI.Texture.fromImage('img/enemies/fairy-green-02.png');
+			enemy = PIXI.Sprite.from(sprites.enemies.fairyGreen.center0);
+			enemy.textureCenter0 = sprites.enemies.fairyGreen.center0;
+			enemy.textureCenter1 = sprites.enemies.fairyGreen.center1;
+			enemy.textureCenter2 = sprites.enemies.fairyGreen.center2;
+			enemy.textureLeft0 = sprites.enemies.fairyGreen.left0;
+			enemy.textureLeft1 = sprites.enemies.fairyGreen.left1;
+			enemy.textureLeft2 = sprites.enemies.fairyGreen.left2;
+			enemy.textureRight0 = sprites.enemies.fairyGreen.right0;
+			enemy.textureRight1 = sprites.enemies.fairyGreen.right1;
+			enemy.textureRight2 = sprites.enemies.fairyGreen.right2;
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
 			break;
+		case 'fairyYellow':
+			enemy = PIXI.Sprite.from(sprites.enemies.fairyYellow.center0);
+			enemy.textureCenter0 = sprites.enemies.fairyYellow.center0;
+			enemy.textureCenter1 = sprites.enemies.fairyYellow.center1;
+			enemy.textureCenter2 = sprites.enemies.fairyYellow.center2;
+			enemy.textureLeft0 = sprites.enemies.fairyYellow.left0;
+			enemy.textureLeft1 = sprites.enemies.fairyYellow.left1;
+			enemy.textureLeft2 = sprites.enemies.fairyYellow.left2;
+			enemy.textureRight0 = sprites.enemies.fairyYellow.right0;
+			enemy.textureRight1 = sprites.enemies.fairyYellow.right1;
+			enemy.textureRight2 = sprites.enemies.fairyYellow.right2;
+			enemy.enemyType = 'fairy';
+			enemy.idleClock = 0;
+			break;
+		case 'fairyBig':
+			enemy = PIXI.Sprite.from(sprites.enemies.fairyBig.center0);
+			enemy.textureCenter0 = sprites.enemies.fairyBig.center0;
+			enemy.textureCenter1 = sprites.enemies.fairyBig.center1;
+			enemy.textureCenter2 = sprites.enemies.fairyBig.center2;
+			enemy.enemyType = 'fairyBig';
+			enemy.idleClock = 0;
+			break;
+
 		case 'lily':
 			enemy = PIXI.Sprite.fromImage('img/enemies/lily-00.png');
 			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/lily-00.png');
@@ -39,27 +80,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 			enemy.enemyType = 'fairy';
 			enemy.idleClock = 0;
 			break;
-		case 'kedamaRed':
-			enemy = PIXI.Sprite.fromImage('img/enemies/kedama-red-00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/kedama-red-00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-red-01.png');
-			enemy.enemyType = 'kedama';
-			enemy.idleClock = 0;
-			break;
-		case 'kedamaBlue':
-			enemy = PIXI.Sprite.fromImage('img/enemies/kedama-blue-00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/kedama-blue-00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-blue-01.png');
-			enemy.enemyType = 'kedama';
-			enemy.idleClock = 0;
-			break;
-		case 'kedamaGreen':
-			enemy = PIXI.Sprite.fromImage('img/enemies/kedama-green-00.png');
-			enemy.textureCenter0 = PIXI.Texture.fromImage('img/enemies/kedama-green-00.png');
-			enemy.textureCenter1 = PIXI.Texture.fromImage('img/enemies/kedama-green-01.png');
-			enemy.enemyType = 'kedama';
-			enemy.idleClock = 0;
-			break;
+
 		case 'komachi':
 			enemy = PIXI.Sprite.fromImage('img/boss/komachi-center00.png');
 			enemy.textureCenter0 = PIXI.Texture.fromImage('img/boss/komachi-center00.png');
@@ -84,6 +105,7 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 	enemy.anchor.set(.5);
 	enemy.type = 'enemy';
 	enemy.x = Math.round(x);
+	enemy.lastX = enemy.x;
 	enemy.y = Math.round(y);
 	enemy.clock = 0;
 	enemy.zOrder = 50;
@@ -108,14 +130,29 @@ updateEnemy(enemy, index){
 	if(!globals.paused){
 		switch(enemy.enemyType){
 			case 'fairy':
-				if(enemy.idleClock % globals.idleInterval == 0) enemy.texture = enemy.textureCenter0;
-				else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 4 || enemy.idleClock % globals.idleInterval == globals.idleInterval / 4 * 3) enemy.texture = enemy.textureCenter1;
-				else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 2) enemy.texture = enemy.textureCenter2;
+				if(enemy.idleClock % globals.idleInterval == 0){
+					if(enemy.x < enemy.lastX) enemy.texture = enemy.textureLeft1;
+					else if(enemy.x > enemy.lastX) enemy.texture = enemy.textureRight1;
+					else enemy.texture = enemy.textureCenter1;
+				} else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 4 || enemy.idleClock % globals.idleInterval == globals.idleInterval / 4 * 3){
+					if(enemy.x < enemy.lastX) enemy.texture = enemy.textureLeft0;
+					else if(enemy.x > enemy.lastX) enemy.texture = enemy.textureRight0;
+					else enemy.texture = enemy.textureCenter0;
+				} else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 2){
+					if(enemy.x < enemy.lastX) enemy.texture = enemy.textureLeft2;
+					else if(enemy.x > enemy.lastX) enemy.texture = enemy.textureRight2;
+					else enemy.texture = enemy.textureCenter2;
+				}
 				enemy.idleClock++;
 				break;
-			case 'kedama':
-				if(enemy.idleClock % globals.idleInterval == 0) enemy.texture = enemy.textureCenter0;
-				else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 2) enemy.texture = enemy.textureCenter1;
+			case 'fairyBig':
+				if(enemy.idleClock % globals.idleInterval == 0){
+					enemy.texture = enemy.textureCenter1;
+				} else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 4 || enemy.idleClock % globals.idleInterval == globals.idleInterval / 4 * 3){
+					enemy.texture = enemy.textureCenter0;
+				} else if(enemy.idleClock % globals.idleInterval == globals.idleInterval / 2){
+					enemy.texture = enemy.textureCenter2;
+				}
 				enemy.idleClock++;
 				break;
 			case 'boss':
@@ -125,6 +162,7 @@ updateEnemy(enemy, index){
 				enemy.idleClock++;
 				break;
 		}
+		enemy.lastX = enemy.x;
 		if(enemy.isBoss){
 			if(!globals.bossActive) globals.bossActive = true;
 			this.bossPosition.x = enemy.x;
@@ -171,13 +209,13 @@ updateBullet(bullet, index){
 	bullet.zOrder += 0.001;
 	bullet.clock++;
 	if(bullet.x >= globals.gameX - bullet.width / 2 &&
-		bullet.y >= 0 - bullet.height / 2 &&
+		bullet.y >= globals.grid - bullet.height / 2 &&
 		bullet.x < globals.gameX + globals.gameWidth + bullet.width / 2 &&
-		bullet.y < globals.winHeight + bullet.height / 2 && !bullet.seen) bullet.seen = true;
-	if(bullet.seen && (bullet.y >= globals.winHeight + globals.winHeight / 4 ||
-		bullet.y <= -globals.winHeight / 4 ||
-		bullet.x >= globals.gameX + globals.gameWidth + globals.gameWidth / 4 ||
-		bullet.x <= globals.gameX - globals.gameWidth / 4)) globals.game.stage.removeChildAt(index);
+		bullet.y < globals.winHeight + bullet.height / 2 - globals.grid && !bullet.seen) bullet.seen = true;
+	if(bullet.seen && (bullet.y >= globals.grid + globals.winHeight + globals.winHeight / 8 ||
+		bullet.y <= globals.grid - globals.winHeight / 8 ||
+		bullet.x >= globals.gameX + globals.gameWidth + globals.gameWidth / 8 ||
+		bullet.x <= globals.gameX - globals.gameWidth / 8)) globals.game.stage.removeChildAt(index);
 	if(globals.removeBullets){
 		explosion.spawn(bullet, bullet.texture.baseTexture.imageUrl.indexOf('blue') > -1, false, false, true)
 		globals.game.stage.removeChildAt(index);
