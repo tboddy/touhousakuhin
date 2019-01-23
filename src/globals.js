@@ -83,9 +83,26 @@ initGame(){
 	globals.resize()
 },
 
+setupContainers(){
+	this.containers = {
+		chrome: new PIXI.Container()
+	};
+	this.containers.chrome.zOrder = 9000;
+	for(container in this.containers){
+		this.containers[container].x = 0;
+		this.containers[container].y = 0;
+		this.containers[container].width = this.winWidth;
+		this.containers[container].height = this.winHeight;
+		console.log(globals.game.stage)
+		globals.game.stage.addChild(this.containers[container]);
+	}
+	console.log(globals.game.stage.children)
+},
+
 startGame(){
 	sound.playBgm('level');
-	globals.game.stage.removeChildren()
+	this.game.stage.removeChildren()
+	this.setupContainers();
 	this.starting = false;
 	globals.game.ticker.add(mainLoop);
 	background.init();
