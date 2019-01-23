@@ -85,13 +85,13 @@ const mainLoop = delta => {
 },
 
 sortZ = () => {
-	if(!globals.paused){
-		globals.game.stage.children.sort((a, b) => {
-	    a.zOrder = a.zOrder || 0;
-	    b.zOrder = b.zOrder || 0;
-	    return a.zOrder - b.zOrder
-		});
-	}
+	// if(!globals.paused){
+	// 	globals.game.stage.children.sort((a, b) => {
+	//     a.zOrder = a.zOrder || 0;
+	//     b.zOrder = b.zOrder || 0;
+	//     return a.zOrder - b.zOrder
+	// 	});
+	// }
 },
 
 init = () => {
