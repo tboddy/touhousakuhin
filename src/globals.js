@@ -97,8 +97,6 @@ setupContainers(){
 		this.containers[container].height = this.winHeight;
 		this.game.stage.addChild(this.containers[container]);
 	}
-
-
 },
 
 startGame(){
