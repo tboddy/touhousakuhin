@@ -85,18 +85,20 @@ initGame(){
 
 setupContainers(){
 	this.containers = {
-		chrome: new PIXI.Container()
+		chrome: new PIXI.Container(),
+		enemyBullets: new PIXI.Container()
 	};
 	this.containers.chrome.zOrder = 9000;
+	this.containers.enemyBullets.zOrder = 70;
 	for(container in this.containers){
 		this.containers[container].x = 0;
 		this.containers[container].y = 0;
 		this.containers[container].width = this.winWidth;
 		this.containers[container].height = this.winHeight;
-		console.log(globals.game.stage)
-		globals.game.stage.addChild(this.containers[container]);
+		this.game.stage.addChild(this.containers[container]);
 	}
-	console.log(globals.game.stage.children)
+
+
 },
 
 startGame(){

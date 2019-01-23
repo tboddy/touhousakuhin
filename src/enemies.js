@@ -467,8 +467,6 @@ miniBoss(){
 			stageUtils.spawnBullet('big-blue', enemy.x, enemy.y, angle, bullet => {
 				const speed = 3;
 				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-				bullet.zOrder++;
-				bullet.zOrder += i * .01;
 			});
 			angle += mod;
 		}
@@ -507,7 +505,6 @@ waveTwelve(){
 			stageUtils.spawnBullet('big-blue', enemy.x, enemy.y, angle, bullet => {
 				const speed = 3;
 				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-				bullet.zOrder += i * 0.05;
 			});
 			angle += Math.PI / (count / 2);
 		}
@@ -567,7 +564,6 @@ waveFourteen(){
 			}, bullet => {
 				const speed = 3.5;
 				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-				bullet.zOrder += i * 0.05;
 			});
 			angle += Math.PI / (count / 2);
 		}
@@ -603,7 +599,6 @@ waveFifteen(){
 			stageUtils.spawnBullet('big-red', enemy.x, enemy.y, angle, bullet => {
 				const speed = 3.5;
 				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-				bullet.zOrder += i;
 			});
 		}
 		for(i = 0; i < 5; i++){
@@ -656,7 +651,6 @@ waveSixteen(){
 				stageUtils.spawnBullet('big-red', enemy.shotPos.x, enemy.shotPos.y, angle, bullet => {
 					bullet.speed = 3;
 					bullet.opposite = enemy.shotOpposite;
-					bullet.zOrder += i * 0.05;
 				}, bullet => {
 					bullet.angle += bullet.opposite ? mod : -mod;
 					bullet.speed += 0.01;
@@ -672,7 +666,6 @@ waveSixteen(){
 			stageUtils.spawnBullet('ring-blue', enemy.shotPos.x, enemy.shotPos.y, angle, bullet => {
 				const speed = 4;
 				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-				bullet.zOrder++;
 			});
 		};
 		if(enemy.clock % 10 == 0) circle();
@@ -701,7 +694,6 @@ boss(){
 							if(opposite) mod = -mod;
 							bullet.mod = enemy.spellFlipOne ? mod : -mod;
 							bullet.speed = 4.5;
-							bullet.zOrder += i * 0.05 + enemy.spellClock * 0.01;
 						}, bullet => {
 							bullet.velocity = {x: Math.cos(bullet.angle) * bullet.speed, y: Math.sin(bullet.angle) * bullet.speed};
 							bullet.rotation = bullet.angle;
@@ -713,8 +705,6 @@ boss(){
 						const speed = 3.5;
 						bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
 						bullet.scale.set(1.25)
-						bullet.zOrder++;
-						bullet.zOrder += enemy.spellClock * 0.01;
 					});
 					const mod = Math.PI / 10;
 					enemy.spellAngleOne += enemy.spellFlipOne ? -mod : mod
@@ -725,7 +715,6 @@ boss(){
 				}
 				if(enemy.spellClock % 6 == 0) swash();
 				sound.spawn('bulletOne');
-
 			}
 		},
 		enemy => {
@@ -737,8 +726,6 @@ boss(){
 				for(i = 0; i < count; i++){
 					stageUtils.spawnBullet('big-blue', x, enemy.y, angle, bullet => {
 						bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-						if(type == 'big-red') bullet.zOrder++;
-						bullet.zOrder += 0.05 * i;
 					});
 					angle += Math.PI / (count / 2);
 				}
@@ -752,8 +739,6 @@ boss(){
 						const speed = 3.5;
 						bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
 						bullet.rotation = bullet.angle;
-						bullet.zOrder--;
-						bullet.zOrder += 0.05 * i;
 					})
 				};
 				for(i = 0; i < 3; i++){
@@ -813,8 +798,6 @@ boss(){
 					stageUtils.spawnBullet('big-blue', enemy.x, enemy.y, angle, bullet => {
 						const speed = 3.5;
 						bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-						bullet.zOrder--;
-						bullet.zOrder += i * 0.02
 					});
 					angle += Math.PI / (count / 2);
 				}
@@ -859,8 +842,6 @@ boss(){
 						const speed = 3.5, mod = 0.03;
 						bullet.angle = bullet.angle - mod + (Math.random() * (mod * 2))
 						bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-						bullet.zOrder++;
-						bullet.zOrder -= i * .01;
 					}, bullet => {
 					});
 					angle += Math.PI / count;
@@ -871,8 +852,6 @@ boss(){
 				for(i = 0; i < count + 1; i++){
 					stageUtils.spawnBullet('arrow-red', enemy.x, enemy.y, angle, bullet => {
 						bullet.speed = 3;
-						bullet.zOrder += 2;
-						bullet.zOrder -= i * .01;
 						bullet.initial = bullet.angle;
 						if(opposite) bullet.opposite = true;
 					}, bullet => {
@@ -1002,7 +981,6 @@ waveSeventeen(){
 			stageUtils.spawnBullet('bullet-blue', enemy.x, enemy.y, angle + i * mod, bullet => {
 				const speed = 3.5;
 				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-				bullet.zOrder += i;
 			});
 		}
 	}, interval = 20;
@@ -1055,7 +1033,6 @@ waveEighteen(){
 			for(i = 0; i < count; i++){
 				stageUtils.spawnBullet('arrow-red', enemy.x, enemy.y, angle, bullet => {
 					bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-					bullet.zOrder += i * 0.001;
 					bullet.rotation = bullet.angle;
 				});
 				angle += Math.PI / (count / 2);
@@ -1231,7 +1208,6 @@ waveTwentyThree(){
 			stageUtils.spawnBullet('big-red', enemy.x, enemy.y, angle, bullet => {
 				const speed = 4;
 				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-				bullet.zOrder += i * .05;
 			});
 			angle -= mod;
 		}
@@ -1239,7 +1215,6 @@ waveTwentyThree(){
 		const speed = 6;
 		stageUtils.spawnBullet('ring-blue', enemy.x, enemy.y, enemy.angle, bullet => {
 			bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-			bullet.zOrder++;
 		});
 	}, interval = 30;
 	if(this.clock % interval == 0 && this.clock < interval * 8)

@@ -192,11 +192,12 @@ spawnBullet(type, x, y, angle, initFunc, updateFunc){
 		bullet.x = x;
 		bullet.y = y;
 		bullet.clock = 0;
+		bullet.zOrder = 70;
 		if(angle) bullet.angle = angle;
 		bullet.updateFunc = updateFunc;
-		bullet.zOrder = 70;
 		if(initFunc) initFunc(bullet);
-		globals.game.stage.addChild(bullet);
+		// globals.game.stage.addChild(bullet);
+		globals.containers.enemyBullets.addChild(bullet);
 	}
 },
 
@@ -215,10 +216,10 @@ updateBullet(bullet, index){
 	if(bullet.seen && (bullet.y >= globals.grid + globals.winHeight + globals.winHeight / 8 ||
 		bullet.y <= globals.grid - globals.winHeight / 8 ||
 		bullet.x >= globals.gameX + globals.gameWidth + globals.gameWidth / 8 ||
-		bullet.x <= globals.gameX - globals.gameWidth / 8)) globals.game.stage.removeChildAt(index);
+		bullet.x <= globals.gameX - globals.gameWidth / 8)) globals.containers.enemyBullets.removeChildAt(index);
 	if(globals.removeBullets){
 		explosion.spawn(bullet, bullet.texture.baseTexture.imageUrl.indexOf('blue') > -1, false, false, true)
-		globals.game.stage.removeChildAt(index);
+		globals.containers.enemyBullets.removeChildAt(index);
 	}
 },
 
@@ -260,6 +261,14 @@ nextWave(wave, thisObj){
 		if(!globals.gameOver){
 			thisObj[wave]();
 			if(!globals.paused) thisObj.clock++;
+		}
+	}
+},
+
+updateEnemyBullets(){
+	if(globals.containers.enemyBullets.children){
+		for(i = 0; i < globals.containers.enemyBullets.children.length; i++){
+			this.updateBullet(globals.containers.enemyBullets.children[i], i)
 		}
 	}
 }

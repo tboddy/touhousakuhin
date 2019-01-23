@@ -1,6 +1,7 @@
 module.exports = {
 
 started: false,
+zOrder: 5000,
 offset: globals.grid / 2,
 highScoreLabel: false,
 highScoreLabelShadow: false,
@@ -25,17 +26,19 @@ elapsed: 0,
 fieldLabels: [],
 
 label(input, x, y, color, large){
-	let fontName = 'goldbox';
+	let fontName = 'goldbox', zOrder = this.zOrder + 20;
 	if(color){
 		if(color == 'dark'){
 			y++;
 			fontName = 'goldboxdark';
+			zOrder--;
 		} else if(color == 'orange') fontName = 'goldboxorange';
 		else if(color == 'brown') fontName = 'goldboxbrown';
 	}
 	const label = new PIXI.extras.BitmapText(input, {font: '16px ' + fontName});
 	label.x = x;
 	label.y = y;
+	label.zOrder = zOrder;
 	return label;
 },
 
@@ -55,7 +58,8 @@ frame(){
 	const img = PIXI.Sprite.from(sprites.frame);
 	img.x = 0;
 	img.y = 0;
-	globals.containers.chrome.addChild(img);
+	img.zOrder = this.zOrder - 11;
+	globals.game.stage.addChild(img);
 },
 
 score(){
@@ -65,19 +69,21 @@ score(){
 		const title = this.label(str, x, y), titleShadow = this.label(str, x, y, 'dark');
 		this.highScoreLabel = this.label(this.processScore(globals.highScore), x, y + offset);
 		this.highScoreLabelShadow = this.label(this.processScore(globals.highScore), x, y + offset, 'dark');
-		globals.containers.chrome.addChild(titleShadow);
-		globals.containers.chrome.addChild(title);
-		globals.containers.chrome.addChild(this.highScoreLabelShadow);
-		globals.containers.chrome.addChild(this.highScoreLabel);
+		globals.game.stage.addChild(title);
+		globals.game.stage.addChild(titleShadow);
+		globals.game.stage.addChild(this.highScoreLabel);
+		globals.game.stage.addChild(this.highScoreLabelShadow);
 	}, playerScore = () => {
 		const x = globals.winWidth - globals.grid * 4.5, str = 'SCORE';
 		const title = this.label(str, x + globals.grid, y), titleShadow = this.label(str, x + globals.grid, y, 'dark');
 		this.scoreLabel = this.label(this.processScore(globals.score), x, y + offset);
 		this.scoreLabelShadow = this.label(this.processScore(globals.score), x, y + offset, 'dark');
-		globals.containers.chrome.addChild(titleShadow);
-		globals.containers.chrome.addChild(title);
-		globals.containers.chrome.addChild(this.scoreLabelShadow);
-		globals.containers.chrome.addChild(this.scoreLabel);
+		// this.scoreLabel.anchor.set(0, 1)
+		// this.scoreLabelShadow.anchor.set(0, 1)
+		globals.game.stage.addChild(title);
+		globals.game.stage.addChild(titleShadow);
+		globals.game.stage.addChild(this.scoreLabel);
+		globals.game.stage.addChild(this.scoreLabelShadow);
 	};
 	playerScore();
 	highScore();
@@ -86,12 +92,12 @@ score(){
 timeLeft(){
 	const x = globals.winWidth - globals.grid * 3, y = globals.grid * 4, offset = globals.grid + 2, str = 'TIME';
 	const title = this.label(str, x, y), titleShadow = this.label(str, x, y, 'dark');
-	this.timeLabelShadow = this.label(this.processTime(this.timeLimit), x, y + offset, 'dark');
 	this.timeLabel = this.label(this.processTime(this.timeLimit), x, y + offset);
-	globals.containers.chrome.addChild(titleShadow);
-	globals.containers.chrome.addChild(title);
-	globals.containers.chrome.addChild(this.timeLabelShadow);
-	globals.containers.chrome.addChild(this.timeLabel);
+	this.timeLabelShadow = this.label(this.processTime(this.timeLimit), x, y + offset, 'dark');
+	globals.game.stage.addChild(title);
+	globals.game.stage.addChild(titleShadow);
+	globals.game.stage.addChild(this.timeLabel);
+	globals.game.stage.addChild(this.timeLabelShadow);
 },
 
 boss(){
@@ -105,15 +111,18 @@ pause(){
 	this.pausedOverlay.width = globals.gameWidth;
 	this.pausedOverlay.height = globals.gameHeight;
 	this.pausedOverlay.alpha = 0;
-	globals.containers.chrome.addChild(this.pausedOverlay);
+	this.pausedOverlay.zOrder = this.zOrder + 10;
+	globals.game.stage.addChild(this.pausedOverlay);
 	this.pausedLabel = this.label('PAUSED', globals.gameWidth / 2 + globals.gameX, globals.winHeight / 2);
 	this.pausedLabelShadow = this.label('PAUSED', globals.gameWidth / 2 + globals.gameX, globals.winHeight / 2, 'dark');
 	this.pausedLabel.anchor.set(.5);
 	this.pausedLabelShadow.anchor.set(.5);
 	this.pausedLabel.alpha = 0;
 	this.pausedLabelShadow.alpha = 0;
-	globals.containers.chrome.addChild(this.pausedLabelShadow);
-	globals.containers.chrome.addChild(this.pausedLabel);
+	this.pausedLabel.zOrder = this.zOrder + 11;
+	this.pausedLabelShadow.zOrder = this.zOrder + 10;
+	globals.game.stage.addChild(this.pausedLabel);
+	globals.game.stage.addChild(this.pausedLabelShadow);
 },
 
 bonus(){
@@ -122,17 +131,19 @@ bonus(){
 	this.bonusLabelShadow = this.label(bonusString, x, y, 'dark');
 	this.bonusLabel.anchor.set(.5);
 	this.bonusLabelShadow.anchor.set(.5);
-	globals.containers.chrome.addChild(this.bonusLabelShadow);
-	globals.containers.chrome.addChild(this.bonusLabel);
+	globals.game.stage.addChild(this.bonusLabel);
+	globals.game.stage.addChild(this.bonusLabelShadow);
 },
 
 debug(){
 	// this.debugTimeLabel = this.label('0', globals.gameWidth - globals.grid / 2, globals.gameHeight - globals.grid / 2, 'red');
 	// this.debugTimeLabel.anchor.set(1);
-	// globals.containers.chrome.addChild(this.debugTimeLabel);
+	// this.debugTimeLabel.zOrder = this.zOrder;
+	// globals.game.stage.addChild(this.debugTimeLabel);
 	// this.debugBulletLabel = this.label('0', globals.gameWidth - globals.grid / 2, globals.gameHeight - 16 - 4, 'red');
 	// this.debugBulletLabel.anchor.set(1);
-	// globals.containers.chrome.addChild(this.debugBulletLabel);
+	// this.debugBulletLabel.zOrder = this.zOrder;
+	// globals.game.stage.addChild(this.debugBulletLabel);
 },
 
 didGameOver: false,
@@ -143,15 +154,16 @@ gameOver(){
 	overlay.y = globals.grid;
 	overlay.width = globals.gameWidth;
 	overlay.height = globals.gameHeight;
-	globals.containers.chrome.addChild(overlay);
+	overlay.zOrder = this.zOrder - 1;
+	globals.game.stage.addChild(overlay);
 	const gameOverString = () => {
 		const x = globals.gameWidth / 2 + globals.gameX, y = globals.winHeight / 2 - globals.grid * 2 - 4 * 2,
 			str = 'GAME OVER';
 		const label = this.label(str, x, y, false, true), shadow = this.label(str, x, y, 'dark', true);
 		label.anchor.set(.5)
 		shadow.anchor.set(.5)
-		globals.containers.chrome.addChild(shadow);
-		globals.containers.chrome.addChild(label);
+		globals.game.stage.addChild(label);
+		globals.game.stage.addChild(shadow);
 	}, endResult = () => {
 		const x = globals.gameX + globals.gameWidth / 2, y = globals.winHeight / 2 - globals.grid - 4;
 		if(globals.wonGame){
@@ -161,24 +173,24 @@ gameOver(){
 			globals.score += wonScore;
 			wonLabel.anchor.set(.5);
 			wonLabelShadow.anchor.set(.5);
-			globals.containers.chrome.addChild(wonLabelShadow);
-			globals.containers.chrome.addChild(wonLabel);
+			globals.game.stage.addChild(wonLabel);
+			globals.game.stage.addChild(wonLabelShadow);
 		} else if(player.lives <= 1){
 			const endString = this.timeLimit - this.elapsed ? 'YOU LOSE...' : 'TIME OUT...';
 			const lostLabel = this.label(endString, x, y),
 				lostLabelShadow = this.label(endString, x, y, 'dark');
 			lostLabel.anchor.set(.5);
 			lostLabelShadow.anchor.set(.5);
-			globals.containers.chrome.addChild(lostLabelShadow);
-			globals.containers.chrome.addChild(lostLabel);
+			globals.game.stage.addChild(lostLabel);
+			globals.game.stage.addChild(lostLabelShadow);
 		} else {
 			const str = 'OUT OF TIME';
 			const wonLabel = this.label(str, x, y),
 				wonLabelShadow = this.label(str, x, y, 'dark');
 			wonLabel.anchor.set(.5);
 			wonLabelShadow.anchor.set(.5);
-			globals.containers.chrome.addChild(wonLabelShadow);
-			globals.containers.chrome.addChild(wonLabel);
+			globals.game.stage.addChild(wonLabel);
+			globals.game.stage.addChild(wonLabelShadow);
 		}
 	}, scoreResult = () => {
 		const scoreString = globals.score >= globals.highScore ? 'NEW HIGH SCORE!' : 'NO HIGH SCORE',
@@ -187,8 +199,8 @@ gameOver(){
 			shadow = this.label(scoreString, x, y, 'dark');
 		label.anchor.set(.5);
 		shadow.anchor.set(.5);
-		globals.containers.chrome.addChild(shadow);
-		globals.containers.chrome.addChild(label);
+		globals.game.stage.addChild(label);
+		globals.game.stage.addChild(shadow);
 		if(globals.score >= globals.highScore){
 			globals.savedData.highScore = globals.score;
 			storage.set('savedData', globals.savedData);
@@ -204,8 +216,8 @@ gameOver(){
 		const label = this.label(scoreString, x, y), shadow = this.label(scoreString, x, y, 'dark');
 		label.anchor.set(.5);
 		shadow.anchor.set(.5);
-		globals.containers.chrome.addChild(shadow);
-		globals.containers.chrome.addChild(label);
+		globals.game.stage.addChild(label);
+		globals.game.stage.addChild(shadow);
 	}
 	sound.stopBgm();
 	gameOverString();
@@ -234,10 +246,10 @@ addFieldLabel(input, pos){
 	fieldLabelShadow.clock = 0;
 	fieldLabelShadow.anchor.set(.5);
 
-	globals.containers.chrome.addChild(fieldLabelShadow);
-	globals.containers.chrome.addChild(fieldLabel);
-	this.fieldLabels.push(fieldLabelShadow);
+	globals.game.stage.addChild(fieldLabel);
+	globals.game.stage.addChild(fieldLabelShadow);
 	this.fieldLabels.push(fieldLabel);
+	this.fieldLabels.push(fieldLabelShadow);
 
 },
 
@@ -341,7 +353,6 @@ init(){
 },
 
 wipe(){
-
 	this.highScoreLabel = false;
 	this.highScoreLabelShadow = false;
 	this.scoreLabel = false;
@@ -361,7 +372,6 @@ wipe(){
 	this.elapsed = 0;
 	this.fieldLabels = [];
 	this.didGameOver = false;
-
 }
 
 }

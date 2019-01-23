@@ -23,7 +23,6 @@ const storage = require('electron-json-storage'),
 let enemyCount = 0, bulletCount = 0, chipCount = 0, lastEnemyCount = 0;
 
 const mainLoop = delta => {
-	// if(sound.list.bgmOne.playing()) sound.list.bgmOne.stop();
 	enemyCount = 0;
 	globals.enemyCount = 0;
 	bulletCount = 0;
@@ -45,11 +44,6 @@ const mainLoop = delta => {
 					collision.placeItem(child, i);
 					enemyCount++;
 					break;
-				case 'bullet':
-					if(!globals.paused) stageUtils.updateBullet(child, i, delta);
-					collision.placeItem(child, i);
-					bulletCount++;
-					break;
 				case 'chipPower':
 					if(!globals.paused) chips.updatePower(child, i, delta);
 					collision.placeItem(child, i);
@@ -70,6 +64,7 @@ const mainLoop = delta => {
 			}
 		}
 	}
+	stageUtils.updateEnemyBullets();
 	collision.update();
 	stage.update();
 	sortZ();
