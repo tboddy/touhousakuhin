@@ -217,7 +217,7 @@ updateMap(){
 updateBlock(block, index){
 	block.y += 1.5;
 	block.zOrder -= 0.001;
-	if(block.clock >= block.growSeed && !block.special){
+	if(block.clock >= block.growSeed){
 		const mod = 0.0025;
 		if((block.growing && block.scale.x >= 1.2) || (!block.growing && block.scale.x <= 1)) block.growing = !block.growing;
 		const diff = block.growing ? mod : -mod;

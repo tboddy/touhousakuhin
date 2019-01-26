@@ -20,12 +20,11 @@ const storage = require('electron-json-storage'),
 	pixiProjection = require('pixi-projection'),
 	enemies = require('./src/enemies.js');
 
-let enemyCount = 0, bulletCount = 0, chipCount = 0, lastEnemyCount = 0;
+let bulletCount = 0, chipCount = 0;
 
 const mainLoop = delta => {
-	enemyCount = 0;
-	globals.enemyCount = 0;
 	bulletCount = 0;
+	globals.enemyCount = 0;
 	for(var i = 0; i < globals.game.stage.children.length; i++){
 		const child = globals.game.stage.children[i]
 		if(child.type){
@@ -42,15 +41,15 @@ const mainLoop = delta => {
 				case 'enemy':
 					stageUtils.updateEnemy(child, i);
 					collision.placeItem(child, i);
-					enemyCount++;
+					globals.enemyCount++;
 					break;
 				case 'chipPower':
 					if(!globals.paused) chips.updatePower(child, i, delta);
 					collision.placeItem(child, i);
 					break;
-				case 'debugEnemies': chrome.updateDebugEnemies(child); break;
-				case 'debugBullets': chrome.updateDebugBullets(child); break;
-				case 'debugFps': chrome.updateDebugFps(child); break;
+				// case 'debugEnemies': chrome.updateDebugEnemies(child); break;
+				// case 'debugBullets': chrome.updateDebugBullets(child); break;
+				// case 'debugFps': chrome.updateDebugFps(child); break;
 				case 'explosion': explosion.update(child, i); break;
 				case 'graze': graze.update(child, i); break;
 				case 'bossBorder': if(!globals.paused) stageUtils.updateBossBorder(child, i); break;
@@ -67,15 +66,14 @@ const mainLoop = delta => {
 	stageUtils.updateEnemyBullets();
 	collision.update();
 	stage.update();
-	sortZ();
 	if(!globals.paused) globals.timeLeft--;
 	if(globals.removeBullets){
 		if(!globals.removeBulletsTime) globals.removeBulletsTime = 30;
 		globals.removeBulletsTime--;
 		if(!globals.removeBulletsTime) globals.removeBullets = false;
 	}
-	if(globals.gameClock % 2 == 0) lastEnemyCount = enemyCount;
 	if(globals.gameOver) globals.gameOverClock++;
+	sortZ();
 	globals.gameClock++;
 },
 

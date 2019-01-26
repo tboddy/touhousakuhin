@@ -11,12 +11,12 @@ grid: 16,
 winWidth: 640,
 gameWidth: 384,
 winHeight: 480,
+idleInterval: 40,
+waitTime: -40,
 
 enemyCount: 0,
 
 savedData: false,
-
-timeLeft: 150 * 60,
 
 game: false,
 
@@ -33,15 +33,10 @@ timeOver: false,
 gameOverClock: false,
 paused: false,
 deadBoss: false,
-currentStage: 1,
-currentLoop: 1,
+
+isFiveMinute: true,
 
 removeBullets: false,
-
-gameLayer: false,
-
-idleInterval: 40,
-waitTime: -45,
 
 colors: {
 	dark: '#000000',

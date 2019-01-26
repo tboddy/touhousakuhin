@@ -10,8 +10,8 @@ scoreLabelShadow: false,
 pausedOverlay: false,
 pausedLabel: false,
 pausedLabelShadow: false,
-debugTimeLabel: false,
-debugBulletLabel: false,
+// debugTimeLabel: false,
+// debugBulletLabel: false,
 timeLabel: false,
 timeLabelShadow: false,
 bonusLabel: false,
@@ -20,8 +20,8 @@ bonusScore: 0,
 bonusClock: 0,
 gameOverClock: 0,
 
-timeLimit: 120,
-baseTimeLimit: 120,
+timeLimit: 60 * 2,
+fiveMinuteLimit: 60 * 5,
 elapsed: 0,
 fieldLabels: [],
 
@@ -101,7 +101,14 @@ timeLeft(){
 },
 
 boss(){
-
+	this.bossBar = new PIXI.extras.TilingSprite(sprites.bossBar);
+	this.bossBar.x = globals.gameX + 8;
+	this.bossBar.y = globals.grid + 8;
+	this.bossBar.width = globals.gameWidth - globals.grid;
+	this.bossBar.height = 8;
+	this.bossBar.zOrder = this.zOrder + 9;
+	this.bossBar.alpha = 0;
+	globals.game.stage.addChild(this.bossBar);
 },
 
 pause(){
@@ -161,9 +168,9 @@ gameOver(){
 			str = 'GAME OVER';
 		const label = this.label(str, x, y, false, true), shadow = this.label(str, x, y, 'dark', true);
 		label.anchor.set(.5)
-		shadow.anchor.set(.5)
-		globals.game.stage.addChild(label);
+		shadow.anchor.set(.5);
 		globals.game.stage.addChild(shadow);
+		globals.game.stage.addChild(label);
 	}, endResult = () => {
 		const x = globals.gameX + globals.gameWidth / 2, y = globals.winHeight / 2 - globals.grid - 4;
 		if(globals.wonGame){
@@ -216,14 +223,28 @@ gameOver(){
 		const label = this.label(scoreString, x, y), shadow = this.label(scoreString, x, y, 'dark');
 		label.anchor.set(.5);
 		shadow.anchor.set(.5);
-		globals.game.stage.addChild(label);
 		globals.game.stage.addChild(shadow);
+		globals.game.stage.addChild(label);
 	}
 	sound.stopBgm();
 	gameOverString();
 	endResult();
 	scoreResult();
 	restartString();
+},
+
+gameStartLabel: false,
+gameStartShadow: false,
+
+gameStart(){
+	const x = globals.gameWidth / 2 + globals.gameX, y = globals.winHeight / 2,
+		str = globals.isFiveMinute ? 'START 5 MINUTE MODE' : 'START 2 MINUTE MODE';
+	this.gameStartLabel = this.label(str, x, y, false, true);
+	this.gameStartShadow = this.label(str, x, y, 'dark', true);
+	this.gameStartLabel.anchor.set(.5)
+	this.gameStartShadow.anchor.set(.5)
+	globals.game.stage.addChild(this.gameStartShadow);
+	globals.game.stage.addChild(this.gameStartLabel);
 },
 
 addFieldLabel(input, pos){
@@ -295,8 +316,8 @@ update(){
 			this.pausedLabelShadow.alpha = 0;
 		}
 	}, updateDebug = () => {
-		this.debugBulletLabel.text = bulletCount + ' B';
-		this.debugTimeLabel.text = (globals.gameClock / 60).toFixed(0) + ' T';
+		// this.debugBulletLabel.text = bulletCount + ' B';
+		// this.debugTimeLabel.text = (globals.gameClock / 60).toFixed(0) + ' T';
 	}, updateTimeLeft = () => {
 		let timeLeft = this.timeLimit - this.elapsed / 60;
 		if(timeLeft <= 0){
@@ -304,7 +325,10 @@ update(){
 			timeLeft = 0;
 		}
 		let minString = timeLeft > 60 ? '1' : '0';
-		if(timeLeft == 120) minString = '2';
+		if(timeLeft >= 60 * 2 && timeLeft < 60 * 3) minString = '2';
+		else if(timeLeft >= 60 * 3 && timeLeft < 60 * 4) minString = '3';
+		else if(timeLeft >= 60 * 4 && timeLeft < 60 * 5) minString = '4';
+		else if(timeLeft == 60 * 5) minString = '5';
 		let secString = Math.floor(timeLeft % 60);
 		if(secString < 10) secString = '0' + secString
 		let timeString = minString + ':' + secString;
@@ -326,24 +350,41 @@ update(){
 			this.bonusLabel.text = '';
 			this.bonusLabelShadow.text = '';
 		}
+	}, updateGameStart = () => {
+		if(globals.gameClock > 60 * 1.5 && this.gameStartLabel.alpha){
+			this.gameStartLabel.alpha = 0;
+			this.gameStartShadow.alpha = 0;
+		}
+	}, updateBoss = () => {
+		if(globals.bossActive){
+			if(!this.bossBar.alpha) this.bossBar.alpha = 1;
+			const num = Math.floor(globals.bossHealth / globals.bossHealthInitial * (globals.gameWidth - globals.grid));
+			if(this.bossBar.width != num) this.bossBar.width = num;
+		} else if(this.bossBar.alpha) this.bossBar.alpha = 0;
 	};
 	if(!globals.starting){
 		updateScore();
-		updateDebug();
+		// updateDebug();
 		updateTimeLeft();
 		updatePaused();
 		updateGameOver();
 		updateBonus();
+		updateBoss();
+		updateGameStart();
 	}
 },
 
 init(){
+	if(globals.isFiveMinute) this.timeLimit = this.fiveMinuteLimit;
+	console.log(this.timeLimit)
 	this.frame();
 	this.score();
 	this.pause();
-	this.debug();
+	// this.debug();
 	this.timeLeft();
 	this.bonus();
+	this.gameStart();
+	this.boss();
 	if(!this.started){
 		this.started = true;
 		globals.game.ticker.add(() => {
@@ -360,15 +401,16 @@ wipe(){
 	this.pausedOverlay = false;
 	this.pausedLabel = false;
 	this.pausedLabelShadow = false;
-	this.debugTimeLabel = false;
-	this.debugBulletLabel = false;
+	// this.debugTimeLabel = false;
+	// this.debugBulletLabel = false;
 	this.timeLabel = false;
 	this.timeLabelShadow = false;
 	this.bonusLabel = false;
 	this.bonusLabelShadow = false;
 	this.bonusScore = 0;
 	this.bonusClock = 0;
-	this.timeLimit = 120;
+	this.timeLimit = 60 * 2;
+	this.fiveMinuteLimit = 60 * 5;
 	this.elapsed = 0;
 	this.fieldLabels = [];
 	this.didGameOver = false;

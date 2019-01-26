@@ -126,7 +126,6 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 },
 
 updateEnemy(enemy, index){
-	globals.enemyCount++;
 	if(!globals.paused){
 		switch(enemy.enemyType){
 			case 'fairy':
@@ -164,11 +163,10 @@ updateEnemy(enemy, index){
 		}
 		enemy.lastX = enemy.x;
 		if(enemy.isBoss){
-			if(!globals.bossActive) globals.bossActive = true;
 			this.bossPosition.x = enemy.x;
 			this.bossPosition.y = enemy.y;
 			globals.bossHealth = enemy.health;
-		} else if(globals.bossActive) globals.bossActive = false;
+		}
 		if(enemy.velocity){
 			enemy.x += enemy.velocity.x;
 			enemy.y += enemy.velocity.y;
@@ -252,12 +250,9 @@ killBoss(enemy){
 	globals.bossActive = false;
 },
 
-nextStage(){
-},
-
 nextWave(wave, thisObj){
 	thisObj.clock = -1;
-	thisObj.currentWave = () => {
+	thisObj.currentWave = count => {
 		if(!globals.gameOver){
 			thisObj[wave]();
 			if(!globals.paused) thisObj.clock++;

@@ -74,7 +74,9 @@ module.exports = {
 			fade2: PIXI.Texture.fromImage('img/bg/fade2.png'),
 			overlay: PIXI.Texture.fromImage('img/bg/overlay.png', false, PIXI.SCALE_MODES.NEAREST),
 			overlay2: PIXI.Texture.fromImage('img/bg/overlay2.png', false, PIXI.SCALE_MODES.NEAREST)
-		}
+		},
+
+		this.bossBar = PIXI.Texture.fromImage('img/boss/bar.png');
 
 	}
 }
