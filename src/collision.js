@@ -90,19 +90,19 @@ module.exports = {
 		}, checkObjAgainstPlayer = obj => {
 			const dx = player.sprite.x - obj.x, dy = player.sprite.y - obj.y, radii = obj.width / 2;
 			if(dx * dx + dy * dy < radii * radii){
-				// if(!globals.gameOver){
-				// 	explosion.spawn(player.sprite, false, false, true);
-				// 	player.graze = 0;
-				// 	globals.removeBullets = true;
-				// 	if(!obj.isBoss) obj.y = -globals.winHeight;
-				// 	if(player.power > 0){
-				// 		player.invulnerableClock = 60 * 2;
-				// 		player.power--;
-				// 	} else{
-				// 		player.lives = 0;
-				// 		globals.gameOver = true;
-				// 	}
-				// }
+				if(!globals.gameOver){
+					explosion.spawn(player.sprite, false, false, true);
+					player.graze = 0;
+					globals.removeBullets = true;
+					if(!obj.isBoss) obj.y = -globals.winHeight;
+					if(player.power > 0){
+						player.invulnerableClock = 60 * 2;
+						player.power--;
+					} else{
+						player.lives = 0;
+						globals.gameOver = true;
+					}
+				}
 			}
 		}, checkChip = chip => {
 			if(chip.x + chip.width / 2 >= player.sprite.x - player.sprite.width / 2 && chip.x - chip.height / 2 <= player.sprite.x + player.sprite.width - player.sprite.width / 2 &&
@@ -131,13 +131,13 @@ module.exports = {
 			for(j = 0; j < thisObj.sects[i].length; j++){
 				if(thisObj.sects[i][j].enemy){
 					if(thisObj.sects[i][j].playerBullet) checkPlayerBulletAgainstEnemy(globals.game.stage.getChildAt(thisObj.sects[i][j].playerBullet), globals.game.stage.getChildAt(thisObj.sects[i][j].enemy), i, j);
-				} else if(thisObj.sects[i][j].mapBlock){
-					if(thisObj.sects[i][j].playerBullet) checkPlayerBulletAgainstBlock(globals.game.stage.getChildAt(thisObj.sects[i][j].playerBullet), globals.game.stage.getChildAt(thisObj.sects[i][j].mapBlock), i, j);
+				} else if(thisObj.sects[i][j].mapBlock && thisObj.sects[i][j].playerBullet){
+					if(thisObj.sects[i][j].mapBlock < globals.containers.blocks.children.length) checkPlayerBulletAgainstBlock(globals.game.stage.getChildAt(thisObj.sects[i][j].playerBullet), globals.containers.blocks.getChildAt(thisObj.sects[i][j].mapBlock), i, j);
 				}
 				if(thisObj.sects[i][j].player){
 					if(!player.invulnerableClock){
-						if(thisObj.sects[i][j].bullet){
-							const bullet = globals.game.stage.getChildAt(thisObj.sects[i][j].bullet)
+						if(thisObj.sects[i][j].bullet && thisObj.sects[i][j].bullet < globals.containers.enemyBullets.children.length){
+							const bullet = globals.containers.enemyBullets.getChildAt(thisObj.sects[i][j].bullet)
 							checkObjAgainstPlayer(bullet);
 							if(bullet.x + bullet.width / 2 >= player.sprite.x - player.sprite.width / 2 &&
 								bullet.x - bullet.height / 2 <= player.sprite.x + player.sprite.width / 2 &&

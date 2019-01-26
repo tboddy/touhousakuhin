@@ -81,10 +81,12 @@ initGame(){
 setupContainers(){
 	this.containers = {
 		chrome: new PIXI.Container(),
-		enemyBullets: new PIXI.Container()
+		enemyBullets: new PIXI.Container(),
+		blocks: new PIXI.Container()
 	};
-	this.containers.chrome.zOrder = 9000;
+	this.containers.chrome.zOrder = 200;
 	this.containers.enemyBullets.zOrder = 70;
+	this.containers.blocks.zOrder = 15;
 	for(container in this.containers){
 		this.containers[container].x = 0;
 		this.containers[container].y = 0;

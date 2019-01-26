@@ -47,18 +47,12 @@ const mainLoop = delta => {
 					if(!globals.paused) chips.updatePower(child, i, delta);
 					collision.placeItem(child, i);
 					break;
-				// case 'debugEnemies': chrome.updateDebugEnemies(child); break;
-				// case 'debugBullets': chrome.updateDebugBullets(child); break;
-				// case 'debugFps': chrome.updateDebugFps(child); break;
 				case 'explosion': explosion.update(child, i); break;
 				case 'graze': graze.update(child, i); break;
 				case 'bossBorder': if(!globals.paused) stageUtils.updateBossBorder(child, i); break;
 				case 'mapBlock':
 					if(!globals.paused) stage.updateBlock(child, i);
 					collision.placeItem(child, i);
-					break;
-				case 'fieldLabel':
-					if(!globals.paused) chrome.updateFieldLabel(child, i);
 					break;
 			}
 		}

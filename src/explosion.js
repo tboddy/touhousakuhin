@@ -20,6 +20,8 @@ module.exports = {
 			explosion.zOrder = zOrder ? zOrder : 90;
 			explosion.type = 'explosion';
 			if(big) explosion.scale.set(2);
+			if(Math.round(Math.random())) explosion.scale.x = big ? -2 : -1;
+			if(Math.round(Math.random())) explosion.scale.y = big ? -2 : -1;
 			globals.game.stage.addChild(explosion);
 			this.count++;
 			sound.spawn('explosion');

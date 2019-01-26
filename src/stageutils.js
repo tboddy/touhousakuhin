@@ -207,6 +207,7 @@ updateBullet(bullet, index){
 	}
 	bullet.zOrder += 0.001;
 	bullet.clock++;
+	collision.placeItem(bullet, index);
 	if(bullet.x >= globals.gameX - bullet.width / 2 &&
 		bullet.y >= globals.grid - bullet.height / 2 &&
 		bullet.x < globals.gameX + globals.gameWidth + bullet.width / 2 &&
@@ -261,7 +262,7 @@ nextWave(wave, thisObj){
 },
 
 updateEnemyBullets(){
-	if(globals.containers.enemyBullets.children){
+	if(globals.containers.enemyBullets.children && !globals.paused){
 		for(i = 0; i < globals.containers.enemyBullets.children.length; i++){
 			this.updateBullet(globals.containers.enemyBullets.children[i], i)
 		}

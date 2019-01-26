@@ -195,7 +195,6 @@ buildBlock(index, img){
 	block.anchor.set(.5);
 	block.y = -size;
 	block.x = globals.gameX + this.gridWidth * index + globals.grid + size / 2;
-	block.zOrder = 15;
 	block.type = 'mapBlock';
 	block.growing = true;
 	block.growSeed = Math.floor(Math.random() * 45);
@@ -207,16 +206,21 @@ buildBlock(index, img){
 		block.hitCount = 0;
 		block.alpha = 0;
 	} else if(img != '2') block.rotation = Math.random() * Math.PI;
-	globals.game.stage.addChild(block);
+	globals.containers.blocks.addChild(block);
 },
 
 updateMap(){
 	if(globals.gameClock % 29 == 0 && this.tempMap.length) this.addRow();
+	if(globals.containers.blocks.children && !globals.paused){
+		for(i = 0; i < globals.containers.blocks.children.length; i++){
+			this.updateBlock(globals.containers.blocks.children[i], i)
+		}
+	}
 },
 
 updateBlock(block, index){
 	block.y += 1.5;
-	block.zOrder -= 0.001;
+	collision.placeItem(block, index);
 	if(block.clock >= block.growSeed){
 		const mod = 0.0025;
 		if((block.growing && block.scale.x >= 1.2) || (!block.growing && block.scale.x <= 1)) block.growing = !block.growing;
@@ -224,7 +228,7 @@ updateBlock(block, index){
 		block.scale.set(block.scale.x + diff);
 	}
 	block.clock++;
-	if(block.baseY > globals.winHeight || block.hit) globals.game.stage.removeChildAt(index);
+	if(block.baseY > globals.winHeight || block.hit) globals.containers.blocks.removeChildAt(index);
 },
 
 update(){
