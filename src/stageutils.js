@@ -217,8 +217,10 @@ updateBullet(bullet, index){
 		bullet.x >= globals.gameX + globals.gameWidth + globals.gameWidth / 8 ||
 		bullet.x <= globals.gameX - globals.gameWidth / 8)) globals.containers.enemyBullets.removeChildAt(index);
 	if(globals.removeBullets){
-		explosion.spawn(bullet, bullet.texture.baseTexture.imageUrl.indexOf('blue') > -1, false, false, true)
-		globals.containers.enemyBullets.removeChildAt(index);
+		if(index < globals.containers.enemyBullets.children.length){
+			explosion.spawn(bullet, bullet.texture.baseTexture.imageUrl.indexOf('blue') > -1, false, false, true);
+			globals.containers.enemyBullets.removeChildAt(index);
+		}
 	}
 },
 

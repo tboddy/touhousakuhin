@@ -91,17 +91,17 @@ module.exports = {
 			const dx = player.sprite.x - obj.x, dy = player.sprite.y - obj.y, radii = obj.width / 2;
 			if(dx * dx + dy * dy < radii * radii){
 				if(!globals.gameOver){
-					explosion.spawn(player.sprite, false, false, true);
-					player.graze = 0;
-					globals.removeBullets = true;
-					if(!obj.isBoss) obj.y = -globals.winHeight;
-					if(player.power > 0){
-						player.invulnerableClock = 60 * 2;
-						player.power--;
-					} else{
-						player.lives = 0;
-						globals.gameOver = true;
-					}
+					// explosion.spawn(player.sprite, false, false, true);
+					// player.graze = 0;
+					// globals.removeBullets = true;
+					// if(!obj.isBoss) obj.y = -globals.winHeight;
+					// if(player.power > 0){
+					// 	player.invulnerableClock = 60 * 2;
+					// 	player.power--;
+					// } else{
+					// 	player.lives = 0;
+					// 	globals.gameOver = true;
+					// }
 				}
 			}
 		}, checkChip = chip => {

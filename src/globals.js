@@ -82,7 +82,8 @@ setupContainers(){
 	this.containers = {
 		chrome: new PIXI.Container(),
 		enemyBullets: new PIXI.Container(),
-		blocks: new PIXI.Container()
+		blocks: new PIXI.Container(),
+		background: new PIXI.Container()
 	};
 	this.containers.chrome.zOrder = 200;
 	this.containers.enemyBullets.zOrder = 70;

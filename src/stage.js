@@ -167,9 +167,7 @@ const mapTwoMin = [
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0]
-], mapFiveMin = [
-	[0, 0, 0, 0, 0, 0, 0, 0]
+	[5, 0, 0, 0, 0, 0, 0, 0]
 ];
 
 module.exports = {
@@ -185,6 +183,7 @@ addRow(){
 			case 2: thisObj.buildBlock(i, '1'); break;
 			case 3: thisObj.buildBlock(i, '2'); break;
 			case 4: thisObj.buildBlock(i, '3'); break;
+			case 5: thisObj.buildBlock(i, '4'); break; // weird collision bandaid, fix later
 		}
 	}
 	this.tempMap.splice(this.tempMap.length - 1, 1)

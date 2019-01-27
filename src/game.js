@@ -58,8 +58,8 @@ const mainLoop = delta => {
 		}
 	}
 	stageUtils.updateEnemyBullets();
-	collision.update();
 	stage.update();
+	collision.update();
 	if(!globals.paused) globals.timeLeft--;
 	if(globals.removeBullets){
 		if(!globals.removeBulletsTime) globals.removeBulletsTime = 30;
