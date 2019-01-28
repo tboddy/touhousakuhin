@@ -184,7 +184,8 @@ updateEnemy(enemy, index){
 spawnBullet(type, x, y, angle, initFunc, updateFunc){
 	if(x >= -globals.gameWidth / 2 && x <= globals.gameWidth * 1.5 && y >= -globals.winHeight / 2 && y <= globals.winHeight * 1.5 &&
 		!globals.gameOver){
-		const bullet = PIXI.Sprite.fromImage('img/bullets/' + type + '.png');
+		// const bullet = PIXI.Sprite.fromImage('img/bullets/' + type + '.png');
+		const bullet = PIXI.Sprite.from(sprites.bullets[type]);
 		bullet.anchor.set(.5);
 		bullet.type = 'bullet';
 		bullet.x = x;
@@ -194,7 +195,6 @@ spawnBullet(type, x, y, angle, initFunc, updateFunc){
 		if(angle) bullet.angle = angle;
 		bullet.updateFunc = updateFunc;
 		if(initFunc) initFunc(bullet);
-		// globals.game.stage.addChild(bullet);
 		globals.containers.enemyBullets.addChild(bullet);
 	}
 },

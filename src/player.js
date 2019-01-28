@@ -9,7 +9,7 @@ power: 0,
 graze: 0,
 invulnerableClock: 0,
 removed: false,
-bulletSpeed: 35,
+bulletSpeed: 30,
 didShoot: false,
 lives: 3,
 livesInit: 1,
@@ -24,20 +24,20 @@ move(){
 	const currentImage = this.sprite.texture.baseTexture.imageUrl;
 	if(controls.moving.left){
 		this.sprite.x -= speed;
-		this.sprite.texture = this.leftClock < globals.idleInterval / 4 ? sprites.playerLeft0 : sprites.playerLeft1;
+		this.sprite.texture = this.leftClock < globals.idleInterval / 4 ? sprites.player.left0 : sprites.player.left1;
 		this.leftClock++;
 		if(this.idleClock) this.idleClock = 0;
 		if(this.rightClock) this.rightClock = 0;
 	} else if(controls.moving.right){
 		this.sprite.x += speed;
-		this.sprite.texture = this.rightClock < globals.idleInterval / 4 ? sprites.playerRight0 : sprites.playerRight1;
+		this.sprite.texture = this.rightClock < globals.idleInterval / 4 ? sprites.player.right0 : sprites.player.right1;
 		this.rightClock++;
 		if(this.idleClock) this.idleClock = 0;
 		if(this.leftClock) this.leftClock = 0;
 	} else if(!controls.moving.left && !controls.moving.right){
-		if(this.idleClock % globals.idleInterval == 0) this.sprite.texture = sprites.playerCenter0;
-		else if(this.idleClock % globals.idleInterval == globals.idleInterval / 4 || this.idleClock % globals.idleInterval == globals.idleInterval / 4 * 3) this.sprite.texture = sprites.playerCenter1;
-		else if(this.idleClock % globals.idleInterval == globals.idleInterval / 2) this.sprite.texture = sprites.playerCenter2;
+		if(this.idleClock % globals.idleInterval == 0) this.sprite.texture = sprites.player.center0;
+		else if(this.idleClock % globals.idleInterval == globals.idleInterval / 4 || this.idleClock % globals.idleInterval == globals.idleInterval / 4 * 3) this.sprite.texture = sprites.player.center1;
+		else if(this.idleClock % globals.idleInterval == globals.idleInterval / 2) this.sprite.texture = sprites.player.center2;
 		this.idleClock++;
 		if(this.leftClock) this.leftClock = 0;
 		if(this.rightClock) this.rightClock = 0;
@@ -67,7 +67,7 @@ move(){
 		const mod = 0.125;
 		this.focus.scale.x += mod;
 		this.focus.scale.y += mod;
-	} else if (this.focus.scale > 1) this.focus.scale.set(1)
+	} else if (this.focus.scale > 1) this.focus.scale.set(1);
 },
 
 shot(){
@@ -84,38 +84,37 @@ shot(){
 
 spawnBullets(){
 	const base = Math.PI / 2;
-	const mainBullet = (rotation, xMod, yMod, zOrder, double, top) => {
+	const mainBullet = (rotation, xMod, yMod, double) => {
 		const img = double ? 'double' : 'single';
 		const bullet = new PIXI.Sprite.fromImage('img/player/bullet-' + img + '.png', PIXI.SCALE_MODES.NEAREST);
 		bullet.anchor.set(.5);
-		bullet.x = this.sprite.x + (globals.grid * 1.5 + 2) * xMod;
-		bullet.y = this.sprite.y;
+		bullet.x = this.sprite.x + xMod;
+		bullet.y = this.sprite.y + yMod;
 		bullet.baseX = bullet.x;
 		bullet.baseY = bullet.y;
 		const bulletMod = this.sprite.height / 4;
-		// bullet.y += top ? -bulletMod : bulletMod;
-		if(yMod) bullet.y += 16
 		bullet.type = 'playerBullet';
 		bullet.alpha = 1;
 		bullet.rotation = rotation - Math.PI / 2;
-		bullet.zOrder = zOrder;
 		bullet.velocity = {
 			x: Math.cos(rotation) * this.bulletSpeed,
 			y: Math.sin(rotation) * this.bulletSpeed
 		}
-		globals.game.stage.addChild(bullet);
+		globals.containers.playerBullets.addChild(bullet);
 	};
-	const offset = Math.PI / 12.5;
-	if(this.power == 1 || this.power == 2) mainBullet(-base, 0, false, this.zIndex - 10);
-	if(this.power < 2 || this.power == 3) mainBullet(base, 0, false, this.zIndex - 10, true, true);
-	if(this.power >= 2){
-		mainBullet(base - Math.PI / 8, 0, false, this.zIndex - 10, false, true);
-		mainBullet(base + Math.PI / 8, 0, false, this.zIndex - 10, false, true);
+	const offset = 0.1, xOffset = 12, yOffset = 4;
+	mainBullet(base, 0, 0, true);
+	if(this.power > 0){
+		mainBullet(base - offset, -xOffset, yOffset, false);
+		mainBullet(base + offset, xOffset, yOffset, false);
 	}
-	if(this.power == 2) mainBullet(base, 0, false, this.zIndex - 10, false, true);
-	else if(this.power == 3){
-		mainBullet(-base - Math.PI / 8, 0, false, this.zIndex - 10, false, true);
-		mainBullet(-base + Math.PI / 8, 0, false, this.zIndex - 10, false, true);
+	if(this.power > 1){
+		mainBullet(base - offset * 2, -xOffset * 1.5, yOffset * 2.5, false);
+		mainBullet(base + offset * 2, xOffset * 1.5, yOffset * 2.5, false);
+	}
+	if(this.power > 2){
+		mainBullet(base - offset * 3, -xOffset * 2, yOffset * 4, false);
+		mainBullet(base + offset * 3, xOffset * 2, yOffset * 4, false);
 	}
 },
 
@@ -149,6 +148,11 @@ update(player, index){
 			this.move();
 			this.shot();
 			this.die();
+			if(globals.containers.playerBullets.children.length){
+				for(i = 0; i < globals.containers.playerBullets.children.length; i++){
+					this.updateBullet(globals.containers.playerBullets.children[i], i);
+				}
+			}
 		}
 	} else{
 		if(player.alpha != 0){
@@ -162,21 +166,19 @@ update(player, index){
 },
 
 updateBullet(bullet, index){
-	bullet.baseY -= bullet.velocity.y;
-	bullet.baseX -= bullet.velocity.x;
-	bullet.y = bullet.baseY;
-	bullet.x = bullet.baseX;
-	if(bullet.baseY < -bullet.height ||
-		bullet.baseX < -bullet.width + globals.gameX ||
-		bullet.baseX > globals.gameWidth + bullet.width + globals.gameX)
-		globals.game.stage.removeChildAt(index);
+	collision.placeItem(bullet, index);
+	bullet.y -= bullet.velocity.y;
+	bullet.x -= bullet.velocity.x;
+	if(bullet.y < -bullet.height ||
+		bullet.x < -bullet.width + globals.gameX ||
+		bullet.x > globals.gameWidth + bullet.width + globals.gameX)
+		globals.containers.playerBullets.removeChildAt(index);
 },
 
-init(){
-
-	this.sprite = new PIXI.Sprite.from(sprites.playerCenter0);
-	this.hitbox = new PIXI.Sprite.from(sprites.hitbox);
-	this.focus = new PIXI.Sprite.from(sprites.focus);
+draw(){
+	this.sprite = new PIXI.Sprite.from(sprites.player.center0);
+	this.hitbox = new PIXI.Sprite.from(sprites.player.hitbox);
+	this.focus = new PIXI.Sprite.from(sprites.player.focus);
 
 	this.spriteInit = {x: globals.gameX + globals.gameWidth / 2, y: globals.gameHeight - globals.grid * 2.75};
 
@@ -187,14 +189,10 @@ init(){
 	this.sprite.zOrder = this.zIndex;
 
 	this.hitbox.anchor.set(.5);
-	this.hitbox.x = this.sprite.x;
-	this.hitbox.y = this.sprite.y + 2;
 	this.hitbox.zOrder = this.zIndex + 2;
 	this.hitbox.alpha = 0;
 
 	this.focus.anchor.set(.5);
-	this.focus.x = this.sprite.x;
-	this.focus.y = this.sprite.y + 2;
 	this.focus.zOrder = this.zIndex + 2;
 	this.focus.alpha = 0;
 	this.focus.scale.set(.25);
@@ -202,6 +200,10 @@ init(){
 	globals.game.stage.addChild(this.sprite);
 	globals.game.stage.addChild(this.hitbox);
 	globals.game.stage.addChild(this.focus);
+},
+
+init(){
+	this.draw();
 },
 
 wipe(){

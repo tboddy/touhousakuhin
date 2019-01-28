@@ -1,44 +1,41 @@
 module.exports = {
 
-	interval: 4,
-	spawnTime: 12,
-
 	count: 0,
 
-	spawn(bullet, blue, zOrder, big, always){
-		// if(this.count < 10 || player.bombClock || always){
-			const suffix = blue ? '-blue' : '';
-			const explosion = PIXI.Sprite.fromImage('img/explosions/explosion' + suffix + '01.png');
-			explosion.textureB = PIXI.Texture.fromImage('img/explosions/explosion' + suffix + '02.png');
-			explosion.textureC = PIXI.Texture.fromImage('img/explosions/explosion' + suffix + '03.png');
-			explosion.textureD = PIXI.Texture.fromImage('img/explosions/explosion' + suffix + '04.png');
-			explosion.textureE = PIXI.Texture.fromImage('img/explosions/explosion' + suffix + '05.png');
-			explosion.anchor.set(0.5);
-			explosion.x = bullet.x;
-			explosion.y = bullet.y;
-			explosion.clock = -1;
-			explosion.zOrder = zOrder ? zOrder : 90;
-			explosion.type = 'explosion';
-			if(big) explosion.scale.set(2);
-			if(Math.round(Math.random())) explosion.scale.x = big ? -2 : -1;
-			if(Math.round(Math.random())) explosion.scale.y = big ? -2 : -1;
-			globals.game.stage.addChild(explosion);
-			this.count++;
-			sound.spawn('explosion');
-		// }
+	spawn(bullet, blue, big){
+		const suffix = blue ? 'blue' : 'red';
+		const explosion = PIXI.Sprite.from(sprites.explosion[suffix][0]);
+		explosion.textureB = sprites.explosion[suffix][1];
+		explosion.textureC = sprites.explosion[suffix][2];
+		explosion.textureD = sprites.explosion[suffix][3];
+		explosion.textureE = sprites.explosion[suffix][4];
+		explosion.anchor.set(0.5);
+		explosion.x = bullet.x;
+		explosion.y = bullet.y;
+		explosion.clock = -1;
+		explosion.type = 'explosion';
+		if(big) explosion.scale.set(2);
+		if(Math.round(Math.random())) explosion.scale.x = big ? -2 : -1;
+		if(Math.round(Math.random())) explosion.scale.y = big ? -2 : -1;
+		globals.containers.explosions.addChild(explosion);
+		this.count++;
+		sound.spawn('explosion');
 	},
 
 	update(explosion, i){
-		if(!globals.paused){
-			explosion.clock++;
-			const interval = 3;
-			if(explosion.clock == interval) explosion.texture = explosion.textureB;
-			else if(explosion.clock == interval * 2) explosion.texture = explosion.textureC;
-			else if(explosion.clock == interval * 3) explosion.texture = explosion.textureD;
-			else if(explosion.clock == interval * 4) explosion.texture = explosion.textureE;
-			else if(explosion.clock == interval * 5){
-				this.count--;
-				globals.game.stage.removeChildAt(i);
+		if(globals.containers.explosions.children.length && !globals.paused){
+			for(i = 0; i < globals.containers.explosions.children.length; i++){
+				const explosion = globals.containers.explosions.children[i];
+				explosion.clock++;
+				const interval = 4;
+				if(explosion.clock == interval) explosion.texture = explosion.textureB;
+				else if(explosion.clock == interval * 2) explosion.texture = explosion.textureC;
+				else if(explosion.clock == interval * 3) explosion.texture = explosion.textureD;
+				else if(explosion.clock == interval * 4) explosion.texture = explosion.textureE;
+				else if(explosion.clock == interval * 5){
+					this.count--;
+					globals.containers.explosions.removeChildAt(i);
+				}
 			}
 		}
 	}

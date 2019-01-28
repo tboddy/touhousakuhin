@@ -1,6 +1,6 @@
 module.exports = {
 
-zOrder: 900,
+zOrder: 150,
 
 spawnPower(block){
 	const chip = PIXI.Sprite.fromImage('img/chips/power.png');

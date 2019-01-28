@@ -91,7 +91,7 @@ module.exports = {
 			const dx = player.sprite.x - obj.x, dy = player.sprite.y - obj.y, radii = obj.width / 2;
 			if(dx * dx + dy * dy < radii * radii){
 				if(!globals.gameOver){
-					// explosion.spawn(player.sprite, false, false, true);
+					// explosion.spawn(player.sprite, false, true);
 					// player.graze = 0;
 					// globals.removeBullets = true;
 					// if(!obj.isBoss) obj.y = -globals.winHeight;
@@ -116,7 +116,7 @@ module.exports = {
 							player.power++;
 							sound.spawn('powerUp');
 							chrome.addFieldLabel('POWER+', player.sprite);
-						} else if(player.power == 3){
+						} else {
 							amt *= 10;
 							chrome.showBonus(amt);
 							sound.spawn('bonus');
@@ -129,10 +129,11 @@ module.exports = {
 		};
 		for(i = 0; i < thisObj.sects.length; i++){
 			for(j = 0; j < thisObj.sects[i].length; j++){
-				if(thisObj.sects[i][j].enemy){
-					if(thisObj.sects[i][j].playerBullet) checkPlayerBulletAgainstEnemy(globals.game.stage.getChildAt(thisObj.sects[i][j].playerBullet), globals.game.stage.getChildAt(thisObj.sects[i][j].enemy), i, j);
+				if(thisObj.sects[i][j].enemy && thisObj.sects[i][j].playerBullet){
+					if(thisObj.sects[i][j].playerBullet < globals.containers.playerBullets.children.length)
+						checkPlayerBulletAgainstEnemy(globals.containers.playerBullets.getChildAt(thisObj.sects[i][j].playerBullet), globals.game.stage.getChildAt(thisObj.sects[i][j].enemy), i, j);
 				} else if(thisObj.sects[i][j].mapBlock && thisObj.sects[i][j].playerBullet){
-					if(thisObj.sects[i][j].mapBlock < globals.containers.blocks.children.length) checkPlayerBulletAgainstBlock(globals.game.stage.getChildAt(thisObj.sects[i][j].playerBullet), globals.containers.blocks.getChildAt(thisObj.sects[i][j].mapBlock), i, j);
+					if(thisObj.sects[i][j].mapBlock < globals.containers.blocks.children.length && thisObj.sects[i][j].playerBullet < globals.containers.playerBullets.children.length) checkPlayerBulletAgainstBlock(globals.containers.playerBullets.getChildAt(thisObj.sects[i][j].playerBullet), globals.containers.blocks.getChildAt(thisObj.sects[i][j].mapBlock), i, j);
 				}
 				if(thisObj.sects[i][j].player){
 					if(!player.invulnerableClock){
@@ -161,7 +162,7 @@ module.exports = {
 				explosion.spawn(enemyHit.bullet, true);
 				enemyHit.enemy.health--;
 			} else {
-				explosion.spawn(enemyHit.bullet, true, false, true);
+				explosion.spawn(enemyHit.bullet, true, true);
 				globals.score += 5000;
 				if(enemyHit.enemy.suicide) enemyHit.enemy.suicide(enemyHit.enemy);
 				enemyHit.enemy.y = globals.winHeight * 2;
@@ -178,7 +179,7 @@ module.exports = {
 				}
 			}
 			else {
-				explosion.spawn(blockHit.bullet, true, false, true);
+				explosion.spawn(blockHit.bullet, true, true);
 				if(blockHit.block.power) chips.spawnPower(blockHit.block);
 				else {
 					const blockScore = blockHit.block.special ? globals.specialScore : 1000;

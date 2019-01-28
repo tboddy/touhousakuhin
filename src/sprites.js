@@ -4,16 +4,17 @@ module.exports = {
 		this.frame = PIXI.Texture.fromImage('img/frame.png');
 		this.pausedOverlay = PIXI.Texture.fromImage('img/pausedoverlay.png');
 
-		this.playerCenter0 = PIXI.Texture.fromImage('img/player/center00.png');
-		this.playerCenter1 = PIXI.Texture.fromImage('img/player/center01.png');
-		this.playerCenter2 = PIXI.Texture.fromImage('img/player/center02.png');
-		this.playerLeft0 = PIXI.Texture.fromImage('img/player/left00.png');
-		this.playerLeft1 = PIXI.Texture.fromImage('img/player/left01.png');
-		this.playerRight0 = PIXI.Texture.fromImage('img/player/right00.png');
-		this.playerRight1 = PIXI.Texture.fromImage('img/player/right01.png');
-
-		this.hitbox = PIXI.Texture.fromImage('img/player/hitbox.png');
-		this.focus = PIXI.Texture.fromImage('img/player/focus.png');
+		this.player = {
+			center0: PIXI.Texture.fromImage('img/player/center00.png'),
+			center1: PIXI.Texture.fromImage('img/player/center01.png'),
+			center2: PIXI.Texture.fromImage('img/player/center02.png'),
+			left0: PIXI.Texture.fromImage('img/player/left00.png'),
+			left1: PIXI.Texture.fromImage('img/player/left01.png'),
+			right0: PIXI.Texture.fromImage('img/player/right00.png'),
+			right1: PIXI.Texture.fromImage('img/player/right01.png'),
+			hitbox: PIXI.Texture.fromImage('img/player/hitbox.png'),
+			focus: PIXI.Texture.fromImage('img/player/focus.png', false, PIXI.SCALE_MODES.NEAREST)
+		};
 
 		this.enemies = {
 			fairyBlue: {
@@ -65,7 +66,7 @@ module.exports = {
 				center1: PIXI.Texture.fromImage('img/enemies/fairy-big/center1.png'),
 				center2: PIXI.Texture.fromImage('img/enemies/fairy-big/center2.png')
 			}
-		},
+		};
 
 		this.background = {
 			bottom: PIXI.Texture.fromImage('img/bg/bottom.png', false, PIXI.SCALE_MODES.NEAREST),
@@ -76,9 +77,37 @@ module.exports = {
 			overlay2: PIXI.Texture.fromImage('img/bg/overlay2.png', false, PIXI.SCALE_MODES.NEAREST),
 			tree: PIXI.Texture.fromImage('img/bg/tree.png'),
 			tree2: PIXI.Texture.fromImage('img/bg/tree2.png')
-		},
+		};
 
 		this.bossBar = PIXI.Texture.fromImage('img/boss/bar.png');
+
+		this.explosion = {
+			red: [
+				PIXI.Texture.fromImage('img/explosions/explosion-red0.png', false, PIXI.SCALE_MODES.NEAREST),
+				PIXI.Texture.fromImage('img/explosions/explosion-red1.png', false, PIXI.SCALE_MODES.NEAREST),
+				PIXI.Texture.fromImage('img/explosions/explosion-red2.png', false, PIXI.SCALE_MODES.NEAREST),
+				PIXI.Texture.fromImage('img/explosions/explosion-red3.png', false, PIXI.SCALE_MODES.NEAREST),
+				PIXI.Texture.fromImage('img/explosions/explosion-red4.png', false, PIXI.SCALE_MODES.NEAREST)
+			],
+			blue: [
+				PIXI.Texture.fromImage('img/explosions/explosion-blue0.png', false, PIXI.SCALE_MODES.NEAREST),
+				PIXI.Texture.fromImage('img/explosions/explosion-blue1.png', false, PIXI.SCALE_MODES.NEAREST),
+				PIXI.Texture.fromImage('img/explosions/explosion-blue2.png', false, PIXI.SCALE_MODES.NEAREST),
+				PIXI.Texture.fromImage('img/explosions/explosion-blue3.png', false, PIXI.SCALE_MODES.NEAREST),
+				PIXI.Texture.fromImage('img/explosions/explosion-blue4.png', false, PIXI.SCALE_MODES.NEAREST)
+			]
+		};
+
+		this.bullets = {
+			'arrow-blue': PIXI.Texture.fromImage('img/bullets/arrow-blue.png', false, PIXI.SCALE_MODES.NEAREST),
+			'arrow-red': PIXI.Texture.fromImage('img/bullets/arrow-red.png', false, PIXI.SCALE_MODES.NEAREST),
+			'big-blue': PIXI.Texture.fromImage('img/bullets/big-blue.png', false, PIXI.SCALE_MODES.NEAREST),
+			'big-red': PIXI.Texture.fromImage('img/bullets/big-red.png', false, PIXI.SCALE_MODES.NEAREST),
+			'bullet-blue': PIXI.Texture.fromImage('img/bullets/bullet-blue.png', false, PIXI.SCALE_MODES.NEAREST),
+			'bullet-red': PIXI.Texture.fromImage('img/bullets/bullet-red.png', false, PIXI.SCALE_MODES.NEAREST),
+			'ring-blue': PIXI.Texture.fromImage('img/bullets/ring-blue.png', false, PIXI.SCALE_MODES.NEAREST),
+			'ring-red': PIXI.Texture.fromImage('img/bullets/ring-red.png', false, PIXI.SCALE_MODES.NEAREST)
+		};
 
 	}
 }

@@ -33,11 +33,11 @@ const mainLoop = delta => {
 					player.update(child, i, delta);
 					collision.placeItem(child, i);
 					break;
-				case 'playerBullet':
-					if(!globals.paused) player.updateBullet(child, i, delta);
-					collision.placeItem(child, i);
-					bulletCount++;
-					break;
+				// case 'playerBullet':
+				// 	if(!globals.paused) player.updateBullet(child, i, delta);
+				// 	collision.placeItem(child, i);
+				// 	bulletCount++;
+				// 	break;
 				case 'enemy':
 					stageUtils.updateEnemy(child, i);
 					collision.placeItem(child, i);
@@ -47,7 +47,6 @@ const mainLoop = delta => {
 					if(!globals.paused) chips.updatePower(child, i, delta);
 					collision.placeItem(child, i);
 					break;
-				case 'explosion': explosion.update(child, i); break;
 				case 'graze': graze.update(child, i); break;
 				case 'bossBorder': if(!globals.paused) stageUtils.updateBossBorder(child, i); break;
 				case 'mapBlock':
@@ -60,6 +59,7 @@ const mainLoop = delta => {
 	stageUtils.updateEnemyBullets();
 	stage.update();
 	collision.update();
+	explosion.update();
 	if(!globals.paused) globals.timeLeft--;
 	if(globals.removeBullets){
 		if(!globals.removeBulletsTime) globals.removeBulletsTime = 30;
