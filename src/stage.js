@@ -1,4 +1,4 @@
-const mapTwoMin = [
+const map = [
 	[1, 0, 0, 0, 0, 0, 0, 2],
 	[0, 2, 0, 0, 0, 0, 1, 0],
 	[1, 0, 1, 0, 0, 2, 4, 2],
@@ -198,7 +198,7 @@ buildBlock(index, img){
 	block.growing = true;
 	block.growSeed = Math.floor(Math.random() * 45);
 	block.clock = 0;
-	block.health = img == '3' ? 15 : 2;
+	block.health = img == '3' ? 15 : 0;
 	if(img == '2') block.power = true;
 	else if(img == '3'){
 		block.special = true;
@@ -219,7 +219,7 @@ updateMap(){
 
 updateBlock(block, index){
 	block.y += 1.5;
-	collision.placeItem(block, index);
+	// collision.placeItem(block, index);
 	if(block.clock >= block.growSeed){
 		const mod = 0.0025;
 		if((block.growing && block.scale.x >= 1.2) || (!block.growing && block.scale.x <= 1)) block.growing = !block.growing;
@@ -236,7 +236,7 @@ update(){
 },
 
 init(){
-	this.tempMap = mapTwoMin.slice(0);
+	this.tempMap = map.slice(0);
 	this.gridWidth = (globals.gameWidth - globals.grid * 2) / this.tempMap[0].length;
 }
 

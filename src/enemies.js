@@ -7,7 +7,7 @@ waveDrop: 0,
 waveOne(){
 	const spawnEnemy = () => {
 		stageUtils.spawnEnemy('fairyGreen', globals.gameX + globals.gameWidth / 2, -globals.grid, enemy => {
-			enemy.health = 2;
+			enemy.health = 0;
 			enemy.initial = enemy.x;
 			enemy.count = 2;
 		}, enemy => {
@@ -25,7 +25,7 @@ waveTwo(){
 		let y = globals.winHeight / 4 + Math.floor(Math.random() * globals.winHeight / 4);
 		if(opposite) y -= globals.winHeight / 6;
 		stageUtils.spawnEnemy('fairyBlue', opposite ? globals.gameX + globals.gameWidth + globals.grid : globals.gameX - globals.grid, y, enemy => {
-			enemy.health = 2;
+			enemy.health = 0;
 			enemy.speed = 3;
 			enemy.speedInit = enemy.speed;
 			if(opposite) enemy.opposite = true;

@@ -38,11 +38,11 @@ const mainLoop = delta => {
 				// 	collision.placeItem(child, i);
 				// 	bulletCount++;
 				// 	break;
-				case 'enemy':
-					stageUtils.updateEnemy(child, i);
-					collision.placeItem(child, i);
-					globals.enemyCount++;
-					break;
+				// case 'enemy':
+				// 	stageUtils.updateEnemy(child, i);
+				// 	collision.placeItem(child, i);
+				// 	globals.enemyCount++;
+				// 	break;
 				case 'chipPower':
 					if(!globals.paused) chips.updatePower(child, i, delta);
 					collision.placeItem(child, i);
@@ -56,6 +56,7 @@ const mainLoop = delta => {
 			}
 		}
 	}
+	stageUtils.updateEnemies();
 	stageUtils.updateEnemyBullets();
 	stage.update();
 	collision.update();

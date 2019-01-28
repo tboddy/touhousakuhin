@@ -108,10 +108,12 @@ spawnEnemy(type, x, y, initFunc, updateFunc){
 	enemy.lastX = enemy.x;
 	enemy.y = Math.round(y);
 	enemy.clock = 0;
-	enemy.zOrder = 50;
+	// enemy.zOrder = 50;
 	enemy.updateFunc = updateFunc;
 	initFunc(enemy);
-	globals.game.stage.addChild(enemy);
+	// globals.game.stage.addChild(enemy);
+	globals.containers.enemies.addChild(enemy);
+
 	if(enemy.isBoss){
 		this.bossBorder = PIXI.Sprite.fromImage('img/boss/border-' + globals.bossName + '.png');
 		this.bossBorder.anchor.set(.5);
@@ -175,9 +177,10 @@ updateEnemy(enemy, index){
 		enemy.clock++;
 		if(enemy.x >= globals.gameX && enemy.y >= 0 &&
 			enemy.x <= globals.gameWidth + globals.gameX && enemy.y <= globals.winHeight && !enemy.seen) enemy.seen = true;
+		// collision.placeItem(enemy, index);
 		if(enemy.seen && (enemy.y >= globals.winHeight + enemy.height / 2 || enemy.y <= -enemy.height / 2 ||
 			enemy.x >= globals.gameWidth + enemy.width / 2 + globals.gameX ||
-			enemy.x <= -enemy.width / 2 + globals.gameX)) globals.game.stage.removeChildAt(index);
+			enemy.x <= -enemy.width / 2 + globals.gameX)) globals.containers.enemies.removeChildAt(index);
 	}
 },
 
@@ -207,7 +210,7 @@ updateBullet(bullet, index){
 	}
 	bullet.zOrder += 0.001;
 	bullet.clock++;
-	collision.placeItem(bullet, index);
+	// collision.placeItem(bullet, index);
 	if(bullet.x >= globals.gameX - bullet.width / 2 &&
 		bullet.y >= globals.grid - bullet.height / 2 &&
 		bullet.x < globals.gameX + globals.gameWidth + bullet.width / 2 &&
@@ -238,11 +241,11 @@ updateBossBorder(border, index){
 },
 
 checkEnemies(){
-	let hasEnemies = false;
-	for(i = 0; i < globals.game.stage.children.length; i++){
-		if(globals.game.stage.children.length[i].type && (globals.game.stage.children.length[i].type == 'enemy') && !hasEnemies) hasEnemies = true;
-	}
-	return hasEnemies;
+	// let hasEnemies = false;
+	// for(i = 0; i < globals.game.stage.children.length; i++){
+	// 	if(globals.game.stage.children.length[i].type && (globals.game.stage.children.length[i].type == 'enemy') && !hasEnemies) hasEnemies = true;
+	// }
+	// return hasEnemies;
 },
 
 killBoss(enemy){
@@ -267,6 +270,14 @@ updateEnemyBullets(){
 	if(globals.containers.enemyBullets.children && !globals.paused){
 		for(i = 0; i < globals.containers.enemyBullets.children.length; i++){
 			this.updateBullet(globals.containers.enemyBullets.children[i], i)
+		}
+	}
+},
+
+updateEnemies(){
+	if(globals.containers.enemies.children && !globals.paused){
+		for(i = 0; i < globals.containers.enemies.children.length; i++){
+			this.updateEnemy(globals.containers.enemies.children[i], i)
 		}
 	}
 }

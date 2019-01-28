@@ -72,7 +72,7 @@ credit(){
 },
 
 version(){
-	const versionText = 'v0.02', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
+	const versionText = 'v0.2', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
 	const label = chrome.label(versionText, x, y),
 		shadow = chrome.label(versionText, x, y, 'dark');
 	label.anchor.set(1);
