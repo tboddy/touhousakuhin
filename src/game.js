@@ -30,37 +30,23 @@ const mainLoop = delta => {
 		if(child.type){
 			switch(child.type){
 				case 'player':
-					player.update(child, i, delta);
 					collision.placeItem(child, i);
 					break;
-				// case 'playerBullet':
-				// 	if(!globals.paused) player.updateBullet(child, i, delta);
-				// 	collision.placeItem(child, i);
-				// 	bulletCount++;
-				// 	break;
-				// case 'enemy':
-				// 	stageUtils.updateEnemy(child, i);
-				// 	collision.placeItem(child, i);
-				// 	globals.enemyCount++;
-				// 	break;
 				case 'chipPower':
 					if(!globals.paused) chips.updatePower(child, i, delta);
 					collision.placeItem(child, i);
 					break;
 				case 'graze': graze.update(child, i); break;
 				case 'bossBorder': if(!globals.paused) stageUtils.updateBossBorder(child, i); break;
-				case 'mapBlock':
-					if(!globals.paused) stage.updateBlock(child, i);
-					collision.placeItem(child, i);
-					break;
 			}
 		}
 	}
+	player.update();
 	stageUtils.updateEnemies();
 	stageUtils.updateEnemyBullets();
 	stage.update();
-	collision.update();
 	explosion.update();
+	collision.update();
 	if(!globals.paused) globals.timeLeft--;
 	if(globals.removeBullets){
 		if(!globals.removeBulletsTime) globals.removeBulletsTime = 30;

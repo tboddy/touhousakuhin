@@ -5,7 +5,7 @@ speed: 5,
 shotClock: 0,
 didShootClock: 0,
 skewDiff: .1,
-power: 0,
+power: 2,
 graze: 0,
 invulnerableClock: 0,
 removed: false,
@@ -89,7 +89,7 @@ spawnBullets(){
 		const bullet = new PIXI.Sprite.fromImage('img/player/bullet-' + img + '.png', PIXI.SCALE_MODES.NEAREST);
 		bullet.anchor.set(.5);
 		bullet.x = this.sprite.x + xMod;
-		bullet.y = this.sprite.y + yMod - 4;
+		bullet.y = this.sprite.y + yMod - 6;
 		bullet.baseX = bullet.x;
 		bullet.baseY = bullet.y;
 		const bulletMod = this.sprite.height / 4;
@@ -102,7 +102,7 @@ spawnBullets(){
 		}
 		globals.containers.playerBullets.addChild(bullet);
 	};
-	const offset = 0.1, xOffset = 12, yOffset = 4;
+	const offset = 0.125, xOffset = 12, yOffset = 4;
 	mainBullet(base, 0, 0, true);
 	if(this.power > 0){
 		mainBullet(base - offset, -xOffset - 1, yOffset, false);
@@ -112,10 +112,10 @@ spawnBullets(){
 		mainBullet(base - offset * 2, -xOffset * 1.5 - 1, yOffset + 6, false);
 		mainBullet(base + offset * 2, xOffset * 1.5 + 1, yOffset + 6, false);
 	}
-	if(this.power > 2){
-		mainBullet(base - offset * 3, -xOffset * 1.5 - 6, yOffset + 14, false);
-		mainBullet(base + offset * 3, xOffset * 1.5 + 6, yOffset + 14, false);
-	}
+	// if(this.power > 2){
+	// 	mainBullet(base - offset * 3, -xOffset * 1.5 - 6, yOffset + 14, false);
+	// 	mainBullet(base + offset * 3, xOffset * 1.5 + 6, yOffset + 14, false);
+	// }
 },
 
 die(){
@@ -142,7 +142,7 @@ die(){
 	}
 },
 
-update(player, index){
+update(){
 	if(!globals.gameOver){
 		if(!globals.paused){
 			this.move();
@@ -153,12 +153,12 @@ update(player, index){
 			}
 		}
 	} else{
-		if(player.alpha != 0){
-			player.alpha = 0;
+		if(this.sprite.alpha != 0){
+			this.sprite.alpha = 0;
 			this.hitbox.alpha = 0;
 			this.focus.alpha = 0;
-			player.x = globals.gameWidth / 2;
-			player.y = globals.winHeight * 2;
+			this.sprite.x = globals.gameWidth / 2;
+			this.sprite.y = globals.winHeight * 2;
 		}
 	}
 },
@@ -166,11 +166,11 @@ update(player, index){
 updateBullet(bullet, index){
 	bullet.y -= bullet.velocity.y;
 	bullet.x -= bullet.velocity.x;
-	// collision.placeItem(bullet, index);
 	if(bullet.y < -bullet.height ||
 		bullet.x < -bullet.width + globals.gameX ||
 		bullet.x > globals.gameWidth + bullet.width + globals.gameX)
 		globals.containers.playerBullets.removeChildAt(index);
+	collision.placeItem(bullet, index);
 },
 
 draw(){

@@ -86,7 +86,8 @@ setupContainers(){
 		background: new PIXI.Container(),
 		explosions: new PIXI.Container(),
 		playerBullets: new PIXI.Container(),
-		enemies: new PIXI.Container()
+		enemies: new PIXI.Container(),
+		collisionDebug: new PIXI.Container()
 	};
 	this.containers.chrome.zOrder = 200;
 	this.containers.enemyBullets.zOrder = 70;
@@ -94,6 +95,7 @@ setupContainers(){
 	this.containers.explosions.zOrder = 90;
 	this.containers.playerBullets.zOrder = 20;
 	this.containers.enemies.zOrder = 50;
+	this.containers.collisionDebug.zOrder = 201;
 	for(container in this.containers){
 		this.containers[container].x = 0;
 		this.containers[container].y = 0;

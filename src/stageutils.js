@@ -177,7 +177,7 @@ updateEnemy(enemy, index){
 		enemy.clock++;
 		if(enemy.x >= globals.gameX && enemy.y >= 0 &&
 			enemy.x <= globals.gameWidth + globals.gameX && enemy.y <= globals.winHeight && !enemy.seen) enemy.seen = true;
-		// collision.placeItem(enemy, index);
+		collision.placeItem(enemy, index);
 		if(enemy.seen && (enemy.y >= globals.winHeight + enemy.height / 2 || enemy.y <= -enemy.height / 2 ||
 			enemy.x >= globals.gameWidth + enemy.width / 2 + globals.gameX ||
 			enemy.x <= -enemy.width / 2 + globals.gameX)) globals.containers.enemies.removeChildAt(index);
@@ -210,7 +210,7 @@ updateBullet(bullet, index){
 	}
 	bullet.zOrder += 0.001;
 	bullet.clock++;
-	// collision.placeItem(bullet, index);
+	collision.placeItem(bullet, index);
 	if(bullet.x >= globals.gameX - bullet.width / 2 &&
 		bullet.y >= globals.grid - bullet.height / 2 &&
 		bullet.x < globals.gameX + globals.gameWidth + bullet.width / 2 &&

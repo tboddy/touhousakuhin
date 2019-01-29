@@ -1,62 +1,50 @@
 module.exports = {
 
 sects: false,
-collisionWidth: 18,
-collisionHeight: 24,
-size: 20,
+collisionWidth: 12,
+collisionHeight: 14,
+size: 32,
 
 resetSects(){
 	const sects = [];
 	for(i = 0; i < this.collisionHeight; i++){
 		const row = [];
-		for(j = 0; j < this.collisionWidth + globals.gameX; j++) row.push({playerBullet: false, enemy: false, bullet: false});
+		for(j = 0; j < this.collisionWidth; j++) row.push({playerBullet: false, enemy: false, bullet: false});
 		sects.push(row)
 	};
 	return sects;
 },
 
+drawSects(){
+	const lines = new PIXI.Graphics();
+	lines.beginFill(globals.hex.green);
+	for(i = 0; i < this.sects.length; i++){
+		for(j = 0; j < this.sects[i].length; j++){
+			if(i == 0) lines.drawRect(this.size * j + globals.gameX, this.size * i + globals.grid, this.size, 1);
+			lines.drawRect(this.size * j + globals.gameX, this.size * i + this.size + globals.grid, this.size, 1);
+			if(j == 0) lines.drawRect(this.size * j + globals.gameX, this.size * i + globals.grid, 1, this.size);
+			lines.drawRect(this.size * j + globals.gameX + this.size, this.size * i + globals.grid, 1, this.size);
+		}
+	}
+	globals.containers.collisionDebug.addChild(lines);
+},
+
 placeItem(item, index){
-	let x = Math.floor(item.x / this.size), y = Math.floor(item.y / this.size), thisObj = this;
-	// console.log(x, y)
-	if(x >= 0 && y >= 0 && this.sects[y] && (this.sects[y][x])){
+	const x = Math.floor((item.x - globals.gameX) / this.size), y = Math.floor((item.y - globals.grid) / this.size), thisObj = this;
+	if(this.sects[y] && (this.sects[y][x])){
+		index = String(index);
 		thisObj.sects[y][x][item.type] = index;
-		if(item.type == 'enemy'){
-			const widthDiff = Math.ceil(item.width / thisObj.size) - 1, heightDiff = Math.ceil(item.height / thisObj.size) - 1;
-			if(thisObj.sects[y][x - 1]) thisObj.sects[y][x - 1].enemy = index;
-			if(thisObj.sects[y - 1]){
-				thisObj.sects[y - 1][x].enemy = index;
-				if(thisObj.sects[y - 1][x - 1]) thisObj.sects[y - 1][x - 1].enemy = index;
-			}
-			if(widthDiff){
-				for(i = 0; i < widthDiff; i++){
-					if(thisObj.sects[y][x + i + 1]){
-						thisObj.sects[y][x + i + 1].enemy = index;
-						if(thisObj.sects[y - 1]) thisObj.sects[y - 1][x + i + 1].enemy = index;
-					}
-				}
-			}
-			if(heightDiff){
-				for(i = 0; i < heightDiff; i++){
-					if(thisObj.sects[y + i + 1]){
-						thisObj.sects[y + i + 1][x].enemy = index;
-						if(thisObj.sects[y + i + 1][x - 1]) thisObj.sects[y + i + 1][x - 1].enemy = index;
-						if(thisObj.sects[y + i + 1][x + 1]) thisObj.sects[y + i + 1][x + 1].enemy = index;
-					}
-				}
-			}
-		} else {
-			if(thisObj.sects[y][x - 1]) thisObj.sects[y][x - 1][item.type] = index;
-			if(thisObj.sects[y][x + 1]) thisObj.sects[y][x + 1][item.type] = index;
-			if(thisObj.sects[y - 1]){
-				thisObj.sects[y - 1][x][item.type] = index;
-				if(thisObj.sects[y - 1][x - 1]) thisObj.sects[y - 1][x - 1][item.type] = index;
-				if(thisObj.sects[y - 1][x + 1]) thisObj.sects[y - 1][x + 1][item.type] = index;
-			}
-			if(thisObj.sects[y + 1]){
-				thisObj.sects[y + 1][x][item.type] = index;
-				if(thisObj.sects[y + 1][x - 1]) thisObj.sects[y + 1][x - 1][item.type] = index;
-				if(thisObj.sects[y + 1][x + 1]) thisObj.sects[y + 1][x + 1][item.type] = index;
-			}
+		if(thisObj.sects[y][x - 1]) thisObj.sects[y][x - 1][item.type] = index;
+		if(thisObj.sects[y][x + 1]) thisObj.sects[y][x + 1][item.type] = index;
+		if(thisObj.sects[y - 1]){
+			thisObj.sects[y - 1][x][item.type] = index;
+			if(thisObj.sects[y - 1][x - 1]) thisObj.sects[y - 1][x - 1][item.type] = index;
+			if(thisObj.sects[y - 1][x + 1]) thisObj.sects[y - 1][x + 1][item.type] = index;
+		}
+		if(thisObj.sects[y + 1]){
+			thisObj.sects[y + 1][x][item.type] = index;
+			if(thisObj.sects[y + 1][x - 1]) thisObj.sects[y + 1][x - 1][item.type] = index;
+			if(thisObj.sects[y + 1][x + 1]) thisObj.sects[y + 1][x + 1][item.type] = index;
 		}
 	}
 },
@@ -114,7 +102,7 @@ check(){
 			switch(chip.type){
 				case 'chipPower':
 					let amt = 5000;
-					if(player.power < 3){
+					if(player.power < 2){
 						player.power++;
 						sound.spawn('powerUp');
 						chrome.addFieldLabel('POWER+', player.sprite);
@@ -129,18 +117,20 @@ check(){
 			}
 		}
 	};
-	for(i = 0; i < thisObj.sects.length; i++){
-		for(j = 0; j < thisObj.sects[i].length; j++){
-
-			if(thisObj.sects[i][j].enemy && thisObj.sects[i][j].playerBullet){
-				if(thisObj.sects[i][j].playerBullet < globals.containers.playerBullets.children.length)
-					checkPlayerBulletAgainstEnemy(globals.containers.playerBullets.getChildAt(thisObj.sects[i][j].playerBullet), globals.game.stage.getChildAt(thisObj.sects[i][j].enemy), i, j);
-			}
-
-			else if(thisObj.sects[i][j].mapBlock && thisObj.sects[i][j].playerBullet){
-				if(thisObj.sects[i][j].mapBlock < globals.containers.blocks.children.length && thisObj.sects[i][j].playerBullet < globals.containers.playerBullets.children.length)
-					checkPlayerBulletAgainstBlock(globals.containers.playerBullets.getChildAt(thisObj.sects[i][j].playerBullet), globals.containers.blocks.getChildAt(thisObj.sects[i][j].mapBlock), i, j);
-			}
+	for(i = 0; i < this.sects.length; i++){
+		for(j = 0; j < this.sects[0].length; j++){
+			if(thisObj.sects[i][j].enemy && thisObj.sects[i][j].playerBullet &&
+				(thisObj.sects[i][j].playerBullet < globals.containers.playerBullets.children.length &&
+				thisObj.sects[i][j].enemy < globals.containers.enemies.children.length)){
+					checkPlayerBulletAgainstEnemy(
+						globals.containers.playerBullets.getChildAt(thisObj.sects[i][j].playerBullet),
+						globals.containers.enemies.getChildAt(thisObj.sects[i][j].enemy), i, j);
+			} else if(thisObj.sects[i][j].mapBlock && thisObj.sects[i][j].playerBullet && 
+				(thisObj.sects[i][j].playerBullet < globals.containers.playerBullets.children.length &&
+				thisObj.sects[i][j].mapBlock < globals.containers.blocks.children.length))
+				checkPlayerBulletAgainstBlock(
+					globals.containers.playerBullets.getChildAt(thisObj.sects[i][j].playerBullet),
+					globals.containers.blocks.getChildAt(thisObj.sects[i][j].mapBlock), i, j);
 			if(thisObj.sects[i][j].player){
 				if(!player.invulnerableClock){
 					if(thisObj.sects[i][j].bullet && thisObj.sects[i][j].bullet < globals.containers.enemyBullets.children.length){
@@ -163,6 +153,7 @@ check(){
 			}
 		}
 	}
+	// console.log(enemyHit)
 	if(enemyHit){
 		if(enemyHit.enemy.health){
 			explosion.spawn(enemyHit.bullet, true);
@@ -202,8 +193,9 @@ check(){
 },
 
 update(){
-	// this.check();
-	// this.sects = this.resetSects();
+	this.check();
+	this.sects = this.resetSects();
+	// if(globals.gameClock == 0) this.drawSects();
 }
 
 };
