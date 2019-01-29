@@ -102,7 +102,9 @@ waveFour(){
 		spawnEnemy();
 		spawnEnemy(true);
 	}, spawnBullet = (enemy, opposite) => {
-		let angle = Math.PI / 4;
+		const mod = 0.1;
+		let angle = Math.PI / 4 - mod;
+		angle += mod * 2 * Math.random()
 		if(enemy.opposite) angle += Math.PI / 2;
 		if(opposite){
 			angle += Math.PI / 2;
@@ -196,55 +198,58 @@ waveSix(){
 
 waveSeven(){
 	const spawnEnemy = () => {
-		stageUtils.spawnEnemy('fairyBig', globals.gameX + globals.grid * 4, globals.winHeight + globals.grid, enemy => {
-			enemy.speed = 2.25;
-			enemy.speedInit = enemy.speed;
-			enemy.health = 30;
-			enemy.bulletAngle = 0;
-			enemy.bulletDirection = false;
-			enemy.bulletMod = 0;
+		stageUtils.spawnEnemy('fairyBig', globals.gameX + globals.grid * 5, -globals.grid, enemy => {
+			enemy.speed = 6;
+			enemy.health = 35;
+			enemy.shotOpposite = false;
 			enemy.suicide = () => {
-				const score = 25000;
+				const score = 50000;
 				chrome.showBonus(score);
 				sound.spawn('bonus');
 				globals.score += score;
 				globals.removeBullets = true;
 			};
 		}, enemy => {
-			enemy.y -= enemy.speed;
-			const interval = 30
-			if(enemy.clock % interval >= interval / 2 && enemy.clock < 60 * 2.5){
-				if(enemy.clock % interval == interval / 2){
-					enemy.bulletAngle = globals.getAngle({x: globals.gameX + globals.gameWidth, y: globals.winHeight / 2}, enemy);
-					enemy.bulletMod = 0;
-					enemy.bulletDirection = !enemy.bulletDirection;
+			enemy.y += enemy.speed;
+			const mod = 0.1;
+			enemy.speed -= enemy.speed > 0 ? mod : mod / 8;
+			if(enemy.speed <= 0){
+				if(!enemy.fired){
+					enemy.clock = -1;
+					enemy.fired = true;
 				}
-				if(enemy.clock % 2 == 0 && enemy.clock > interval) spray(enemy)
+				const interval = 40;
+				if(enemy.clock % interval < interval / 2){
+					if(enemy.clock % interval == 0) enemy.bulletAngle = globals.getAngle(player.sprite, enemy)
+					if(enemy.clock % 2 == 0 && enemy.y > globals.grid){
+						arrows(enemy);
+						spray(enemy);
+					}
+				}
 			}
-			if(enemy.clock % (interval * 1.5) == 0 && enemy.clock > 0) circle(enemy);
 		});
-	}, spray = enemy => {
-		sound.spawn('bulletTwo');
-		stageUtils.spawnBullet('big-blue', enemy.x, enemy.y, enemy.bulletAngle, bullet => {
-			const speed = 2.25 + enemy.bulletMod, mod = 0.15;
-			bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
-			enemy.bulletMod += enemy.bulletDirection ? mod : -mod;
-		});
-		enemy.bulletAngle += Math.PI / 15;
-	}, circle = enemy => {
-		const count = 20, speed = 2;
-		let angle = Math.random() * Math.PI;
-		sound.spawn('bulletOne');
+	}, arrows = enemy => {
+		const count = 7;
+		let angle = enemy.bulletAngle - Math.PI / 2;
 		for(i = 0; i < count; i++){
-			stageUtils.spawnBullet('ring-red', enemy.x, enemy.y, false, bullet => {
+			stageUtils.spawnBullet('ring-red', enemy.x, enemy.y, angle, bullet => {
 				const speed = 3.5;
-				bullet.velocity = {x: Math.cos(angle) * speed, y: Math.sin(angle) * speed};
+				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
+				bullet.rotation = bullet.angle;
 			});
-			angle += Math.PI / (count / 2);
+			angle += Math.PI / count;
 		}
+	}, spray = enemy => {
+		const mod = Math.PI / 4;
+		let angle = globals.getAngle(player.sprite, enemy) - mod;
+		angle += mod * 2 * Math.random();
+		stageUtils.spawnBullet('big-blue', enemy.x, enemy.y, angle, bullet => {
+			const speed = 3;
+			bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
+		});
 	};
 	if(this.clock == 0) spawnEnemy();
-	else if(this.clock == 200) stageUtils.nextWave('waveEight', this);
+	else if(this.clock == 60 * 4) stageUtils.nextWave('waveEight', this);
 },
 
 waveEight(){
@@ -657,7 +662,7 @@ waveFifteen(){
 
 waveSixteen(){
 	const spawnEnemy = () => {
-		stageUtils.spawnEnemy('fairyBig', globals.gameWidth + globals.gameX - globals.grid * 4, -globals.grid, enemy => {
+		stageUtils.spawnEnemy('fairyBig', globals.gameWidth + globals.gameX - globals.grid * 5, -globals.grid, enemy => {
 			enemy.speed = 6;
 			enemy.health = 35;
 			enemy.shotOpposite = false;
@@ -668,55 +673,41 @@ waveSixteen(){
 				globals.score += score;
 				globals.removeBullets = true;
 			};
+			enemy.bulletMod = 0.5;
 		}, enemy => {
 			enemy.y += enemy.speed;
 			const mod = 0.1;
-			enemy.speed -= enemy.speed > 0 ? mod : mod / 4;
+			enemy.speed -= enemy.speed > 0 ? mod : mod / 8;
 			if(enemy.speed <= 0){
 				if(!enemy.fired){
 					enemy.clock = -1;
 					enemy.fired = true;
 				}
-				const interval = 10 * 4;
-				if(enemy.clock % interval == 0){
-					enemy.shotPos = {x: enemy.x, y: enemy.y};
-					enemy.shotOpposite = !enemy.shotOpposite;
-				}
-				if(enemy.clock % interval < interval * .75 && enemy.y > globals.grid){
-					spawnBullets(enemy);
-				}
+				if(enemy.clock == 0) enemy.bulletAngle = Math.PI / 2;
+				if(enemy.clock % 15 == 0) splash(enemy);
+				spray(enemy);
 			}
 		});
-	}, spawnBullets = enemy => {
-		const circle = () => {
-			let angle = Math.PI;
-			const count = 17, mod = 0.01;
-			for(i = 0; i < count; i++){
-				stageUtils.spawnBullet('big-red', enemy.shotPos.x, enemy.shotPos.y, angle, bullet => {
-					bullet.speed = 3;
-					bullet.opposite = enemy.shotOpposite;
-				}, bullet => {
-					bullet.angle += bullet.opposite ? mod : -mod;
-					bullet.speed += 0.01;
-					bullet.velocity = {x: Math.cos(bullet.angle) * bullet.speed, y: Math.sin(bullet.angle) * bullet.speed};
-				});
-				angle += Math.PI / (count / 2);
-			}
-		}, spray = () => {
-			const mod = .2;
-			sound.spawn('bulletTwo');
-			let angle = globals.getAngle(player.sprite, enemy) - mod;
-			angle += Math.random() * (mod * 2)
-			stageUtils.spawnBullet('ring-blue', enemy.shotPos.x, enemy.shotPos.y, angle, bullet => {
-				const speed = 4;
+	}, spray = enemy => {
+		stageUtils.spawnBullet('big-blue', enemy.x, enemy.y, enemy.bulletAngle, bullet => {
+			const speed = 4;
+			bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
+		});
+		enemy.bulletAngle += enemy.bulletMod;
+		enemy.bulletMod += 0.0025;
+	}, splash = enemy => {
+		const count = 20;
+		let angle = Math.PI * Math.random();
+		for(i = 0; i < count; i++){
+			stageUtils.spawnBullet('ring-red', enemy.x, enemy.y, angle, bullet => {
+				const speed = 3;
 				bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
 			});
-		};
-		if(enemy.clock % 10 == 0) circle();
-		if(enemy.clock % 5 == 0) spray();
-	};
+			angle += Math.PI / (count / 2);
+		}
+	}
 	if(this.clock == 0) spawnEnemy();
-	else if(this.clock == 60 * 3) stageUtils.nextWave('boss', this);
+	else if(this.clock == 60 * 4) stageUtils.nextWave('boss', this);
 },
 
 boss(){
@@ -1655,7 +1646,6 @@ miniBoss2(){
 					const starsInterval = 60 * 4;
 					if(enemy.clock % 25 == 0 && enemy.clock > 0) circle(enemy);
 					if(enemy.clock % starsInterval < starsInterval / 8 && enemy.clock % 3 == 0){
-						console.log('fff')
 						if(enemy.clock % starsInterval == 0){
 							enemy.spellAngleOne = Math.PI * Math.random()
 							enemy.spellAngleTwo = Math.PI * Math.random()
