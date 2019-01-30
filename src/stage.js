@@ -197,7 +197,7 @@ buildBlock(index, img){
 	block.growing = true;
 	block.growSeed = Math.floor(Math.random() * 45);
 	block.clock = 0;
-	block.health = img == '3' ? 5 : 0;
+	block.health = img == '3' ? 10 : 1;
 	if(img == '2') block.power = true;
 	else if(img == '3'){
 		block.special = true;
