@@ -148,7 +148,7 @@ check(){
 						}
 					}
 					if(thisObj.sects[i][j].enemy && thisObj.sects[i][j].enemy < globals.containers.enemies.children.length)
-						checkObjAgainstPlayer(globals.game.stage.getChildAt(thisObj.sects[i][j].enemy));
+						checkObjAgainstPlayer(globals.containers.enemies.getChildAt(thisObj.sects[i][j].enemy));
 				}
 				if(thisObj.sects[i][j].chipPower) checkChip(globals.game.stage.getChildAt(thisObj.sects[i][j].chipPower));
 			}

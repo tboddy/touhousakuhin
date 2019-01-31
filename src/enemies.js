@@ -406,11 +406,13 @@ miniBoss(){
 		stageUtils.spawnEnemy('komachi', globals.gameX + globals.gameWidth / 2, -31, enemy => {
 			enemy.speed = 2.5;
 			enemy.speedMod = 0.025;
-			enemy.health = 155;
+			enemy.health = 60;
 			enemy.initHealth = enemy.health;
 			enemy.spinnerAngle = 0;
 			enemy.spinnerAngleTwo = Math.PI;
 			enemy.spinnerDir = true;
+			globals.bossHealth = enemy.health;
+			globals.bossHealthInitial = enemy.health;
 			enemy.suicide = () => {
 				const score = 80000;
 				chrome.showBonus(score);
@@ -418,6 +420,7 @@ miniBoss(){
 				globals.score += score;
 				globals.removeBullets = true;
 				stageUtils.bossBorder.kill = true;
+				globals.bossActive = false;
 			}
 		}, enemy => {
 			if(enemy.ready){
@@ -425,7 +428,9 @@ miniBoss(){
 					enemy.y += enemy.speed;
 					enemy.speed -= enemy.speedMod;
 					stageUtils.bossBorder.kill = true;
+					globals.bossActive = false;
 				} else if(!globals.gameOver){
+					if(!globals.bossActive) globals.bossActive = true;
 					const circleInterval = 60 * 3;
 					if(enemy.clock % circleInterval == 0){
 						enemy.spellAngleOne = Math.PI * Math.random();
@@ -834,7 +839,7 @@ boss(){
 					angle += Math.PI / (count / 2);
 				}
  			}, circle = () => {
-				let angle = Math.PI * Math.random();
+				let angle = Math.PI * Math.random() * 2;
 				const count = 35;
 				sound.spawn('bulletOne');
 				for(i = 0; i < count; i++){
@@ -944,7 +949,7 @@ boss(){
 			enemy.startedSpell = false;
 			enemy.initial = enemy.x;
 			enemy.spellSubClock = 0;
-			enemy.count = 0,
+			enemy.count = 0;
 			globals.bossHealth = enemy.health;
 			globals.bossHealthInitial = enemy.health;
 			enemy.suicide = () => {
@@ -1661,11 +1666,13 @@ miniBoss2(){
 		stageUtils.spawnEnemy('komachi', globals.gameX + globals.gameWidth / 2, -31, enemy => {
 			enemy.speed = 2.5;
 			enemy.speedMod = 0.025;
-			enemy.health = 165;
+			enemy.health = 60;
 			enemy.initHealth = enemy.health;
 			enemy.spinnerAngle = 0;
 			enemy.spinnerAngleTwo = Math.PI;
 			enemy.spinnerDir = true;
+			globals.bossHealth = enemy.health;
+			globals.bossHealthInitial = enemy.health;
 			enemy.suicide = () => {
 				const score = 80000;
 				chrome.showBonus(score);
@@ -1673,6 +1680,7 @@ miniBoss2(){
 				globals.score += score;
 				globals.removeBullets = true;
 				stageUtils.bossBorder.kill = true;
+				globals.bossActive = false;
 			}
 		}, enemy => {
 			if(enemy.ready){
@@ -1680,7 +1688,9 @@ miniBoss2(){
 					enemy.y += enemy.speed;
 					enemy.speed -= enemy.speedMod;
 					stageUtils.bossBorder.kill = true;
+					globals.bossActive = false;
 				} else if(!globals.gameOver){
+					globals.bossActive = true;
 					const starsInterval = 60 * 4;
 					if(enemy.clock % 25 == 0 && enemy.clock > 0) circle(enemy);
 					if(enemy.clock % starsInterval < starsInterval / 8 && enemy.clock % 3 == 0){
@@ -1744,8 +1754,118 @@ waveThirtyOne(){
 
 },
 
+boss2(){
+	const spells = [
+		enemy => {
+ 			const curvy = initClock => {
+				const speed = 3.5, count = 10, totalWidth = globals.gameX * 2 + globals.gameWidth;
+				for(i = 0; i < totalWidth / count; i++){
+					const x = totalWidth / count * i + globals.grid * 2 * enemy.curvyOffset;
+					stageUtils.spawnBullet('ring-red', x, enemy.y, false, bullet => {
+						bullet.initial = Math.PI / 2;
+						bullet.count = 0;
+						bullet.opposite = i % 2 == 0;
+					}, bullet => {
+						bullet.angle = bullet.initial + Math.sin(bullet.count);
+						const mod = 0.1;
+						bullet.count += bullet.opposite ? mod : -mod;
+						bullet.rotation = bullet.angle;
+						bullet.velocity = {x: Math.cos(bullet.angle) * speed, y: Math.sin(bullet.angle) * speed};
+					});
+				}
+ 			},  circle = () => {
+				let angle = Math.PI * Math.random() * 2;
+				const count = 35;
+				sound.spawn('bulletOne');
+				for(i = 0; i < count; i++){
+					stageUtils.spawnBullet('big-blue', enemy.x, enemy.y, angle, bullet => {
+						bullet.speed = 6;
+					}, bullet => {
+						bullet.velocity = {x: Math.cos(bullet.angle) * bullet.speed, y: Math.sin(bullet.angle) * bullet.speed};
+						if(bullet.speed > 2.5) bullet.speed -= 0.1;
+					});
+					angle += Math.PI / (count / 2);
+				}
+ 			}
+ 			circleInterval = 25, curvyInterval = 60;
+ 			if(enemy.spellSubClock % 3 == 0 && enemy.spellSubClock % curvyInterval < curvyInterval * .5){
+ 				if(enemy.spellSubClock % curvyInterval == 0) enemy.curvyOffset++;
+ 				curvy(enemy.spellSubClock % curvyInterval);
+ 			}
+			if(enemy.spellSubClock % (3 * 15) == 0) sound.spawn('laser');
+			if(enemy.spellSubClock % circleInterval == 0 && enemy.spellSubClock > 0) circle();
+		}, enemy => {},
+		enemy => {},
+		enemy => {}
+	], spawnEnemy = () => {
+		sound.playBgm('boss');
+		stageUtils.spawnEnemy('eiki', globals.gameX + globals.gameWidth / 2, -31, enemy => {
+			enemy.speed = 2.5;
+			enemy.spellClock = 0;
+			enemy.health = 600;
+			enemy.initHealth = enemy.health;
+			enemy.spellAngleOne = 0;
+			enemy.spellAngleTwo = 0;
+			enemy.spellFlipOne = false;
+			enemy.startedSpell = false;
+			enemy.initial = enemy.x;
+			enemy.spellSubClock = 0;
+			enemy.curvyOffset = 0;
+			enemy.count = 0;
+			globals.bossHealth = enemy.health;
+			globals.bossHealthInitial = enemy.health;
+			enemy.suicide = () => {
+				// if(globals.isFiveMinute) stageUtils.nextWave('waveSeventeen', this);
+				// else {
+				// 	globals.wonGame = true;
+				// 	globals.gameOver = true;
+				// }
+				// globals.removeBullets = true;
+				// stageUtils.bossBorder.kill = true;
+				// globals.bossActive = false;
+			}
+		}, enemy => {
+			if(enemy.ready && !globals.gameOver){
+				if(!globals.bossActive) globals.bossActive = true;
+				if(enemy.health > globals.bossHealthInitial * .75){
+					if(enemy.spellClock == 0) resetSpell(enemy);
+					spells[0](enemy);
+				} else if(enemy.health <= globals.bossHealthInitial * .75 && enemy.health > globals.bossHealthInitial * .5){
+					if(enemy.spellClock == 0) resetSpell(enemy);
+					spells[1](enemy);
+				} else if(enemy.health <= globals.bossHealthInitial * .5 && enemy.health > globals.bossHealthInitial * .25){
+					if(enemy.spellClock == 0) resetSpell(enemy);
+					spells[2](enemy);
+				} else if(enemy.health <= globals.bossHealthInitial * .25){
+					if(enemy.spellClock == 0) resetSpell(enemy);
+					spells[3](enemy);
+				}
+				enemy.x = enemy.initial - Math.sin(enemy.count) * globals.grid * 2;
+				enemy.count += .005;
+				enemy.spellClock++;
+	 			enemy.spellSubClock++;
+			} else if(!globals.gameOver) {
+				enemy.y += enemy.speed;
+				enemy.speed -= 0.025;
+				enemy.health = enemy.initHealth;
+				if(enemy.speed <= 0){
+					enemy.speed = 0;
+					enemy.ready = true;
+				}
+			}
+			globals.bossHealth = enemy.health;
+		});
+	}, resetSpell = enemy => {
+		enemy.spellAngleOne = 0;
+		enemy.spellAngleTwo = 0;
+		enemy.spellFlipOne = false;
+		enemy.spellSubClock = -1;
+	}
+	if(this.clock == 0) spawnEnemy();
+},
+
 currentWave(){
-	stageUtils.nextWave('waveThirty', this);
+	stageUtils.nextWave('boss2', this);
 }
 
 };
