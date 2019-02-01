@@ -5,11 +5,11 @@ speed: 5,
 shotClock: 0,
 didShootClock: 0,
 skewDiff: .1,
-power: 0,
+power: 1,
 graze: 0,
 invulnerableClock: 0,
 removed: false,
-bulletSpeed: 30,
+bulletSpeed: 35,
 didShoot: false,
 lives: 3,
 livesInit: 1,
@@ -50,10 +50,10 @@ move(){
 	else if(this.hitbox.x + this.hitbox.width / 2 > globals.gameWidth + globals.gameX) this.sprite.x = globals.gameWidth - this.hitbox.width / 2 + globals.gameX;
 	if(this.hitbox.y - this.hitbox.height / 2 < globals.grid) this.sprite.y = this.hitbox.height / 2 - 2 + globals.grid;
 	else if(this.hitbox.y + this.hitbox.height / 2 > globals.winHeight - globals.grid) this.sprite.y = globals.winHeight - this.hitbox.height / 2 - 2 - globals.grid;
-	this.hitbox.x = this.sprite.x;
-	this.hitbox.y = this.sprite.y + 2;
-	this.focus.x = this.sprite.x;
-	this.focus.y = this.sprite.y;
+	this.hitbox.x = this.sprite.x + 1;
+	this.hitbox.y = this.sprite.y - 1;
+	this.focus.x = this.sprite.x + 1;
+	this.focus.y = this.sprite.y - 1;
 	if(controls.focus && this.hitbox.alpha != 1){
 		this.hitbox.alpha = 1;
 		this.focus.alpha = 1;
@@ -84,9 +84,8 @@ shot(){
 
 spawnBullets(){
 	const base = Math.PI / 2;
-	const mainBullet = (rotation, xMod, yMod, double) => {
-		const img = double ? 'double' : 'single';
-		const bullet = new PIXI.Sprite.fromImage('img/player/bullet-' + img + '.png', PIXI.SCALE_MODES.NEAREST);
+	const mainBullet = (rotation, xMod, yMod) => {
+		const bullet = new PIXI.Sprite.from(sprites.player.knives);
 		bullet.anchor.set(.5);
 		bullet.x = this.sprite.x + xMod;
 		bullet.y = this.sprite.y + yMod - 6;
@@ -102,15 +101,15 @@ spawnBullets(){
 		}
 		globals.containers.playerBullets.addChild(bullet);
 	};
-	const offset = 0.125, xOffset = 12, yOffset = 4;
+	const offset = 0.125, xOffset = 16, yOffset = 16;
 	mainBullet(base, 0, 0, true);
 	if(this.power > 0){
-		mainBullet(base - offset, -xOffset - 1, yOffset, false);
-		mainBullet(base + offset, xOffset + 1, yOffset, false);
+		mainBullet(base - offset, -xOffset, yOffset, false);
+		mainBullet(base + offset, xOffset, yOffset, false);
 	}
 	if(this.power > 1){
-		mainBullet(base - offset * 2, -xOffset * 1.5 - 1, yOffset + 6, false);
-		mainBullet(base + offset * 2, xOffset * 1.5 + 1, yOffset + 6, false);
+		mainBullet(base - offset * 2, -xOffset * 2 + 2, yOffset + 18, false);
+		mainBullet(base + offset * 2, xOffset * 2 - 2, yOffset + 18, false);
 	}
 	// if(this.power > 2){
 	// 	mainBullet(base - offset * 3, -xOffset * 1.5 - 6, yOffset + 14, false);

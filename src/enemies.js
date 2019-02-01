@@ -1865,7 +1865,7 @@ boss2(){
 },
 
 currentWave(){
-	stageUtils.nextWave('boss2', this);
+	// stageUtils.nextWave('boss2', this);
 }
 
 };
