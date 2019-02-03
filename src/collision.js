@@ -60,7 +60,8 @@ check(){
 			enemyHit = {
 				enemy: enemy,
 				bullet: {x: bullet.x, y: bullet.y},
-				sect: thisObj.sects[i][j]
+				sect: thisObj.sects[i][j],
+				isBlue: bullet.isBlue
 			};
 			bullet.y = -globals.winHeight;
 			thisObj.sects[i][j].bullet = false;
@@ -72,7 +73,8 @@ check(){
 			blockHit = {
 				block: block,
 				bullet: {x: bullet.x, y: bullet.y},
-				sect: thisObj.sects[i][j]
+				sect: thisObj.sects[i][j],
+				isBlue: bullet.isBlue
 			};
 			bullet.y = -globals.winHeight;
 			thisObj.sects[i][j].bullet = false;
@@ -80,18 +82,18 @@ check(){
 	}, checkObjAgainstPlayer = obj => {
 		const dx = player.sprite.x - obj.x, dy = player.sprite.y - obj.y, radii = obj.width / 2;
 		if(dx * dx + dy * dy < radii * radii){
-			if(!globals.gameOver){
-				// explosion.spawn(player.sprite, false, true);
-				// player.graze = 0;
-				// globals.removeBullets = true;
-				// if(!obj.isBoss) obj.y = -globals.winHeight;
-				// if(player.power > 0){
-				// 	player.invulnerableClock = 60 * 2;
-				// 	player.power--;
-				// } else{
-				// 	player.lives = 0;
-				// 	globals.gameOver = true;
-				// }
+			if(!globals.gameOver && !player.invincible){
+				explosion.spawn(player.sprite, false, true);
+				player.graze = 0;
+				globals.removeBullets = true;
+				if(!obj.isBoss) obj.y = -globals.winHeight;
+				if(player.power > 0){
+					player.invulnerableClock = 60 * 2;
+					player.power--;
+				} else{
+					player.lives = 0;
+					globals.gameOver = true;
+				}
 			}
 		}
 	}, checkChip = chip => {
@@ -157,10 +159,10 @@ check(){
 	// console.log(enemyHit)
 	if(enemyHit){
 		if(enemyHit.enemy.health){
-			explosion.spawn(enemyHit.bullet, true);
+			explosion.spawn(enemyHit.bullet, enemyHit.isBlue);
 			enemyHit.enemy.health--;
 		} else {
-			explosion.spawn(enemyHit.bullet, true, true);
+			explosion.spawn(enemyHit.bullet, enemyHit.isBlue, true);
 			globals.score += 5000;
 			if(enemyHit.enemy.suicide) enemyHit.enemy.suicide(enemyHit.enemy);
 			enemyHit.enemy.y = globals.winHeight * 2;
@@ -169,7 +171,7 @@ check(){
 	}
 	if(blockHit){
 		if(blockHit.block.health){
-			explosion.spawn(blockHit.bullet, true);
+			explosion.spawn(blockHit.bullet, blockHit.isBlue);
 			blockHit.block.health--;
 			if(blockHit.block.special){
 				if(blockHit.block.hitCount == 2 && blockHit.block.alpha != 1) blockHit.block.alpha = 1;
@@ -177,7 +179,7 @@ check(){
 			}
 		}
 		else {
-			explosion.spawn(blockHit.bullet, true, true);
+			explosion.spawn(blockHit.bullet, blockHit.isBlue, true);
 			if(blockHit.block.power) chips.spawnPower(blockHit.block);
 			else {
 				const blockScore = blockHit.block.special ? globals.specialScore : 1000;

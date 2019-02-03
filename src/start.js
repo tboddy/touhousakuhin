@@ -4,12 +4,12 @@ currentOption: 0,
 
 optionItems: [
 	{text: '2 MINUTE MODE'},
-	// {text: '5 MINUTE MODE'},
+	{text: '5 MINUTE MODE'},
 	{text: 'EXIT GAME'}
 ],
 
 bg(){
-	const bg = PIXI.Sprite.fromImage('img/start/bg.png');
+	const bg = PIXI.Sprite.from(sprites.start.bg);
 	bg.x = 0;
 	bg.y = 0;
 	bg.zOrder = 1;
@@ -18,27 +18,31 @@ bg(){
 
 title(){
 	const y = globals.grid * 5.5, headerText = 'WINTER CARNIVAL \'19';
-	const header = chrome.label(headerText, globals.winWidth / 2, y),
-		headerShadow = chrome.label(headerText, globals.winWidth / 2, y, 'dark'),
-		title = PIXI.Sprite.fromImage('img/start/title.png');
+	const header = PIXI.Sprite.from(sprites.start.header),
+		title = PIXI.Sprite.from(sprites.start.title),
+		subTitle = PIXI.Sprite.from(sprites.start.subTitle);
 
 	header.anchor.set(.5, 0);
-	header.zOrder = 2;
-	headerShadow.anchor.set(.5, 0);
-	headerShadow.zOrder = 2;
+	header.x = globals.winWidth / 2;
+	header.y = globals.grid * 4;
 
 	title.anchor.set(.5, 0);
 	title.x = globals.winWidth / 2;
-	title.y = y + globals.grid * 2.25
+	title.y = y + globals.grid * 2 + 2;
 	title.zOrder = 2;
 
-	globals.game.stage.addChild(title);
-	globals.game.stage.addChild(headerShadow);
+	subTitle.anchor.set(.5, 0);
+	subTitle.x = globals.winWidth / 2;
+	subTitle.y = y + globals.grid * 9.5;
+	subTitle.zOrder = 2;
+
 	globals.game.stage.addChild(header);
+	globals.game.stage.addChild(title);
+	globals.game.stage.addChild(subTitle);
 },
 
 options(){
-	const x = globals.winWidth / 2, y = globals.winHeight / 2 + globals.grid;
+	const x = globals.winWidth / 2, y = globals.winHeight / 2 + globals.grid * 4.5;
 	for(i = 0; i < this.optionItems.length; i++){
 		const item = this.optionItems[i];
 		item.label = chrome.label(item.text, x, y + i * (globals.grid + 4));
@@ -111,6 +115,11 @@ selectOption(){
 			globals.startGame();
 			break;
 		case 1:
+			globals.isFiveMinute = true;
+			sound.spawn('startGame');
+			globals.startGame();
+			break;
+		case 2:
 			require('electron').remote.app.quit();
 			break;
 	}

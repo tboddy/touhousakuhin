@@ -6,15 +6,18 @@ module.exports = {
 
 		this.player = {
 			center0: PIXI.Texture.fromImage('img/player-new/center0.png'),
-			center1: PIXI.Texture.fromImage('img/player-new/center0.png'),
-			center2: PIXI.Texture.fromImage('img/player-new/center0.png'),
+			center1: PIXI.Texture.fromImage('img/player-new/center1.png'),
+			center2: PIXI.Texture.fromImage('img/player-new/center2.png'),
 			left0: PIXI.Texture.fromImage('img/player-new/center0.png'),
 			left1: PIXI.Texture.fromImage('img/player-new/center0.png'),
 			right0: PIXI.Texture.fromImage('img/player-new/center0.png'),
 			right1: PIXI.Texture.fromImage('img/player-new/center0.png'),
 			hitbox: PIXI.Texture.fromImage('img/player/hitbox.png'),
 			focus: PIXI.Texture.fromImage('img/player/focus.png', false, PIXI.SCALE_MODES.NEAREST),
-			knives: PIXI.Texture.fromImage('img/player-new/knives.png', false, PIXI.SCALE_MODES.NEAREST)
+			knives: PIXI.Texture.fromImage('img/player-new/knives.png', false, PIXI.SCALE_MODES.NEAREST),
+			bulletSingle: PIXI.Texture.fromImage('img/player/bullet-single.png', false, PIXI.SCALE_MODES.NEAREST),
+			bulletDouble: PIXI.Texture.fromImage('img/player/bullet-double.png', false, PIXI.SCALE_MODES.NEAREST),
+			bulletDoubleRed: PIXI.Texture.fromImage('img/player/bullet-double-red.png', false, PIXI.SCALE_MODES.NEAREST)
 		};
 
 		this.enemies = {
@@ -70,14 +73,14 @@ module.exports = {
 		};
 
 		this.background = {
-			bottom: PIXI.Texture.fromImage('img/bg/bottom.png', false, PIXI.SCALE_MODES.NEAREST),
-			bottom2: PIXI.Texture.fromImage('img/bg/bottom2.png', false, PIXI.SCALE_MODES.NEAREST),
-			fade: PIXI.Texture.fromImage('img/bg/fade.png'),
-			fade2: PIXI.Texture.fromImage('img/bg/fade2.png'),
-			overlay: PIXI.Texture.fromImage('img/bg/overlay.png', false, PIXI.SCALE_MODES.NEAREST),
-			overlay2: PIXI.Texture.fromImage('img/bg/overlay2.png', false, PIXI.SCALE_MODES.NEAREST),
-			tree: PIXI.Texture.fromImage('img/bg/tree.png'),
-			tree2: PIXI.Texture.fromImage('img/bg/tree2.png')
+			bottom: PIXI.Texture.fromImage('img/bg/bottom2.png', false, PIXI.SCALE_MODES.NEAREST),
+			bottom2: PIXI.Texture.fromImage('img/bg/bottom.png', false, PIXI.SCALE_MODES.NEAREST),
+			fade: PIXI.Texture.fromImage('img/bg/fade2.png'),
+			fade2: PIXI.Texture.fromImage('img/bg/fade.png'),
+			overlay: PIXI.Texture.fromImage('img/bg/overlay2.png', false, PIXI.SCALE_MODES.NEAREST),
+			overlay2: PIXI.Texture.fromImage('img/bg/overlay.png', false, PIXI.SCALE_MODES.NEAREST),
+			tree: PIXI.Texture.fromImage('img/bg/tree2.png'),
+			tree2: PIXI.Texture.fromImage('img/bg/tree.png')
 		};
 
 		this.bossBar = PIXI.Texture.fromImage('img/boss/bar.png');
@@ -109,6 +112,13 @@ module.exports = {
 			'ring-blue': PIXI.Texture.fromImage('img/bullets/ring-blue.png', false, PIXI.SCALE_MODES.NEAREST),
 			'ring-red': PIXI.Texture.fromImage('img/bullets/ring-red.png', false, PIXI.SCALE_MODES.NEAREST)
 		};
+
+		this.start = {
+			bg: PIXI.Texture.fromImage('img/start/bg.png'),
+			header: PIXI.Texture.fromImage('img/start/header.png'),
+			title: PIXI.Texture.fromImage('img/start/title.png'),
+			subTitle: PIXI.Texture.fromImage('img/start/subtitle.png')
+		}
 
 	}
 }

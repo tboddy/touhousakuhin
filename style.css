@@ -1,4 +1,2 @@
 * {margin:0;padding:0;cursor:default;image-rendering:pixelated;cursor:none !important;}
-body, html {background-color:black;overflow:hidden;width:100%;height:100%;display:flex;justify-content:center;align-items:center;
-	font-family:'bucky';color:white;}
-canvas {}
+body, html {background-color:black;overflow:hidden;width:100%;height:100%;display:flex;justify-content:center;align-items:center;color:white;}

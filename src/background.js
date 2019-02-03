@@ -86,7 +86,7 @@ update(){
 	const currentTime = Math.floor(chrome.elapsed / 60), limit = chrome.timeLimit - 45;
 	this.bg.tilePosition.y += this.speed;
 	this.overlay.tilePosition.y += this.speedOverlay;
-	if(globals.gameClock % 15 == 0) this.spawnTree();
+	if(globals.gameClock % 15 == 0 && !globals.isFiveMinute) this.spawnTree();
 	this.updateTrees();
 },
 

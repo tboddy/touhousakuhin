@@ -5,7 +5,7 @@ speed: 5,
 shotClock: 0,
 didShootClock: 0,
 skewDiff: .1,
-power: 1,
+power: 0,
 graze: 0,
 invulnerableClock: 0,
 removed: false,
@@ -18,6 +18,7 @@ focusClock: 0,
 idleClock: 0,
 leftClock: 0,
 rightClock: 0,
+invincible: true,
 
 move(){
 	let speed = controls.focus ? this.speed / 2 : this.speed;
@@ -45,15 +46,19 @@ move(){
 	if(controls.moving.up) this.sprite.y -= speed;
 	else if(controls.moving.down) this.sprite.y += speed;
 	this.hitbox.x = this.sprite.x;
-	this.hitbox.y = this.sprite.y + 2;
-	if(this.hitbox.x - this.hitbox.width / 2 < globals.gameX) this.sprite.x = this.hitbox.width / 2 + globals.gameX;
-	else if(this.hitbox.x + this.hitbox.width / 2 > globals.gameWidth + globals.gameX) this.sprite.x = globals.gameWidth - this.hitbox.width / 2 + globals.gameX;
-	if(this.hitbox.y - this.hitbox.height / 2 < globals.grid) this.sprite.y = this.hitbox.height / 2 - 2 + globals.grid;
-	else if(this.hitbox.y + this.hitbox.height / 2 > globals.winHeight - globals.grid) this.sprite.y = globals.winHeight - this.hitbox.height / 2 - 2 - globals.grid;
-	this.hitbox.x = this.sprite.x + 1;
-	this.hitbox.y = this.sprite.y - 1;
-	this.focus.x = this.sprite.x + 1;
-	this.focus.y = this.sprite.y - 1;
+	this.hitbox.y = this.sprite.y;
+	if(this.hitbox.x - this.hitbox.width / 2 <= globals.gameX)
+		this.sprite.x = this.hitbox.width / 2 + globals.gameX;
+	else if(this.hitbox.x + this.hitbox.width / 2 >= globals.gameWidth + globals.gameX)
+		this.sprite.x = globals.gameX + globals.gameWidth - this.hitbox.width / 2;
+	if(this.hitbox.y - this.hitbox.height / 2 < globals.grid)
+		this.sprite.y = this.hitbox.height / 2 + globals.grid;
+	else if(this.hitbox.y + this.hitbox.height / 2 > globals.winHeight - globals.grid)
+		this.sprite.y = globals.winHeight - this.hitbox.height / 2 - globals.grid;
+	this.hitbox.x = this.sprite.x;
+	this.hitbox.y = this.sprite.y;
+	this.focus.x = this.hitbox.x;
+	this.focus.y = this.hitbox.y;
 	if(controls.focus && this.hitbox.alpha != 1){
 		this.hitbox.alpha = 1;
 		this.focus.alpha = 1;
@@ -84,37 +89,32 @@ shot(){
 
 spawnBullets(){
 	const base = Math.PI / 2;
-	const mainBullet = (rotation, xMod, yMod) => {
-		const bullet = new PIXI.Sprite.from(sprites.player.knives);
+	const spawnBullet = (rotation, xMod, yMod, double) => {
+		const bullet = new PIXI.Sprite.from(double ? sprites.player.bulletDoubleRed : sprites.player.bulletSingle);
 		bullet.anchor.set(.5);
 		bullet.x = this.sprite.x + xMod;
 		bullet.y = this.sprite.y + yMod - 6;
-		bullet.baseX = bullet.x;
-		bullet.baseY = bullet.y;
 		const bulletMod = this.sprite.height / 4;
 		bullet.type = 'playerBullet';
 		bullet.alpha = 1;
 		bullet.rotation = rotation - Math.PI / 2;
+		if(!double) bullet.isBlue = true;
 		bullet.velocity = {
 			x: Math.cos(rotation) * this.bulletSpeed,
 			y: Math.sin(rotation) * this.bulletSpeed
 		}
 		globals.containers.playerBullets.addChild(bullet);
 	};
-	const offset = 0.125, xOffset = 16, yOffset = 16;
-	mainBullet(base, 0, 0, true);
-	if(this.power > 0){
-		mainBullet(base - offset, -xOffset, yOffset, false);
-		mainBullet(base + offset, xOffset, yOffset, false);
-	}
+	const offset = 0.135;
 	if(this.power > 1){
-		mainBullet(base - offset * 2, -xOffset * 2 + 2, yOffset + 18, false);
-		mainBullet(base + offset * 2, xOffset * 2 - 2, yOffset + 18, false);
+		spawnBullet(base - offset * 2, 0, 14);
+		spawnBullet(base + offset * 2, 0, 14);
 	}
-	// if(this.power > 2){
-	// 	mainBullet(base - offset * 3, -xOffset * 1.5 - 6, yOffset + 14, false);
-	// 	mainBullet(base + offset * 3, xOffset * 1.5 + 6, yOffset + 14, false);
-	// }
+	if(this.power > 0){
+		spawnBullet(base - offset, -2, 8);
+		spawnBullet(base + offset, 2, 8);
+	}
+	spawnBullet(base, 0, 0, true);
 },
 
 die(){
