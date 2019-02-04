@@ -61,22 +61,16 @@ options(){
 },
 
 credit(){
-	const text = '2019 PEACE RESEARCH', x = globals.grid * 2 + 2, y = globals.winHeight - globals.grid,
-		copyleft = PIXI.Sprite.fromImage('img/start/copyleft.png');
+	const text = '© PEACE RESEARCH', x = globals.grid, y = globals.winHeight - globals.grid;
 	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
-	copyleft.anchor.set(0, 1);
 	label.anchor.set(0, 1);
 	shadow.anchor.set(0, 1);
-	copyleft.x = globals.grid;
-	copyleft.y = globals.winHeight - globals.grid - 1;
-	copyleft.zOrder = this.zOrder;
-	globals.game.stage.addChild(copyleft);
 	globals.game.stage.addChild(shadow);
 	globals.game.stage.addChild(label);
 },
 
 version(){
-	const versionText = 'v0.2', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
+	const versionText = 'v0.3', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
 	const label = chrome.label(versionText, x, y),
 		shadow = chrome.label(versionText, x, y, 'dark');
 	label.anchor.set(1);

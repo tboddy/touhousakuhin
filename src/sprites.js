@@ -110,7 +110,9 @@ module.exports = {
 			'bullet-blue': PIXI.Texture.fromImage('img/bullets/bullet-blue.png', false, PIXI.SCALE_MODES.NEAREST),
 			'bullet-red': PIXI.Texture.fromImage('img/bullets/bullet-red.png', false, PIXI.SCALE_MODES.NEAREST),
 			'ring-blue': PIXI.Texture.fromImage('img/bullets/ring-blue.png', false, PIXI.SCALE_MODES.NEAREST),
-			'ring-red': PIXI.Texture.fromImage('img/bullets/ring-red.png', false, PIXI.SCALE_MODES.NEAREST)
+			'ring-red': PIXI.Texture.fromImage('img/bullets/ring-red.png', false, PIXI.SCALE_MODES.NEAREST),
+			'laser-red': PIXI.Texture.fromImage('img/bullets/laser-red.png', false, PIXI.SCALE_MODES.NEAREST),
+			tracker: PIXI.Texture.fromImage('img/bullets/tracker.png', false, PIXI.SCALE_MODES.NEAREST)
 		};
 
 		this.start = {
