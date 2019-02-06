@@ -34,7 +34,7 @@ gameOverClock: false,
 paused: false,
 deadBoss: false,
 
-isFiveMinute: true,
+isFiveMinute: false,
 
 removeBullets: false,
 

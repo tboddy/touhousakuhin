@@ -28,12 +28,12 @@ title(){
 
 	title.anchor.set(.5, 0);
 	title.x = globals.winWidth / 2;
-	title.y = y + globals.grid * 2 + 2;
+	title.y = y + globals.grid * 1.5;
 	title.zOrder = 2;
 
 	subTitle.anchor.set(.5, 0);
 	subTitle.x = globals.winWidth / 2;
-	subTitle.y = y + globals.grid * 9.5;
+	subTitle.y = y + globals.grid * 9;
 	subTitle.zOrder = 2;
 
 	globals.game.stage.addChild(header);
@@ -42,7 +42,7 @@ title(){
 },
 
 options(){
-	const x = globals.winWidth / 2, y = globals.winHeight / 2 + globals.grid * 4.5;
+	const x = globals.winWidth / 2, y = globals.winHeight / 2 + globals.grid * 4;
 	for(i = 0; i < this.optionItems.length; i++){
 		const item = this.optionItems[i];
 		item.label = chrome.label(item.text, x, y + i * (globals.grid + 4));
@@ -61,16 +61,21 @@ options(){
 },
 
 credit(){
-	const text = '© PEACE RESEARCH', x = globals.grid, y = globals.winHeight - globals.grid;
+	const text = 'PEACE RESEARCH', x = globals.grid * 2 + 2, y = globals.winHeight - globals.grid,
+		copyleft = PIXI.Sprite.fromImage('img/start/copyleft.png');
 	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
+	copyleft.anchor.set(0, 1);
 	label.anchor.set(0, 1);
 	shadow.anchor.set(0, 1);
+	copyleft.x = globals.grid;
+	copyleft.y = globals.winHeight - globals.grid - 1;
+	globals.game.stage.addChild(copyleft);
 	globals.game.stage.addChild(shadow);
 	globals.game.stage.addChild(label);
 },
 
 version(){
-	const versionText = 'v0.3', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
+	const versionText = 'v0.4 HAPPY BIRTHDAY!', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
 	const label = chrome.label(versionText, x, y),
 		shadow = chrome.label(versionText, x, y, 'dark');
 	label.anchor.set(1);
@@ -80,7 +85,7 @@ version(){
 },
 
 highScore(){
-	const text = 'HIGH SCORE: ' + chrome.processScore(globals.highScore), x = globals.winWidth / 2,
+	const text = 'HI SCORE: ' + chrome.processScore(globals.highScore), x = globals.winWidth / 2,
 		y = globals.winHeight - globals.grid;
 	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
 	label.anchor.set(.5, 1);
