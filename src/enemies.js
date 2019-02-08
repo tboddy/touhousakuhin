@@ -406,7 +406,7 @@ miniBoss(){
 		stageUtils.spawnEnemy('komachi', globals.gameX + globals.gameWidth / 2, -31, enemy => {
 			enemy.speed = 2.5;
 			enemy.speedMod = 0.025;
-			enemy.health = 60;
+			enemy.health = 70;
 			enemy.initHealth = enemy.health;
 			enemy.spinnerAngle = 0;
 			enemy.spinnerAngleTwo = Math.PI;
@@ -1991,7 +1991,7 @@ boss2(){
 },
 
 currentWave(){
-	stageUtils.nextWave('boss2', this);
+	stageUtils.nextWave('miniBoss', this);
 }
 
 };
