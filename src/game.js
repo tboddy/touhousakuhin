@@ -72,6 +72,7 @@ init = () => {
 	storage.get('savedData', (err, data) => {
 		globals.savedData = data;
 		if(globals.savedData.highScore) globals.highScore = globals.savedData.highScore;
+		if(globals.savedData.highScoreFiveMin) globals.highScoreFiveMin = globals.savedData.highScoreFiveMin;
 		if(globals.savedData.fullscreen){
 			controls.isFullscreen = true;
 			controls.mainWindow.setFullScreen(true);

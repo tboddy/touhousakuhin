@@ -61,7 +61,8 @@ check(){
 				enemy: enemy,
 				bullet: {x: bullet.x, y: bullet.y},
 				sect: thisObj.sects[i][j],
-				isBlue: bullet.isBlue
+				isBlue: bullet.isBlue,
+				damage: bullet.damage
 			};
 			bullet.y = -globals.winHeight;
 			thisObj.sects[i][j].bullet = false;
@@ -104,7 +105,7 @@ check(){
 			switch(chip.type){
 				case 'chipPower':
 					let amt = 5000;
-					if(player.power < 2){
+					if(player.power < 3){
 						player.power++;
 						sound.spawn('powerUp');
 						chrome.addFieldLabel('POWER+', player.sprite);
@@ -158,9 +159,9 @@ check(){
 	}
 	// console.log(enemyHit)
 	if(enemyHit){
-		if(enemyHit.enemy.health){
+		if(enemyHit.enemy.health > 0){
 			explosion.spawn(enemyHit.bullet, enemyHit.isBlue);
-			enemyHit.enemy.health--;
+			enemyHit.enemy.health -= enemyHit.damage;
 		} else {
 			explosion.spawn(enemyHit.bullet, enemyHit.isBlue, true);
 			globals.score += 5000;
@@ -186,7 +187,7 @@ check(){
 				if(blockHit.block.special){
 					chrome.showBonus(globals.specialScore);
 					sound.spawn('bonus');
-					globals.specialScore *= 2;
+					globals.specialScore *= 1.25;
 				}
 				globals.score += blockScore;
 			}

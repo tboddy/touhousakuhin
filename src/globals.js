@@ -2,6 +2,7 @@ module.exports = {
 
 score: 0,
 highScore: 0,
+highScoreFiveMin: 0,
 specialScore: 2000,
 specialScoreInit: 2000,
 

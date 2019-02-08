@@ -1,8 +1,9 @@
 module.exports = {
 
-	muted: true,
+	muted: false,
 	volume: .375,
 	bgmVolume: .8,
+	// bgmVolume: 0,
 
 	list: {
 
@@ -25,7 +26,8 @@ module.exports = {
 
 		title: new Howl({src: ['bgm/title.ogg'], loop: true}),
 		level: new Howl({src: ['bgm/level.ogg'], loop: true}),
-		boss: new Howl({src: ['bgm/boss.ogg'], loop: true})
+		boss: new Howl({src: ['bgm/boss.ogg'], loop: true}),
+		boss2: new Howl({src: ['bgm/boss2.ogg'], loop: true})
 
 	},
 

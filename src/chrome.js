@@ -19,7 +19,7 @@ bonusClock: 0,
 gameOverClock: 0,
 
 timeLimit: 60 * 2,
-fiveMinuteLimit: 60 * 5,
+fiveMinuteLimit: 60 * 4,
 elapsed: 0,
 fieldLabels: [],
 
@@ -40,7 +40,7 @@ label(input, x, y, color, large){
 
 processScore(input){
 	input = String(input);
-	for(let i = input.length; i < 7; i++){
+	for(let i = input.length; i < 8; i++){
 		input = '0' + input;
 	}
 	return input;
@@ -62,8 +62,8 @@ score(){
 	const highScore = () => {
 		const x = globals.grid, str = 'HIGH SCORE';
 		const title = this.label(str, x, y), titleShadow = this.label(str, x, y, 'dark');
-		this.highScoreLabel = this.label(this.processScore(globals.highScore), x, y + offset);
-		this.highScoreLabelShadow = this.label(this.processScore(globals.highScore), x, y + offset, 'dark');
+		this.highScoreLabel = this.label(this.processScore(globals.isFiveMinute ? globals.highScoreFiveMin : globals.highScore), x, y + offset);
+		this.highScoreLabelShadow = this.label(this.processScore(globals.isFiveMinute ? globals.highScoreFiveMin : globals.highScore), x, y + offset, 'dark');
 		globals.containers.chrome.addChild(titleShadow);
 		globals.containers.chrome.addChild(title);
 		globals.containers.chrome.addChild(this.highScoreLabelShadow);
@@ -71,8 +71,8 @@ score(){
 	}, playerScore = () => {
 		const x = globals.winWidth - globals.grid * 4.5, str = 'SCORE';
 		const title = this.label(str, x + globals.grid, y), titleShadow = this.label(str, x + globals.grid, y, 'dark');
-		this.scoreLabel = this.label(this.processScore(globals.score), x, y + offset);
-		this.scoreLabelShadow = this.label(this.processScore(globals.score), x, y + offset, 'dark');
+		this.scoreLabel = this.label(this.processScore(globals.score), x - 8, y + offset);
+		this.scoreLabelShadow = this.label(this.processScore(globals.score), x - 8, y + offset, 'dark');
 		globals.containers.chrome.addChild(titleShadow);
 		globals.containers.chrome.addChild(title);
 		globals.containers.chrome.addChild(this.scoreLabelShadow);
@@ -178,16 +178,17 @@ gameOver(){
 			globals.containers.chrome.addChild(wonLabel);
 		}
 	}, scoreResult = () => {
-		const scoreString = globals.score >= globals.highScore ? 'NEW HIGH SCORE!' : 'NO HIGH SCORE',
+		let highScore = globals.isFiveMinute ? globals.highScoreFiveMin : globals.highScore
+		const scoreString = globals.score >= highScore ? 'NEW HIGH SCORE!' : 'NO HIGH SCORE',
 			x = globals.gameX + globals.gameWidth / 2, y = globals.winHeight / 2;
-		const label = this.label(scoreString, x, y, globals.score >= globals.highScore ? 'orange' : 'light'),
+		const label = this.label(scoreString, x, y, globals.score >= highScore ? 'orange' : 'light'),
 			shadow = this.label(scoreString, x, y, 'dark');
 		label.anchor.set(.5);
 		shadow.anchor.set(.5);
 		globals.containers.chrome.addChild(shadow);
 		globals.containers.chrome.addChild(label);
-		if(globals.score >= globals.highScore){
-			globals.savedData.highScore = globals.score;
+		if(globals.score >= highScore){
+			globals.isFiveMinute ? globals.savedData.highScoreFiveMin = globals.score : globals.savedData.highScore = globals.score
 			storage.set('savedData', globals.savedData);
 			sound.spawn('timeOut');
 		} else if(globals.wonGame){
@@ -216,7 +217,7 @@ gameStartShadow: false,
 
 gameStart(){
 	const x = globals.gameWidth / 2 + globals.gameX, y = globals.winHeight / 2,
-		str = globals.isFiveMinute ? 'START 5 MINUTE MODE' : 'START 2 MINUTE MODE';
+		str = globals.isFiveMinute ? 'START 4 MINUTE MODE' : 'START 2 MINUTE MODE';
 	this.gameStartLabel = this.label(str, x, y, false, true);
 	this.gameStartShadow = this.label(str, x, y, 'dark', true);
 	this.gameStartLabel.anchor.set(.5)
@@ -268,7 +269,7 @@ update(){
 		if(this.scoreLabel.text != score){
 			this.scoreLabel.text = score;
 			this.scoreLabelShadow.text = score;
-			if(globals.score >= globals.highScore){
+			if(globals.score >= (globals.isFiveMinute ? globals.highScoreFiveMin : globals.highScore)){
 				globals.highScoreLabel = globals.score;
 				this.highScoreLabel.text = this.processScore(globals.score);
 				this.highScoreLabelShadow.text = this.processScore(globals.score);
@@ -332,7 +333,7 @@ update(){
 			if(!this.bossBar.alpha) this.bossBar.alpha = 1;
 			const num = Math.floor(globals.bossHealth / globals.bossHealthInitial * (globals.gameWidth - globals.grid));
 			if(this.bossBar.width != num) this.bossBar.width = num;
-		} else if(this.bossBar.alpha) this.bossBar.alpha = 0;
+		} else if(!globals.bossActive && this.bossBar.alpha) this.bossBar.alpha = 0;
 	}, updateFieldLabel = (label, i) => {
 		label.clock++;
 		label.y -= .5;
@@ -392,7 +393,7 @@ wipe(){
 	this.bonusScore = 0;
 	this.bonusClock = 0;
 	this.timeLimit = 60 * 2;
-	this.fiveMinuteLimit = 60 * 5;
+	this.fiveMinuteLimit = 60 * 4;
 	this.elapsed = 0;
 	this.fieldLabels = [];
 	this.didGameOver = false;

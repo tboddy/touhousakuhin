@@ -4,7 +4,7 @@ currentOption: 0,
 
 optionItems: [
 	{text: '2 MINUTE MODE'},
-	{text: '5 MINUTE MODE'},
+	{text: '4 MINUTE MODE'},
 	{text: 'EXIT GAME'}
 ],
 
@@ -75,7 +75,7 @@ credit(){
 },
 
 version(){
-	const versionText = 'v0.4 HAPPY BIRTHDAY!', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
+	const versionText = 'v0.4 HBD SKYLER', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
 	const label = chrome.label(versionText, x, y),
 		shadow = chrome.label(versionText, x, y, 'dark');
 	label.anchor.set(1);
@@ -85,7 +85,17 @@ version(){
 },
 
 highScore(){
-	const text = 'HI SCORE: ' + chrome.processScore(globals.highScore), x = globals.winWidth / 2,
+	const text = 'HI SCORE 2 MIN: ' + chrome.processScore(globals.highScore), x = globals.winWidth / 2,
+		y = globals.winHeight - globals.grid * 2 - 4;
+	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
+	label.anchor.set(.5, 1);
+	shadow.anchor.set(.5, 1);
+	globals.game.stage.addChild(shadow);
+	globals.game.stage.addChild(label);
+},
+
+highScoreFiveMin(){
+	const text = 'HI SCORE 4 MIN: ' + chrome.processScore(globals.highScoreFiveMin), x = globals.winWidth / 2,
 		y = globals.winHeight - globals.grid;
 	const label = chrome.label(text, x, y), shadow = chrome.label(text, x, y, 'dark');
 	label.anchor.set(.5, 1);
@@ -132,7 +142,8 @@ init(){
 	this.credit();
 	this.version();
 	this.highScore();
-	globals.startGame();
+	this.highScoreFiveMin();
+	// globals.starttGame();
 }
 
 };

@@ -18,7 +18,7 @@ focusClock: 0,
 idleClock: 0,
 leftClock: 0,
 rightClock: 0,
-invincible: true,
+invincible: false,
 
 move(){
 	let speed = controls.focus ? this.speed / 2 : this.speed;
@@ -89,6 +89,7 @@ shot(){
 
 spawnBullets(){
 	const base = Math.PI / 2;
+	let damage = 1;
 	const spawnBullet = (rotation, xMod, yMod, double) => {
 		const bullet = new PIXI.Sprite.from(double ? sprites.player.bulletDoubleRed : sprites.player.bulletSingle);
 		bullet.anchor.set(.5);
@@ -98,6 +99,7 @@ spawnBullets(){
 		bullet.type = 'playerBullet';
 		bullet.alpha = 1;
 		bullet.rotation = rotation - Math.PI / 2;
+		bullet.damage = damage;
 		if(!double) bullet.isBlue = true;
 		bullet.velocity = {
 			x: Math.cos(rotation) * this.bulletSpeed,
@@ -105,14 +107,21 @@ spawnBullets(){
 		}
 		globals.containers.playerBullets.addChild(bullet);
 	};
-	const offset = 0.135;
+	const offset = 0.12;
+	if(this.power > 0){
+		damage = .75;
+		spawnBullet(base - offset, -2, 8);
+		spawnBullet(base + offset, 2, 8);
+	}
 	if(this.power > 1){
+		damage = .5;
 		spawnBullet(base - offset * 2, 0, 14);
 		spawnBullet(base + offset * 2, 0, 14);
 	}
-	if(this.power > 0){
-		spawnBullet(base - offset, -2, 8);
-		spawnBullet(base + offset, 2, 8);
+	if(this.power > 2){
+		damage = .25;
+		spawnBullet(base - offset * 3, 0, 20);
+		spawnBullet(base + offset * 3, 0, 20);
 	}
 	spawnBullet(base, 0, 0, true);
 },
@@ -158,6 +167,9 @@ update(){
 			this.focus.alpha = 0;
 			this.sprite.x = globals.gameWidth / 2;
 			this.sprite.y = globals.winHeight * 2;
+		}
+		if(globals.containers.playerBullets.children.length){
+			for(i = 0; i < globals.containers.playerBullets.children.length; i++) globals.containers.playerBullets.children[i].alpha = 0;
 		}
 	}
 },

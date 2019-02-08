@@ -1,4 +1,6 @@
-const map = [
+module.exports = {
+
+map: [
 	[1, 0, 0, 0, 0, 0, 0, 2],
 	[0, 2, 0, 0, 0, 0, 1, 0],
 	[1, 0, 1, 0, 0, 2, 4, 2],
@@ -168,9 +170,7 @@ const map = [
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0]
-];
-
-module.exports = {
+],
 
 gridWidth: false,
 tempMap: false,
@@ -235,7 +235,7 @@ update(){
 },
 
 init(){
-	this.tempMap = map.slice(0);
+	this.tempMap = this.map.slice(0);
 	this.gridWidth = (globals.gameWidth - globals.grid * 2) / this.tempMap[0].length;
 }
 

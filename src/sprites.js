@@ -5,13 +5,13 @@ module.exports = {
 		this.pausedOverlay = PIXI.Texture.fromImage('img/pausedoverlay.png');
 
 		this.player = {
-			center0: PIXI.Texture.fromImage('img/player-new/center0.png'),
-			center1: PIXI.Texture.fromImage('img/player-new/center1.png'),
-			center2: PIXI.Texture.fromImage('img/player-new/center2.png'),
-			left0: PIXI.Texture.fromImage('img/player-new/center0.png'),
-			left1: PIXI.Texture.fromImage('img/player-new/center0.png'),
-			right0: PIXI.Texture.fromImage('img/player-new/center0.png'),
-			right1: PIXI.Texture.fromImage('img/player-new/center0.png'),
+			center0: PIXI.Texture.fromImage('img/player/center00.png'),
+			center1: PIXI.Texture.fromImage('img/player/center01.png'),
+			center2: PIXI.Texture.fromImage('img/player/center02.png'),
+			left0: PIXI.Texture.fromImage('img/player/left00.png'),
+			left1: PIXI.Texture.fromImage('img/player/left01.png'),
+			right0: PIXI.Texture.fromImage('img/player/right00.png'),
+			right1: PIXI.Texture.fromImage('img/player/right01.png'),
 			hitbox: PIXI.Texture.fromImage('img/player/hitbox.png'),
 			focus: PIXI.Texture.fromImage('img/player/focus.png', false, PIXI.SCALE_MODES.NEAREST),
 			knives: PIXI.Texture.fromImage('img/player-new/knives.png', false, PIXI.SCALE_MODES.NEAREST),
