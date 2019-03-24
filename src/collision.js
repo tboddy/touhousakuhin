@@ -111,7 +111,7 @@ check(){
 						chrome.addFieldLabel('POWER+', player.sprite);
 					} else {
 						amt *= 10;
-						chrome.showBonus(amt);
+						chrome.showBonus(Math.round(amt));
 						sound.spawn('bonus');
 					}
 					globals.score += amt;
@@ -157,7 +157,6 @@ check(){
 			}
 		}
 	}
-	// console.log(enemyHit)
 	if(enemyHit){
 		if(enemyHit.enemy.health > 0){
 			explosion.spawn(enemyHit.bullet, enemyHit.isBlue);
@@ -188,6 +187,7 @@ check(){
 					chrome.showBonus(globals.specialScore);
 					sound.spawn('bonus');
 					globals.specialScore *= 1.25;
+					globals.specialScore = Math.round(globals.specialScore)
 				}
 				globals.score += blockScore;
 			}

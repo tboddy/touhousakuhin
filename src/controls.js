@@ -118,7 +118,7 @@ init(){
 	if(!this.started){
 		this.started = true;
 		this.setupKeyboard();
-		globals.game.ticker.add(this.updateGamepad);
+		// globals.game.ticker.add(this.updateGamepad);
 	}
 },
 

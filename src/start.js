@@ -75,7 +75,7 @@ credit(){
 },
 
 version(){
-	const versionText = 'v0.4 HBD SKYLER', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
+	const versionText = 'v0.41 SHMUP DAY', x = globals.winWidth - globals.grid, y = globals.winHeight - globals.grid;
 	const label = chrome.label(versionText, x, y),
 		shadow = chrome.label(versionText, x, y, 'dark');
 	label.anchor.set(1);

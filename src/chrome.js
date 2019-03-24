@@ -39,7 +39,7 @@ label(input, x, y, color, large){
 },
 
 processScore(input){
-	input = String(input);
+	input = String(Math.round(input));
 	for(let i = input.length; i < 8; i++){
 		input = '0' + input;
 	}
